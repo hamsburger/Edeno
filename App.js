@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+import React from 'react';
+import { NativeBaseProvider, extendTheme } from 'native-base';
+import { Content } from './Content';
+
+export default () => {
+  const { colors } = extendTheme({});
+
+  const theme = extendTheme({
+    colors: {
+      // Add new color
+      primary: colors.gray,
+      // Redefining only one shade, rest of the color will remain same.
+      amber: {
+        400: '#d97706',
+      },
+      // Configure breakpoints if needed. I copied from
+      // default breakpoints: https://docs.nativebase.io/breakpoints
+      breakpoints: {
+        base: 0,
+        sm: 480,
+        md: 768,
+        lg: 992,
+        xl: 1280,
+      }
+    },
+    config: {
+      // Changing initialColorMode to 'dark'
+      initialColorMode: 'dark',
+    },
+  });
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider theme={theme}>
+      <Content />
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
