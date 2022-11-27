@@ -12,7 +12,7 @@ import {
 import { Pressable, StyleSheet } from "react-native";
 
 function Content() {
-  const bg = useColorModeValue("blue.300", "black");
+  const bg = useColorModeValue("edeno_green.0", "black");
   const colourTheme = useColorModeValue("Dark", "Light");
 
   const { colorMode, toggleColorMode } = useColorMode();

@@ -1,8 +1,12 @@
-import React from "react";
+import * as Font from "expo-font";
+import AppLoading from "expo-app-loading";
+import React, { useState } from "react";
 import { NativeBaseProvider, extendTheme } from "native-base";
-import { Content } from "./Content";
+import { Home } from "./pages/home/Home";
 
-export default () => {
+import useFonts from "./hooks/useFont";
+
+export default function App() {
   const { colors } = extendTheme({});
 
   const theme = extendTheme({
@@ -57,19 +61,35 @@ export default () => {
       },
       // Configure breakpoints if needed. I copied from
       // default breakpoints: https://docs.nativebase.io/breakpoints
-      breakpoints: {
-        base: 0,
-        sm: 480,
-        md: 768,
-        lg: 992,
-        xl: 1280,
-      },
+    },
+    breakpoints: {
+      base: 0,
+      sm: 480,
+      md: 768,
+      lg: 992,
+      xl: 1280,
     },
   });
 
+  const [IsReady, SetIsReady] = useState(false);
+
+  const LoadFonts = async () => {
+    await useFonts();
+  };
+
+  if (!IsReady) {
+    return (
+      <AppLoading
+        startAsync={LoadFonts}
+        onFinish={() => SetIsReady(true)}
+        onError={() => {}}
+      />
+    );
+  }
+
   return (
     <NativeBaseProvider theme={theme}>
-      <Content />
+      <Home />
     </NativeBaseProvider>
   );
-};
+}
