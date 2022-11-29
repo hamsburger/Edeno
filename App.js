@@ -1,29 +1,53 @@
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import React, { useState } from "react";
-import { NativeBaseProvider, extendTheme } from "native-base";
-import { Home } from "./pages/home/Home";
-import { Settings } from "./pages/settings/Settings";
-import { Measure } from "./pages/Measure/Measure";
-import { MeasureModal } from "./pages/Measure/MeasureModal";
+import {
+  NativeBaseProvider,
+  extendTheme,
+  Box,
+  Text,
+  Center,
+} from "native-base";
+import { Home } from "./Screens/Home/Home";
+import { Settings } from "./Screens/Settings/Settings";
+import { Measure } from "./Screens/Measure/Measure";
+import { MeasureModal } from "./Screens/Measure/MeasureModal";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import HomeSelected from "./assets/icons/my-eden-selected";
 import HomeNotSelected from "./assets/icons/my-eden-not-selected";
 import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
+import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
+import { initializeApp } from "firebase/app";
+import useFonts from "./Hooks/Use_Fonts";
+import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
+import { PlantProvider } from "./Hooks/Contexts/Plant_Context";
 
-import useFonts from "./hooks/useFont";
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+const DEBUG = 0;
 
-export default () => {
-  const [showModal, setShowModal] = useState(false);
+const themeObject = {
+  ...{
+    components: {
+      Text: {
+        baseStyle: {
+          color: "dark.50",
+        },
+      },
+      ...(DEBUG && {
+        Box: {
+          baseStyle: {
+            borderColor: "cyan.500",
+            borderWidth: "1",
+          },
+        },
+      }),
+    },
 
-  const { colors } = extendTheme({});
-
-  const theme = extendTheme({
     colors: {
       edeno_green: "#597F51",
       vermillion_red: "#B9422C",
@@ -42,16 +66,17 @@ export default () => {
       light_vermillion_red: "#F5CFC7",
       faded_green: "#ADCDB",
     },
-    // Configure breakpoints if needed. I copied from
-    // default breakpoints: https://docs.nativebase.io/breakpoints
-    breakpoints: {
-      base: 0,
-      sm: 480,
-      md: 768,
-      lg: 992,
-      xl: 1280,
+    config: {
+      // Changing initialColorMode to 'dark'
+      initialColorMode: "light",
     },
-  });
+  },
+};
+
+export default () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const theme = extendTheme(themeObject);
 
   const [IsReady, SetIsReady] = useState(false);
 
@@ -68,8 +93,6 @@ export default () => {
       />
     );
   }
-  const Tab = createBottomTabNavigator();
-  const Stack = createNativeStackNavigator();
 
   function HomeTabs() {
     return (
@@ -158,6 +181,11 @@ export default () => {
           >
             <Stack.Screen name="Measure" component={MeasureModal} />
           </Stack.Group>
+          <Stack.Screen
+            name="AddPlantLandingPage"
+            component={AddPlantLandingPage}
+            getId={({ params }) => params.progress}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

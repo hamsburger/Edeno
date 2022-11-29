@@ -3,7 +3,7 @@ import { Text, StyleSheet } from "react-native";
 import { Box, Menu, Pressable } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
 
-const Header = () => {
+const Header = ({ navigation }) => {
   return (
     <Box
       bgColor="secondary_green"
@@ -27,7 +27,16 @@ const Header = () => {
           }}
         >
           <Menu.Item>Edit My Eden</Menu.Item>
-          <Menu.Item>Add New Plant</Menu.Item>
+          <Menu.Item>
+            <Pressable
+              key="1"
+              onPress={() =>
+                navigation.navigate("AddPlantLandingPage", { progress: 1 })
+              }
+            >
+              <Text color="black">Add New Plant</Text>
+            </Pressable>
+          </Menu.Item>
         </Menu>
       </Box>
       <Text style={styles.page_title}>My Eden</Text>
