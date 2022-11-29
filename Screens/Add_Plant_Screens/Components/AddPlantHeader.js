@@ -1,17 +1,17 @@
 import { React, useContext, useEffect, useState } from 'react';
-import { Box, Text, Center, Flex, Button } from 'native-base';
+import { Box, Text, Center,  Button } from 'native-base';
 import { ProgressSlider } from '../../../Components/Progress_Slider';
-import { RouteContext } from "../AddPlantLandingPage";
+import { useRouteContext } from "../../../Contexts/Route_Context";
 
 let isResetFetch = false;
 
 export function AddPlantHeader(){
-    const { navigation, route } = useContext(RouteContext);
+    const { navigation, route } = useRouteContext();
     const progress = route.params.progress;
 
-    return <Flex w="100%" p={2} flexDirection="row" justifyContent="center" flexWrap="wrap">
-        <Box w="100%" pl={3}>
-            <Button bg="transparent" _text={{
+    return <>
+    <Box position="absolute" top={10} left={2} w="100%" pl={2} justifyContent="flex-start" flexDirection="row">
+            {(progress !== 3) && <Button bg="transparent" _text={{
                 fontSize: "19px",
                 color: "red.700"
             }} onPress={() => {
@@ -28,18 +28,19 @@ export function AddPlantHeader(){
                     }
                 
                 }}>
-                <Text fontSize="19px" color="red.700">{
-                    (progress === 1) && "Cancel" || "Back"
-                }</Text>
-            </Button>
-        </Box>
-        
+                {
+                    (progress === 1) ? "Cancel" : "Back"
+                }
+            </Button>}
+    </Box>
+    <Center w="100%" p={2} mt={16}>        
         <Center mt={3}>
             <Text fontSize="4xl">Add Plant</Text> 
         </Center> 
 
-        <Box w="100%" alignItems="center" marginTop={5} marginBottom={5}>
+        <Center w="100%" marginTop={5} marginBottom={5}>
             <ProgressSlider progress={progress}/> 
-        </Box>
-    </Flex>
+        </Center>
+    </Center>
+    </>
 }

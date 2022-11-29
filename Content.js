@@ -1,9 +1,11 @@
 
 
 import React from 'react';
-import { Menu, Box, Button, Text, Icon, IconButton, Center, Flex, ThreeDotsIcon } from 'native-base';
-import { Pressable, StyleSheet } from 'react-native'
+import { Menu, Box, Button, Text, Pressable, Center, Flex, ThreeDotsIcon } from 'native-base';
+import { StyleSheet, ScrollView } from 'react-native'
 import { PlantCard } from "./Components/PlantCard"
+import { Header } from 'react-native/Libraries/NewAppScreen';
+import { usePlants } from './Contexts/Plant_Context';
 
 const styles = StyleSheet.create({
     /**
@@ -16,42 +18,41 @@ const styles = StyleSheet.create({
 });
 
 const HeaderFinal = ({ navigation }) => {
-    return <Box pos="relative" w="100%" h="120"
-                bg="secondary.green">
+    return <Box position="relative" w="100%" h="120"
+    bg="secondary.green">
 
-                <Center pos="absolute" width="100%" h="100%" pb={2} justifyContent="flex-end">
-                    <Text wordWrap="break-word" fontSize="4xl">My Eden</Text>
-                </Center>
-                <Box position="absolute" top={0} right={0} padding={2} pt={6}>
-                    <Menu
-                        bg="white"
+    <Center pos="absolute" width="100%" h="100%" pb={2} justifyContent="flex-end">
+        <Text wordWrap="break-word" fontSize="4xl" color="white">My Eden</Text>
+    </Center>
+    <Box position="absolute" top={0} right={0} padding={2} pt={6}>
+        <Menu
+            bg="white"
 
-                        placement="bottom left"
-                        offset={30}
-                        shadow={0}
-                        trigger={(triggerProps) => {
-                        {/* Absolute Positioned Vertical Three-Dot Icon */}
-                        return <Button
-                            bg="transparent"    
-                            {...triggerProps}
-                            _pressed={
-                                {bg : "secondary.green"}
-                            }
-                        >   
-                            <ThreeDotsIcon style={styles.iconFlip} size="6" color="white"/>
-                        </Button>
-                        }}
-                        >
-
-                            <Menu.Item _text={{color: "black"}}>
-                                <Pressable onPress={() => navigation.navigate("AddPlantLandingPage")}>
-                                    <Text color="black">Add Plant</Text>
-                                </Pressable>
-                            </Menu.Item>
-                            <Menu.Item _text={{color: "black"}}>Delete Plant</Menu.Item>
-                    </Menu>
-                </Box>
+            placement="bottom left"
+            offset={30}
+            shadow={0}
+            trigger={(triggerProps) => {
+            {/* Absolute Positioned Vertical Three-Dot Icon */}
+            return <Button
+                bg="transparent"    
+                {...triggerProps}
+                _pressed={
+                    {bg : "secondary.green"}
+                }
+            >   
+                <ThreeDotsIcon style={styles.iconFlip} size="6" color="white"/>
+            </Button>
+            }}
+            >
+                <Menu.Item key="1">
+                    <Pressable key="1" onPress={() => navigation.navigate("AddPlantLandingPage", {progress: 1})}>
+                        <Text color="black">Add Plant</Text>
+                    </Pressable>
+                </Menu.Item>
+                <Menu.Item key="2">Delete Plant</Menu.Item>
+        </Menu>
     </Box>
+</Box>
 
 }
 
@@ -95,42 +96,18 @@ const HeaderFinal = ({ navigation }) => {
 // }
 
 
-function Content({ navigation }){
+function Content(props){
+    const [ Plants, dispatch ] = usePlants();
+
+    console.log(Plants);
     // const { arr } = ["Aria", ]
-    return <Box pos="relative" w="100%" h="120"
-        bg="secondary.green">
-
-        <Center pos="absolute" width="100%" h="100%" pb={2} justifyContent="flex-end">
-            <Text wordWrap="break-word" fontSize="4xl" color="white">My Eden</Text>
-        </Center>
-        <Box position="absolute" top={0} right={0} padding={2} pt={6}>
-            <Menu
-                bg="white"
-
-                placement="bottom left"
-                offset={30}
-                shadow={0}
-                trigger={(triggerProps) => {
-                {/* Absolute Positioned Vertical Three-Dot Icon */}
-                return <Button
-                    bg="transparent"    
-                    {...triggerProps}
-                    _pressed={
-                        {bg : "secondary.green"}
-                    }
-                >   
-                    <ThreeDotsIcon style={styles.iconFlip} size="6" color="white"/>
-                </Button>
-                }}
-                >
-                    <Menu.Item key="1">
-                        <Pressable key="1" onPress={() => navigation.navigate("AddPlantLandingPage", {progress: 1})}>
-                            <Text color="black">Add Plant</Text>
-                        </Pressable>
-                    </Menu.Item>
-                    <Menu.Item key="2">Delete Plant</Menu.Item>
-            </Menu>
-        </Box>
+    return <Box w="100%">
+        <HeaderFinal {...props}></HeaderFinal>
+        <ScrollView>
+        <Flex w="100%" justifyContent="flex-start" flexDirection="row" flexWrap="wrap">
+                { Plants.map((elem) => <PlantCard plantInfo={elem}/>) } 
+        </Flex>
+        </ScrollView>
     </Box>
 }
 
