@@ -1,13 +1,10 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from "react";
 
 const PlantsContext = createContext([{}, () => {}]);
 
 export function PlantProvider({ children }) {
-  const [Plants, dispatch] = useReducer(
-    PlantsReducer,
-    initialPlants
-  );
-  
+  const [Plants, dispatch] = useReducer(PlantsReducer, initialPlants);
+
   return (
     <PlantsContext.Provider value={[Plants, dispatch]}>
       {children}
@@ -21,14 +18,17 @@ export function usePlants() {
 
 function PlantsReducer(Plants, action) {
   switch (action.type) {
-    case 'added': {
-      return [...Plants, {
-        iconId: action.iconId,
-        plantName: action.plantName,
-      }];
+    case "added": {
+      return [
+        ...Plants,
+        {
+          iconId: action.iconId,
+          plantName: action.plantName,
+        },
+      ];
     }
-    case 'changed': {
-      return Plants.map(t => {
+    case "changed": {
+      return Plants.map((t) => {
         if (t.iconId === action.plant.iconId) {
           return action.plant;
         } else {
@@ -36,15 +36,15 @@ function PlantsReducer(Plants, action) {
         }
       });
     }
-    case 'deleted': {
-      return Plants.filter(t => t.iconId !== action.iconId);
+    case "deleted": {
+      return Plants.filter((t) => t.iconId !== action.iconId);
     }
     default: {
-      throw Error('Unknown action: ' + action.type);
+      throw Error("Unknown action: " + action.type);
     }
   }
 }
 
 const initialPlants = [
-  { iconId: 0, plantName : "Anthurium" }, // iconId stores the icon image used for the plant
+  { iconId: 0, plantName: "Anthurium" }, // iconId stores the icon image used for the plant
 ];

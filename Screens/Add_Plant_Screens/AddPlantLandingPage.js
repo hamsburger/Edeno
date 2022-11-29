@@ -10,7 +10,7 @@ export function AddPlantLandingPage(props) {
   const { route, navigation } = props;
   const [canContinue, setContinue] = useState(false);
   const progress = !route.params.progress ? 1 : route.params.progress;
-
+  alert(progress);
   return (
     <RouteProvider route={route} navigation={navigation}>
       <Box h="100%" w="100%" bg="white" pt={6}>
@@ -22,6 +22,9 @@ export function AddPlantLandingPage(props) {
         {/* Button at bottom to push landing page onto history stack, but with progress + 1 */}
         <Center w="100%">
           <Button
+            borderWidth={1}
+            borderColor="cyan.500"
+            backgroundColor="cyan.500"
             minW="1/5"
             onPress={() =>
               progress === 3
@@ -30,10 +33,10 @@ export function AddPlantLandingPage(props) {
                     progress: progress + 1,
                   })
             }
-            bg="secondary.green"
-            _disabled={{ opacity: 1, bg: "secondary.fadedGreen" }}
+            _disabled={{ opacity: 1, bg: "faded_green" }}
             isDisabled={!canContinue}
           >
+            Hi
             {(progress == 3 && "Return to Home") || "Next"}
           </Button>
         </Center>
