@@ -6,7 +6,7 @@ import Kabob from "../../assets/icons/kabob.svg";
 const Header = () => {
   return (
     <Box
-      bgColor="edeno_green.0"
+      bgColor="secondary_green"
       paddingTop="50px"
       px="30px"
       paddingBottom="15px"
