@@ -26,10 +26,15 @@ import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider } from "./Hooks/Contexts/Plant_Context";
 import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
+import { LogBox } from 'react-native';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const DEBUG = 0;
+const IGNORE_WARNINGS = 1;
+
+if (IGNORE_WARNINGS) LogBox.ignoreLogs(['Warning: ...']);
 
 const themeObject = {
   ...{
@@ -41,6 +46,12 @@ const themeObject = {
       },
       ...(DEBUG && {
         Box: {
+          baseStyle: {
+            borderColor: "cyan.500",
+            borderWidth: "1",
+          },
+        },
+        View: {
           baseStyle: {
             borderColor: "cyan.500",
             borderWidth: "1",

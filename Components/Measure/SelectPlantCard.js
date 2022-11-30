@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, Image } from "react-native";
-import { Button, Flex } from "native-base";
+import { Button, Pressable, Flex, Box } from "native-base";
 
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 
-const SelectPlantCard = ({ i, iconNum, name, onPress }) => {
+const SelectPlantCard = ({ i, iconNum, name, selected, setSelected }) => {
   return (
-    <Button
+    <Pressable key={i}        
       style={styles.plant}
       onPress={() => {
-        onPress(i);
+        setSelected(i)
       }}
+      
       _text={{
         color: "#432D1E",
       }}
-    >
-      <Flex direction="row" alignItems="center" justifyContent="center-between">
+    > 
+      <Flex bg={(selected === i) ? "silver": "transparent"} w="100%" h="100px" direction="row" 
+      alignItems="center" justifyContent="flex-start" rounded={2} pr={3}>
         <Image
-          style={{ height: 75, width: 75, marginRight: 20 }}
+          style={{ height: 75, width: 75, marginRight: 20, marginTop: 20, marginBottom: 20}}
           source={plant_icons[iconNum]}
         />
-        <Text style={styles.plant_name}>{name}</Text>
+        <Box>
+          <Text 
+            style={styles.plant_name}
+          >{name}</Text>
+        </Box>
       </Flex>
-    </Button>
+    </Pressable>
   );
 };
 
@@ -30,7 +36,7 @@ const styles = StyleSheet.create({
   plant: { backgroundColor: "transparent" },
   plant_name: {
     fontFamily: "SFProDisplay-Bold",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 17,
   },
 });

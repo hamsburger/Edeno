@@ -29,7 +29,7 @@ function PlantsReducer(Plants, action) {
     }
     case "changed": {
       return Plants.map((t) => {
-        if (t.iconId === action.plant.iconId) {
+        if (t.plantName === action.plant.plantName) {
           return action.plant;
         } else {
           return t;
@@ -37,7 +37,7 @@ function PlantsReducer(Plants, action) {
       });
     }
     case "deleted": {
-      return Plants.filter((t) => t.iconId !== action.iconId);
+      return Plants.filter((t) => t.platnName !== action.plantName);
     }
     default: {
       throw Error("Unknown action: " + action.type);

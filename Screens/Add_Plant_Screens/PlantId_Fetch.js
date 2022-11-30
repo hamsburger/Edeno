@@ -14,9 +14,9 @@ import {
   WarningOutlineIcon,
 } from "native-base";
 import {
-  useRouteContext,
   usePlant,
 } from "../../Hooks/Contexts/AddPlant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 
 export function PlantId_Fetch(props) {
@@ -26,8 +26,10 @@ export function PlantId_Fetch(props) {
   const [loading, setLoading] = useState(false);
   const [inputText, setText] = useState("");
   const [isInputTextInvalid, setInputTextInvalid] = useState(false);
+  const [inputTextErrorMessage, setInputTextErrorMessage] = useState(false);
   const { setContinue } = props;
   const [Plant, setPlant] = usePlant();
+  const [Plants, dispatch] = usePlants();
 
   // // useEffect to fetch from plant.id
   useEffect(() => {
@@ -77,15 +79,26 @@ export function PlantId_Fetch(props) {
                     // Input is invalid if we don't have any string entered.
                     if (inputText === "") {
                       setInputTextInvalid(true);
+                      setInputTextErrorMessage("Please Enter a Valid Plant Name");
                       setContinue(false);
                       return;
                     }
+
+                    // If the Input already exists in Plant Database
+                    if (Plants.filter(e => e.plantName === inputText).length > 0){
+                      setInputTextInvalid(true);
+                      setInputTextErrorMessage("Plant Name Already Exists in Database");
+                      setContinue(false);
+                      return;
+                    }
+
 
                     // else it is valid
                     setInputTextInvalid(false);
                     setSearched(!hasSearched); // Toggle search
                     setPlant((prevPlant) => ({
                       ...prevPlant,
+                      id : inputText,
                       plantName: inputText,
                     })); // Set the plant name
                     Keyboard.dismiss();
@@ -97,7 +110,7 @@ export function PlantId_Fetch(props) {
             <FormControl.ErrorMessage
               leftIcon={<WarningOutlineIcon size="xs" />}
             >
-              Please Enter a Valid Plant Name
+              {inputTextErrorMessage}
             </FormControl.ErrorMessage>
           </FormControl>
         </Box>

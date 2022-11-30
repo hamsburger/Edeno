@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
 import {
+  Box,
   Center,
   ScrollView,
   View,
@@ -17,24 +18,31 @@ const MeasureModal = ({ navigation }) => {
   const [selected, setSelected] = useState(-1);
   const [Plants, dispatch] = usePlants();
 
-  const onPress = (index) => {
-    setSelected(index);
-  };
+  const plantElements = useMemo(
+    () => {
+    return Plants.map((elem, i) => (
+      <SelectPlantCard
+        i={i}
+        iconNum={elem.iconId}
+        name={elem.plantName}
+        selected={selected}
+        setSelected={setSelected}
+      />
+    ))
+    }
+  , [selected]);
 
   return (
     <View style={styles.modal}>
       <Text style={styles.select_prompt}>Select the plant to measure.</Text>
-      <View style={styles.plants}>
-        <ScrollView persistentScrollbar="true">
-          <Flex justifyContent="flex-start">
-            {Plants.map((elem, i) => (
-              <SelectPlantCard
-                i={i}
-                iconNum={elem.iconId}
-                name={elem.plantName}
-                onPress={onPress}
-              />
-            ))}
+
+      {/* Plants Box that Defines ScrollView Height */}
+      <View style={styles.plants}> 
+        <ScrollView persistentScrollbar={true}>
+          
+          {/* Plants Flexbox */}
+          <Flex w="100%" justifyContent="flex-start" flexWrap="wrap"> 
+            {plantElements}
           </Flex>
         </ScrollView>
       </View>
@@ -68,7 +76,7 @@ const MeasureModal = ({ navigation }) => {
         >
           Start
         </Button>
-      </Center>
+      </Center> 
     </View>
   );
 };
@@ -78,16 +86,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     // justifyContent: "center",
-    paddingTop: 35,
+    paddingTop: 75,
   },
   select_prompt: {
     color: "#432D1E",
     fontWeight: "700",
-    fontSize: "19px",
+    fontSize: 19,
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
-  plants: { height: "65%", marginTop: 25, marginBottom: 30 },
+  plants: { height: "65%", width: "65%", marginTop: 25, marginBottom: 30 },
   alert: {
     textAlign: "center",
     color: "#B9422C",

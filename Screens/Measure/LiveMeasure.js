@@ -11,13 +11,7 @@ const LiveMeasure = ({ route, navigation }) => {
   const [Plants, dispatch] = usePlants();
   return (
     <View>
-      <Box
-        w="100%"
-        pl={2}
-        paddingTop={43}
-        justifyContent="flex-start"
-        flexDirection="row"
-      >
+      <Box position="absolute" left={2} top={43}>
         <Button
           bg="transparent"
           _text={{
@@ -28,7 +22,8 @@ const LiveMeasure = ({ route, navigation }) => {
             navigation.navigate("Home");
           }}
         >
-          Cancel
+          
+            Cancel
         </Button>
       </Box>
       <View style={styles.container}>
@@ -72,18 +67,18 @@ const LiveMeasure = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { display: "flex", alignItems: "center" },
+  container: { display: "flex", alignItems: "center", marginTop: 60},
   plant_name: {
     color: "#597F51",
     fontFamily: "SFProDisplay-Bold",
-    fontSize: "28px",
+    fontSize: 28,
     paddingTop: 64,
     paddingBottom: 47,
   },
   live_reading: {
     color: "#432D1E",
     fontFamily: "SFProDisplay-Bold",
-    fontSize: "19px",
+    fontSize: 19,
     marginLeft: 10,
   },
   measurement_title: {
@@ -91,13 +86,13 @@ const styles = StyleSheet.create({
     marginRight: 29,
     color: "#432D1E",
     fontFamily: "SFProDisplay-Regular",
-    fontSize: "17",
+    fontSize: 17,
   },
   measurement: {
     paddingTop: 16,
     color: "#432D1E",
     fontFamily: "SFProDisplay-Regular",
-    fontSize: "17",
+    fontSize: 17,
   },
 });
 

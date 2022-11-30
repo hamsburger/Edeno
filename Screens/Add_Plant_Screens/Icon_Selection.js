@@ -3,6 +3,7 @@ import { Image, ScrollView } from "react-native";
 import { Text, Flex, Box, Button, Center, Select } from "native-base";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 import { usePlant } from "../../Hooks/Contexts/AddPlant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 
 export function Icon_Selection(props) {
   // Code can be optimized. plant_icons.map does not have to be called every single time
