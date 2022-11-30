@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import { Image } from "react-native";
+import { Image, Keyboard } from "react-native";
 import {
   Text,
   Center,
@@ -88,8 +88,9 @@ export function PlantId_Fetch(props) {
                       ...prevPlant,
                       plantName: inputText,
                     })); // Set the plant name
+                    Keyboard.dismiss();
                   }}
-                  startIcon={<SearchIcon color="secondary.edenoGreen" />}
+                  startIcon={<SearchIcon color="edeno_green" />}
                 />
               }
             />

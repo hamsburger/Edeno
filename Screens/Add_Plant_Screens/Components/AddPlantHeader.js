@@ -7,7 +7,7 @@ let isResetFetch = false;
 
 export function AddPlantHeader() {
   const { navigation, route } = useRouteContext();
-  const progress = route.params.progress;
+  const progress = (!route.params.progress) ? 1 : route.params.progress;
 
   return (
     <>

@@ -17,7 +17,7 @@ export function Icon_Selection(props) {
         return (
           <Button
             key={i}
-            bg={pressed === i ? "secondary.culturedGrey" : "transparent"}
+            bg={pressed === i ? "cultured_grey" : "transparent"}
             startIcon={
               <Image source={elem} style={{ height: 64, width: 64 }} />
             }
@@ -26,7 +26,7 @@ export function Icon_Selection(props) {
               setPlant((prevPlant) => ({ ...prevPlant, iconId: i }));
               setContinue(true);
             }}
-            _pressed={{ bg: "secondary.culturedGrey" }}
+            _pressed={{ bg: "cultured_grey" }}
           ></Button>
         );
       }),
