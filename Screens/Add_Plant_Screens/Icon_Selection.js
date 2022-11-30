@@ -42,7 +42,7 @@ export function Icon_Selection(props) {
       mb={5}
     >
       <Center>
-        <Text fontSize="lg" fontWeight="bold">
+        <Text textAlign={"center"} fontSize="lg" fontWeight="bold">
           Choose an icon for your {Plant.plantName}
         </Text>
       </Center>
