@@ -2,10 +2,10 @@ import React from "react";
 import { Text, View, SafeAreaView, ScrollView } from "react-native";
 import { Header } from "../../Components/Header/Header";
 
-const Settings = () => {
+const Settings = (props) => {
   return (
     <View>
-      <Header />
+      <Header {...props}/>
       <ScrollView>
         <Text>Settings</Text>
       </ScrollView>

@@ -4,15 +4,15 @@ import { Box, Slider, Flex } from 'native-base';
 const numSteps = 3;
 
 let progressStates = {
-    1 : [{"width" : "0%", "colorScheme" : "secondary.green"}, 
-         {"width" : "50%", "colorScheme" : "secondary.fadedGreen"}, 
-         {"width" : "50%", "colorScheme" : "secondary.fadedGreen"}], 
-    2 : [{"width" : "0%", "colorScheme" : "secondary.green"}, 
-         {"width" : "50%", "colorScheme" : "secondary.green"}, 
-         {"width" : "50%", "colorScheme" : "secondary.fadedGreen"}], 
-    3 : [{"width" : "0%", "colorScheme" : "secondary.green"}, 
-         {"width" : "50%", "colorScheme" : "secondary.green"}, 
-         {"width" : "50%", "colorScheme" : "secondary.green"}], 
+    1 : [{"width" : "0%", "colorScheme" : "secondary_green"}, 
+         {"width" : "50%", "colorScheme" : "faded_green"}, 
+         {"width" : "50%", "colorScheme" : "faded_green"}], 
+    2 : [{"width" : "0%", "colorScheme" : "secondary_green"}, 
+         {"width" : "50%", "colorScheme" : "secondary_green"}, 
+         {"width" : "50%", "colorScheme" : "faded_green"}], 
+    3 : [{"width" : "0%", "colorScheme" : "secondary_green"}, 
+         {"width" : "50%", "colorScheme" : "secondary_green"}, 
+         {"width" : "50%", "colorScheme" : "secondary_green"}], 
 }
 
 export function ProgressSlider(props){
@@ -29,9 +29,9 @@ export function ProgressSlider(props){
     //     opacity: 1
     //  }}>
     //     <Slider.Track>
-    //         <Slider.FilledTrack bg="secondary.green"/>
+    //         <Slider.FilledTrack bg="secondary_green"/>
     //     </Slider.Track>
-    //     <Slider.Thumb bg="secondary.green"/>
+    //     <Slider.Thumb bg="secondary_green"/>
     //  </Slider>
 
     return (<Flex w="80%" flexDirection="row" justifyContent="center">

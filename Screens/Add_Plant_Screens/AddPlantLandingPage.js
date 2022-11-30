@@ -10,7 +10,6 @@ export function AddPlantLandingPage(props) {
   const { route, navigation } = props;
   const [canContinue, setContinue] = useState(false);
   const progress = !route.params.progress ? 1 : route.params.progress;
-  alert(progress);
   return (
     <RouteProvider route={route} navigation={navigation}>
       <Box h="100%" w="100%" bg="white" pt={6}>
@@ -26,6 +25,7 @@ export function AddPlantLandingPage(props) {
             borderColor="cyan.500"
             backgroundColor="cyan.500"
             minW="1/5"
+            bg="secondary_green"
             onPress={() =>
               progress === 3
                 ? navigation.navigate("Home")

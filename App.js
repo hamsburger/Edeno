@@ -1,4 +1,4 @@
-import * as Font from "expo-font";
+
 import AppLoading from "expo-app-loading";
 import React, { useState } from "react";
 import {
@@ -21,6 +21,7 @@ import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
 import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
+import { Content } from "./Content";
 import { initializeApp } from "firebase/app";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
@@ -64,7 +65,7 @@ const themeObject = {
       attention_yellow: "#C9B500",
       menu_selected_dark_green: "#1B461A",
       light_vermillion_red: "#F5CFC7",
-      faded_green: "#ADCDB",
+      faded_green: "#ADCDB0",
     },
     config: {
       // Changing initialColorMode to 'dark'
@@ -118,8 +119,8 @@ export default () => {
           tabBarActiveTintColor: "#1B461A",
           tabBarInactiveTintColor: "white",
         })}
-      >
-        <Tab.Screen
+      > 
+       <Tab.Screen
           name="My Eden"
           component={Home}
           options={{
@@ -131,7 +132,7 @@ export default () => {
             tabBarIcon: ({ focused }) =>
               focused ? <HomeSelected /> : <HomeNotSelected />,
           }}
-        />
+        /> 
         <Tab.Screen
           name="MeasureTrigger"
           component={Measure}
@@ -146,7 +147,7 @@ export default () => {
             },
           })}
         />
-        <Tab.Screen
+         <Tab.Screen
           name="Settings"
           component={Settings}
           options={{
@@ -160,11 +161,17 @@ export default () => {
           }}
         />
       </Tab.Navigator>
+
+
+
+      
     );
   }
 
   return (
     <NativeBaseProvider theme={theme}>
+      <PlantProvider>
+      <AddPlantProvider>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -188,6 +195,8 @@ export default () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      </AddPlantProvider>
+      </PlantProvider>
     </NativeBaseProvider>
   );
 };
