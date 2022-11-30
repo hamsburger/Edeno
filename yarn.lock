@@ -10825,6 +10825,11 @@ react-native-web@~0.18.9:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.2"
 
+react-native-wheel-scrollview-picker@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-wheel-scrollview-picker/-/react-native-wheel-scrollview-picker-2.0.1.tgz#130fb9c4c6080376d4166d53e626c67d65193931"
+  integrity sha512-jNhOU/gsw9TDumMev4vMaIfR9Coicc4Pgo3kizdam0UC0NQga1gpLWnXuZoYIwEIDElwbHXAEGINOoiF1MM5Hw==
+
 react-native@0.70.5:
   version "0.70.5"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.70.5.tgz#f60540b21d338891086e0a834e331c124dd1f55c"

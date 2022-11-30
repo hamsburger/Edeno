@@ -4,7 +4,7 @@ import { View, Text } from "native-base";
 const Measure = () => {
   return (
     <View>
-      <Text>Start Measurings</Text>
+      <Text>Dummy Page. DO NOT DELETE.</Text>
     </View>
   );
 };

@@ -1,4 +1,3 @@
-
 import AppLoading from "expo-app-loading";
 import React, { useState } from "react";
 import {
@@ -26,6 +25,7 @@ import { initializeApp } from "firebase/app";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider } from "./Hooks/Contexts/Plant_Context";
+import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -119,8 +119,8 @@ export default () => {
           tabBarActiveTintColor: "#1B461A",
           tabBarInactiveTintColor: "white",
         })}
-      > 
-       <Tab.Screen
+      >
+        <Tab.Screen
           name="My Eden"
           component={Home}
           options={{
@@ -132,7 +132,7 @@ export default () => {
             tabBarIcon: ({ focused }) =>
               focused ? <HomeSelected /> : <HomeNotSelected />,
           }}
-        /> 
+        />
         <Tab.Screen
           name="MeasureTrigger"
           component={Measure}
@@ -147,7 +147,7 @@ export default () => {
             },
           })}
         />
-         <Tab.Screen
+        <Tab.Screen
           name="Settings"
           component={Settings}
           options={{
@@ -161,41 +161,38 @@ export default () => {
           }}
         />
       </Tab.Navigator>
-
-
-
-      
     );
   }
 
   return (
     <NativeBaseProvider theme={theme}>
       <PlantProvider>
-      <AddPlantProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          initialRouteName="Home"
-        >
-          <Stack.Screen name="Home" component={HomeTabs} />
+        <AddPlantProvider>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
+              }}
+              initialRouteName="Home"
+            >
+              <Stack.Screen name="Home" component={HomeTabs} />
 
-          <Stack.Group
-            screenOptions={({ navigation }) => ({
-              presentation: "modal",
-            })}
-          >
-            <Stack.Screen name="Measure" component={MeasureModal} />
-          </Stack.Group>
-          <Stack.Screen
-            name="AddPlantLandingPage"
-            component={AddPlantLandingPage}
-            getId={({ params }) => params.progress}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-      </AddPlantProvider>
+              <Stack.Group
+                screenOptions={({ navigation }) => ({
+                  presentation: "modal",
+                })}
+              >
+                <Stack.Screen name="Measure" component={MeasureModal} />
+              </Stack.Group>
+              <Stack.Screen
+                name="AddPlantLandingPage"
+                component={AddPlantLandingPage}
+                getId={({ params }) => params.progress}
+              />
+              <Stack.Screen name="LiveMeasure" component={LiveMeasure} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AddPlantProvider>
       </PlantProvider>
     </NativeBaseProvider>
   );

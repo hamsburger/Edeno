@@ -21,9 +21,6 @@ export function AddPlantLandingPage(props) {
         {/* Button at bottom to push landing page onto history stack, but with progress + 1 */}
         <Center w="100%">
           <Button
-            borderWidth={1}
-            borderColor="cyan.500"
-            backgroundColor="cyan.500"
             minW="1/5"
             bg="secondary_green"
             onPress={() =>
@@ -36,7 +33,6 @@ export function AddPlantLandingPage(props) {
             _disabled={{ opacity: 1, bg: "faded_green" }}
             isDisabled={!canContinue}
           >
-            Hi
             {(progress == 3 && "Return to Home") || "Next"}
           </Button>
         </Center>
