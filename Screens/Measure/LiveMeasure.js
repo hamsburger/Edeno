@@ -15,21 +15,21 @@ const LiveMeasure = ({ route, navigation }) => {
   useEffect(() => {
     db.listenForChildUpdate("readings", setReadings);
 
-    /* Get readings every five seconds */
-    const interval = setInterval(
-      () =>
-        db.pushToRealTimeDatabase("readings", {
-          Light: Math.floor(Math.random() * 135) + [], // + [] is a shorthand for string conversion
-          Moisture: Math.floor(Math.random() * 10) + [],
-          PH: Math.floor(Math.random() * 10) + [],
-          Temp: Math.floor(Math.random() * 50 - 25) + [],
-          Humidity: Math.floor(Math.random() * 50 - 25) + [],
-        }),
-      5000
-    );
+    // /* Get readings every five seconds */
+    // const interval = setInterval(
+    //   () =>
+    //     db.pushToRealTimeDatabase("readings", {
+    //       Light: Math.floor(Math.random() * 135) + [], // + [] is a shorthand for string conversion
+    //       Moisture: Math.floor(Math.random() * 10) + [],
+    //       PH: Math.floor(Math.random() * 10) + [],
+    //       Temp: Math.floor(Math.random() * 50 - 25) + [],
+    //       Humidity: Math.floor(Math.random() * 50 - 25) + [],
+    //     }),
+    //   5000
+    // );
 
     return () => {
-      clearInterval(interval);
+      // clearInterval(interval);
       db.cleanListeners();
     };
   }, []);
