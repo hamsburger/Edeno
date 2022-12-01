@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import { View, Text, Box, Button, Flex, Center } from "native-base";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import LiveIcon from "../../assets/icons/live-circle.svg";
+
+
 
 const LiveMeasure = ({ route, navigation }) => {
   const { plantIndex } = route.params;
-
   const [Plants, dispatch] = usePlants();
+  const [readings, setReadings] = useState({}); 
+  const db = useFirebaseDatabase();
+
+  useEffect(() => {
+    db.listenForChildUpdate("readings", setReadings);
+
+    /* Get readings every five seconds */
+    const interval = setInterval( () => db.pushToRealTimeDatabase("readings", {
+      "Light": Math.floor((Math.random() * 135)) + [] , // + [] is a shorthand for string conversion 
+      "Moisture": Math.floor((Math.random() * 10)) + [],
+      "PH": Math.floor((Math.random() * 10)) + [],
+      "Temp": Math.floor((Math.random() * 50 - 25)) + [],
+      "Humidity": Math.floor((Math.random() * 50 - 25)) + []
+    }), 5000)
+
+    return () => {
+      clearInterval(interval);
+      db.cleanListeners();
+    }
+  }, [])
+  
+  console.log(readings)
   return (
     <View>
       <Box position="absolute" left={2} top={43}>
@@ -38,23 +62,23 @@ const LiveMeasure = ({ route, navigation }) => {
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>pH Level:</Text>
-          <Text style={styles.measurement}>9</Text>
+          <Text style={styles.measurement}>{readings.PH}</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Soil Moisture:</Text>
-          <Text style={styles.measurement}>3</Text>
+          <Text style={styles.measurement}>{readings.Moisture}</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Humidity:</Text>
-          <Text style={styles.measurement}>65%</Text>
+          <Text style={styles.measurement}>{readings.Humidity}</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Temperature:</Text>
-          <Text style={styles.measurement}>18°C</Text>
+          <Text style={styles.measurement}>{readings.Temp}</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Light Intensity:</Text>
-          <Text style={styles.measurement}>98 LUX</Text>
+          <Text style={styles.measurement}>{readings.Light} LUX</Text>
         </Flex>
       </View>
       <Center w="100%" marginTop={100}>

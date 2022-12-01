@@ -2,7 +2,7 @@ import { createContext, useState, useContext } from 'react';
 
 const NewPlantContext = createContext([{}, () => {}]);
 
-export function AddPlantProvider({children }) {
+export function AddPlantProvider({ children }) {
   const [Plant, setPlant] = useState({});
   
   return (

@@ -27,6 +27,7 @@ import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider } from "./Hooks/Contexts/Plant_Context";
 import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
 import { LogBox } from 'react-native';
+import { FirebaseProvider } from "./Hooks/Contexts/Firebase_Context";
 
 
 const Tab = createBottomTabNavigator();
@@ -177,6 +178,7 @@ export default () => {
 
   return (
     <NativeBaseProvider theme={theme}>
+      <FirebaseProvider>
       <PlantProvider>
         <AddPlantProvider>
           <NavigationContainer>
@@ -205,6 +207,7 @@ export default () => {
           </NavigationContainer>
         </AddPlantProvider>
       </PlantProvider>
+      </FirebaseProvider>
     </NativeBaseProvider>
   );
 };
