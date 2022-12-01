@@ -16,6 +16,9 @@ const Home = (props) => {
           justifyContent="flex-start"
           flexDirection="row"
           flexWrap="wrap"
+          padding={15}
+          paddingBottom={140}
+          bg="#FBFBFB"
         >
           {Plants.map((elem) => (
             <PlantCard plantInfo={elem} />

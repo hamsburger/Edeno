@@ -26,16 +26,15 @@ import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider } from "./Hooks/Contexts/Plant_Context";
 import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
-import { LogBox } from 'react-native';
+import { LogBox } from "react-native";
 import { FirebaseProvider } from "./Hooks/Contexts/Firebase_Context";
-
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const DEBUG = 0;
 const IGNORE_WARNINGS = 1;
 
-if (IGNORE_WARNINGS) LogBox.ignoreLogs(['Warning: ...']);
+if (IGNORE_WARNINGS) LogBox.ignoreLogs(["Warning: ..."]);
 
 const themeObject = {
   ...{
@@ -179,34 +178,36 @@ export default () => {
   return (
     <NativeBaseProvider theme={theme}>
       <FirebaseProvider>
-      <PlantProvider>
-        <AddPlantProvider>
-          <NavigationContainer>
-            <Stack.Navigator
-              screenOptions={{
-                headerShown: false,
-              }}
-              initialRouteName="Home"
-            >
-              <Stack.Screen name="Home" component={HomeTabs} />
-
-              <Stack.Group
-                screenOptions={({ navigation }) => ({
-                  presentation: "modal",
-                })}
+        <PlantProvider>
+          <AddPlantProvider>
+            <NavigationContainer>
+              <Stack.Navigator
+                screenOptions={{
+                  headerShown: false,
+                }}
+                initialRouteName="Home"
               >
-                <Stack.Screen name="Measure" component={MeasureModal} />
-              </Stack.Group>
-              <Stack.Screen
-                name="AddPlantLandingPage"
-                component={AddPlantLandingPage}
-                getId={({ params }) => params.progress}
-              />
-              <Stack.Screen name="LiveMeasure" component={LiveMeasure} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </AddPlantProvider>
-      </PlantProvider>
+                <Stack.Screen name="Home" component={HomeTabs} />
+
+                <Stack.Group
+                  screenOptions={({ navigation }) => ({
+                    presentation: "modal",
+                  })}
+                >
+                  <Stack.Screen name="Measure" component={MeasureModal} />
+                </Stack.Group>
+                <Stack.Screen
+                  name="AddPlantLandingPage"
+                  component={AddPlantLandingPage}
+                  getId={({ params }) => params.progress}
+                />
+                <Stack.Screen name="LiveMeasure">
+                  {(props) => <LiveMeasure {...props} visible={1} />}
+                </Stack.Screen>
+              </Stack.Navigator>
+            </NavigationContainer>
+          </AddPlantProvider>
+        </PlantProvider>
       </FirebaseProvider>
     </NativeBaseProvider>
   );

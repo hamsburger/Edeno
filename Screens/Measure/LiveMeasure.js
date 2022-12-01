@@ -6,33 +6,35 @@ import { plant_icons } from "../../Constants/StaticPlantIconImages";
 import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import LiveIcon from "../../assets/icons/live-circle.svg";
 
-
-
 const LiveMeasure = ({ route, navigation }) => {
   const { plantIndex } = route.params;
   const [Plants, dispatch] = usePlants();
-  const [readings, setReadings] = useState({}); 
+  const [readings, setReadings] = useState({});
   const db = useFirebaseDatabase();
 
   useEffect(() => {
     db.listenForChildUpdate("readings", setReadings);
 
     /* Get readings every five seconds */
-    const interval = setInterval( () => db.pushToRealTimeDatabase("readings", {
-      "Light": Math.floor((Math.random() * 135)) + [] , // + [] is a shorthand for string conversion 
-      "Moisture": Math.floor((Math.random() * 10)) + [],
-      "PH": Math.floor((Math.random() * 10)) + [],
-      "Temp": Math.floor((Math.random() * 50 - 25)) + [],
-      "Humidity": Math.floor((Math.random() * 50 - 25)) + []
-    }), 5000)
+    const interval = setInterval(
+      () =>
+        db.pushToRealTimeDatabase("readings", {
+          Light: Math.floor(Math.random() * 135) + [], // + [] is a shorthand for string conversion
+          Moisture: Math.floor(Math.random() * 10) + [],
+          PH: Math.floor(Math.random() * 10) + [],
+          Temp: Math.floor(Math.random() * 50 - 25) + [],
+          Humidity: Math.floor(Math.random() * 50 - 25) + [],
+        }),
+      5000
+    );
 
     return () => {
       clearInterval(interval);
       db.cleanListeners();
-    }
-  }, [])
-  
-  console.log(readings)
+    };
+  }, []);
+
+  console.log(readings);
   return (
     <View>
       <Box position="absolute" left={2} top={43}>
@@ -46,8 +48,7 @@ const LiveMeasure = ({ route, navigation }) => {
             navigation.navigate("Home");
           }}
         >
-          
-            Cancel
+          Cancel
         </Button>
       </Box>
       <View style={styles.container}>
@@ -82,7 +83,13 @@ const LiveMeasure = ({ route, navigation }) => {
         </Flex>
       </View>
       <Center w="100%" marginTop={100}>
-        <Button minW="1/5" bg="secondary_green" onPress={() => {}}>
+        <Button
+          minW="1/5"
+          bg="secondary_green"
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
           Done
         </Button>
       </Center>
@@ -91,7 +98,7 @@ const LiveMeasure = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { display: "flex", alignItems: "center", marginTop: 60},
+  container: { display: "flex", alignItems: "center", marginTop: 60 },
   plant_name: {
     color: "#597F51",
     fontFamily: "SFProDisplay-Bold",

@@ -6,26 +6,38 @@ import { plant_icons } from "../../Constants/StaticPlantIconImages";
 
 const SelectPlantCard = ({ i, iconNum, name, selected, setSelected }) => {
   return (
-    <Pressable key={i}        
+    <Pressable
+      key={i}
       style={styles.plant}
       onPress={() => {
-        setSelected(i)
+        setSelected(i);
       }}
-      
       _text={{
         color: "#432D1E",
       }}
-    > 
-      <Flex bg={(selected === i) ? "silver": "transparent"} w="100%" h="100px" direction="row" 
-      alignItems="center" justifyContent="flex-start" rounded={2} pr={3}>
+    >
+      <Flex
+        bg={selected === i ? "#E4E4E4" : "transparent"}
+        w="100%"
+        h="100px"
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-start"
+        rounded={2}
+        pr={3}
+      >
         <Image
-          style={{ height: 75, width: 75, marginRight: 20, marginTop: 20, marginBottom: 20}}
+          style={{
+            height: 75,
+            width: 75,
+            marginRight: 20,
+            marginTop: 20,
+            marginBottom: 20,
+          }}
           source={plant_icons[iconNum]}
         />
         <Box>
-          <Text 
-            style={styles.plant_name}
-          >{name}</Text>
+          <Text style={styles.plant_name}>{name}</Text>
         </Box>
       </Flex>
     </Pressable>
