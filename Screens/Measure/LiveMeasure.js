@@ -67,15 +67,15 @@ const LiveMeasure = ({ route, navigation }) => {
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Soil Moisture:</Text>
-          <Text style={styles.measurement}>{readings.Moisture}</Text>
+          <Text style={styles.measurement}>{readings.Moisture}%</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Humidity:</Text>
-          <Text style={styles.measurement}>{readings.Humidity}</Text>
+          <Text style={styles.measurement}>{readings.humidity}%</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Temperature:</Text>
-          <Text style={styles.measurement}>{readings.Temp}</Text>
+          <Text style={styles.measurement}>{readings.Temp}°C</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Light Intensity:</Text>
