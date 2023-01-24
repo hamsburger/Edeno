@@ -175,22 +175,6 @@ export default () => {
     );
   }
 
-  const [IsReady, SetIsReady] = useState(false);
-
-  const LoadFonts = async () => {
-    await useFonts();
-  };
-
-  if (!IsReady) {
-    return (
-      <AppLoading
-        startAsync={LoadFonts}
-        onFinish={() => SetIsReady(true)}
-        onError={() => {}}
-      />
-    );
-  }
-
   return (
     <NativeBaseProvider theme={theme}>
       <FirebaseProvider>
