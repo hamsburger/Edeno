@@ -61,5 +61,5 @@ Run [functions-framework](https://cloud.google.com/functions/docs/running/functi
 
 The below command can be run in the /edeno/server directory. It runs hello_get function from the main.py file in ./python-docs-samples/functions/helloworld
 ```bash
-functions-framework --target=hello_get --signature-type=http --source=./python-docs-samples/functions/helloworld/main.py
+functions-framework --target=hello_get --signature-type=http --source=./helloworld/main.py
 ```
