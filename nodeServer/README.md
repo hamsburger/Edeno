@@ -1,0 +1,1 @@
+Run npm start to test helloGET function locally. 
