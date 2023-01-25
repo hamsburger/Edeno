@@ -1,2 +1,6 @@
 virtualEnv
+<<<<<<< HEAD
 python-docs-samples
+=======
+python-docs-samples
+>>>>>>> e79b4d6 (.gitignore python-docs-samples)
