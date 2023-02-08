@@ -16,11 +16,20 @@ const Header = ({ navigation }) => {
           placement="bottom left"
           trigger={(triggerProps) => {
             return (
-              <Pressable w="100%"
+              <Pressable
+                w="100%"
                 accessibilityLabel="More options menu"
                 {...triggerProps}
               >
-                <Flex w="100%" justifyContent="flex-end" alignItems="center" pr={9} pt={9} pb={5} flexDirection="row">
+                <Flex
+                  w="100%"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                  pr={9}
+                  pt={9}
+                  pb={5}
+                  flexDirection="row"
+                >
                   <Kabob width={7} height={29} />
                 </Flex>
               </Pressable>
@@ -41,7 +50,9 @@ const Header = ({ navigation }) => {
         </Menu>
       </Flex>
       <Box>
-        <Text fontSize="34px" style={styles.page_title}>My Eden</Text>
+        <Text fontSize="34px" style={styles.page_title}>
+          My Eden
+        </Text>
       </Box>
     </Box>
   );
