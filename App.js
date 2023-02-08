@@ -26,6 +26,7 @@ import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider } from "./Hooks/Contexts/Plant_Context";
 import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
+import { PlantInfoPage } from "./Screens/PlantInfoPage/PlantInfoPage";
 import { LogBox } from "react-native";
 import { FirebaseProvider } from "./Hooks/Contexts/Firebase_Context";
 
@@ -106,6 +107,23 @@ export default () => {
     );
   }
 
+  const HomeStack = createNativeStackNavigator();
+
+  function HomeStackScreen() {
+    return (
+      <HomeStack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <HomeStack.Screen name="Home" component={Home} />
+        <HomeStack.Screen name="PlantInfoPage">
+          {(props) => <PlantInfoPage {...props} />}
+        </HomeStack.Screen>
+      </HomeStack.Navigator>
+    );
+  }
+
   function HomeTabs() {
     return (
       <Tab.Navigator
@@ -133,7 +151,7 @@ export default () => {
       >
         <Tab.Screen
           name="My Eden"
-          component={Home}
+          component={HomeStackScreen}
           options={{
             tabBarLabelStyle: {
               fontSize: 14,
@@ -196,14 +214,20 @@ export default () => {
                 >
                   <Stack.Screen name="Measure" component={MeasureModal} />
                 </Stack.Group>
+
                 <Stack.Screen
                   name="AddPlantLandingPage"
                   component={AddPlantLandingPage}
                   getId={({ params }) => params.progress}
                 />
+
                 <Stack.Screen name="LiveMeasure">
                   {(props) => <LiveMeasure {...props} visible={1} />}
                 </Stack.Screen>
+
+                {/* <Stack.Screen name="PlantInfoPage">
+                  {(props) => <PlantInfoPage {...props} visible={1} />}
+                </Stack.Screen> */}
               </Stack.Navigator>
             </NavigationContainer>
           </AddPlantProvider>

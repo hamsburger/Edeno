@@ -4,24 +4,26 @@ import { Header } from "../../Components/Header/Header";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { PlantCard } from "../../Components/PlantCard";
 
-const Home = (props) => {
+const Home = ({ navigation }) => {
   const [Plants, dispatch] = usePlants();
 
   return (
     <View>
-      <Header {...props} />
+      <Header navigation={navigation} />
       <ScrollView>
         <View
-          w="100%"
+          // w="90%"
           justifyContent="flex-start"
           flexDirection="row"
           flexWrap="wrap"
-          padding={15}
-          paddingBottom={140}
+          paddingTop={15}
+          paddingBottom={15}
+          paddingLeft={15}
+          paddingRight={22}
           bg="#FBFBFB"
         >
           {Plants.map((elem) => (
-            <PlantCard plantInfo={elem} />
+            <PlantCard plantInfo={elem} navigation={navigation} />
           ))}
         </View>
       </ScrollView>
