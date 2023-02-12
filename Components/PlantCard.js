@@ -9,7 +9,6 @@ export function PlantCard({ plantInfo, navigation }) {
     <TouchableOpacity
       onPress={() => {
         // plantIndex is the index of the plant in the Plant Context
-        console.log("pressed");
         navigation.navigate("PlantInfoPage", {
           plantInfo: plantInfo,
         });
