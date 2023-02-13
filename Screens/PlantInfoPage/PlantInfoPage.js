@@ -1,10 +1,16 @@
 import { React, useState, useRef, useEffect } from "react";
-import { StyleSheet, Image, TouchableOpacity, Animated } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Animated,
+  Modal,
+  Pressable,
+} from "react-native";
 import { AccordionComponent } from "./AccordionComponent";
 import {
   View,
   Flex,
-  Pressable,
   Text,
   ScrollView,
   Menu,
@@ -13,9 +19,12 @@ import {
   Center,
 } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
+import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;
+  const [Plants, dispatch] = usePlants();
 
   const styles = StyleSheet.create({
     plantImage: { height: 170, opacity: 0.7 },
@@ -56,6 +65,96 @@ const PlantInfoPage = ({ route, navigation }) => {
       color: "#597F51",
       textAlign: "center",
     },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "rgba(0,0,0,0.5)",
+    },
+    modalView: {
+      backgroundColor: "white",
+      borderRadius: 8,
+      padding: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      width: "80%",
+      height: 300,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    modalTitle: {
+      marginBottom: 10,
+      textAlign: "center",
+      fontWeight: "700",
+      fontFamily: "SFProDisplay-Bold",
+      fontStyle: "normal",
+      fontSize: "20",
+      color: "black",
+    },
+    modalSub: {
+      textAlign: "center",
+    },
+    modalWarning: {
+      marginTop: 5,
+      marginBottom: 15,
+      backgroundColor: "#F5CFC7",
+      width: "100%",
+      borderRadius: 4,
+      borderWidth: 4,
+      borderLeftColor: "#B9422C",
+      borderRightColor: "#F5CFC7",
+      borderTopColor: "#F5CFC7",
+      borderBottomColor: "#F5CFC7",
+    },
+    warningTitle: {
+      fontWeight: "600",
+      fontFamily: "SFProDisplay-Semibold",
+      fontStyle: "normal",
+      fontSize: "16",
+      color: "black",
+      paddingTop: 8,
+    },
+    warningDesc: {
+      fontWeight: "600",
+      fontFamily: "SFProDisplay-Regular",
+      fontStyle: "normal",
+      fontSize: "14",
+      color: "black",
+      lineHeight: "20",
+      paddingRight: 8,
+      paddingBottom: 8,
+    },
+    button: {
+      borderRadius: 4,
+      padding: 12,
+      elevation: 2,
+      marginLeft: 15,
+      backgroundColor: "white",
+      borderColor: "#72A077",
+      borderWidth: 1,
+    },
+    close: {
+      color: "#72A077",
+    },
+    confirm: {
+      backgroundColor: "#72A077",
+    },
+    textStyleClose: {
+      color: "#72A077",
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+    textStyleConfirm: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center",
+    },
   });
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -83,6 +182,7 @@ const PlantInfoPage = ({ route, navigation }) => {
   };
 
   const [expanded, setExpanded] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handlePress = () => setExpanded(!expanded);
 
@@ -104,7 +204,6 @@ const PlantInfoPage = ({ route, navigation }) => {
         <Box>
           <TouchableOpacity
             onPress={() => {
-              // plantIndex is the index of the plant in the Plant Context
               navigation.navigate("Home", {
                 plantInfo: plantInfo,
               });
@@ -138,8 +237,20 @@ const PlantInfoPage = ({ route, navigation }) => {
               );
             }}
           >
-            <Menu.Item>Take Measurements</Menu.Item>
-            <Menu.Item>Delete</Menu.Item>
+            <Menu.Item
+              onPress={() => {
+                plantIndex = Plants.findIndex(
+                  (plant) => plant.id == plantInfo.id
+                );
+                // plantIndex is the index of the plant in the Plant Context
+                navigation.navigate("LiveMeasure", {
+                  plantIndex: plantIndex,
+                });
+              }}
+            >
+              Take Measurements
+            </Menu.Item>
+            <Menu.Item onPress={() => setModalVisible(true)}>Delete</Menu.Item>
           </Menu>
         </Flex>
         <Box>
@@ -230,6 +341,62 @@ const PlantInfoPage = ({ route, navigation }) => {
           </Flex>
         </View>
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Delete {plantInfo.plantName}?</Text>
+            <Text style={styles.modalSub}>
+              Are you sure you want to delete {plantInfo.plantName} from your
+              Eden? You cannot undo this action.
+            </Text>
+            <Box style={styles.modalWarning}>
+              <Flex flexDirection="row" width="90%">
+                <Warning
+                  width={20}
+                  height={25}
+                  marginRight={8}
+                  marginLeft={8}
+                  marginTop={5}
+                />
+                <View>
+                  <Text style={styles.warningTitle}>Warning</Text>
+                  <Text style={styles.warningDesc}>
+                    You will permenantly lose all measurements and data
+                    associated with this plant.
+                  </Text>
+                </View>
+              </Flex>
+            </Box>
+            <Flex
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="flex-end"
+              width="100%"
+            >
+              <TouchableOpacity
+                style={[styles.button, styles.close]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyleClose}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.confirm]}
+                onPress={null}
+              >
+                <Text style={styles.textStyleConfirm}>Yes, I'm sure</Text>
+              </TouchableOpacity>
+            </Flex>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };

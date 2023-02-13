@@ -22,6 +22,7 @@ function PlantsReducer(Plants, action) {
       return [
         ...Plants,
         {
+          id: Plants.length,
           iconId: action.iconId,
           plantName: action.plantName,
         },
@@ -46,5 +47,7 @@ function PlantsReducer(Plants, action) {
 }
 
 const initialPlants = [
-  { iconId: 0, plantName: "Anthurium" }, // iconId stores the icon image used for the plant
+  { id: 0, iconId: 0, plantName: "Anthurium" }, // iconId stores the icon image used for the plant
 ];
+
+// const initialPlants = [];
