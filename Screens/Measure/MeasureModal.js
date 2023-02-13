@@ -18,8 +18,7 @@ const MeasureModal = ({ navigation }) => {
   const [selected, setSelected] = useState(-1);
   const [Plants, dispatch] = usePlants();
 
-  const plantElements = useMemo(
-    () => {
+  const plantElements = useMemo(() => {
     return Plants.map((elem, i) => (
       <SelectPlantCard
         i={i}
@@ -28,20 +27,18 @@ const MeasureModal = ({ navigation }) => {
         selected={selected}
         setSelected={setSelected}
       />
-    ))
-    }
-  , [selected]);
+    ));
+  }, [selected]);
 
   return (
     <View style={styles.modal}>
       <Text style={styles.select_prompt}>Select the plant to measure.</Text>
 
       {/* Plants Box that Defines ScrollView Height */}
-      <View style={styles.plants}> 
+      <View style={styles.plants}>
         <ScrollView persistentScrollbar={true}>
-          
           {/* Plants Flexbox */}
-          <Flex w="100%" justifyContent="flex-start" flexWrap="wrap"> 
+          <Flex w="100%" justifyContent="flex-start" flexWrap="wrap">
             {plantElements}
           </Flex>
         </ScrollView>
@@ -76,7 +73,7 @@ const MeasureModal = ({ navigation }) => {
         >
           Start
         </Button>
-      </Center> 
+      </Center>
     </View>
   );
 };

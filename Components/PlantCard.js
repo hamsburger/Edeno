@@ -1,5 +1,5 @@
 import { React } from "react";
-import { Flex, Box, Text, Button } from "native-base";
+import { Flex, Box, Text, Button, View } from "native-base";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { plant_icons } from "../Constants/StaticPlantIconImages";
 

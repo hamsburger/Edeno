@@ -12,10 +12,7 @@ import {
   ArrowBackIcon,
   Center,
 } from "native-base";
-import * as Animatable from "react-native-animatable";
-import { List } from "react-native-paper";
 import Kabob from "../../assets/icons/kabob.svg";
-import InfoIcon from "../../assets/icons/plant-info-page-icons/info.png";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;
@@ -141,6 +138,7 @@ const PlantInfoPage = ({ route, navigation }) => {
               );
             }}
           >
+            <Menu.Item>Take Measurements</Menu.Item>
             <Menu.Item>Delete</Menu.Item>
           </Menu>
         </Flex>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Image } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { StyleSheet, Image, Animated } from "react-native";
 import { View, Text, Box, Button, Flex, Center } from "native-base";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
@@ -11,6 +11,7 @@ const LiveMeasure = ({ route, navigation }) => {
   const [Plants, dispatch] = usePlants();
   const [readings, setReadings] = useState({});
   const db = useFirebaseDatabase();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     db.listenForChildUpdate("readings", setReadings);
@@ -28,13 +29,28 @@ const LiveMeasure = ({ route, navigation }) => {
     //   5000
     // );
 
+    // Code for animating live icon
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+
     return () => {
       // clearInterval(interval);
       db.cleanListeners();
     };
   }, []);
 
-  console.log(readings);
   return (
     <View>
       <Box position="absolute" left={2} top={43}>
@@ -58,7 +74,9 @@ const LiveMeasure = ({ route, navigation }) => {
           source={plant_icons[Plants[plantIndex].iconId]}
         />
         <Flex flexDirection="row" alignItems="center">
-          <LiveIcon />
+          <Animated.View style={{ opacity: fadeAnim }}>
+            <LiveIcon />
+          </Animated.View>
           <Text style={styles.live_reading}>Live Readings</Text>
         </Flex>
         <Flex flexDirection="row">

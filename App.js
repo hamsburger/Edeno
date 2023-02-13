@@ -1,12 +1,6 @@
 import AppLoading from "expo-app-loading";
 import React, { useState } from "react";
-import {
-  NativeBaseProvider,
-  extendTheme,
-  Box,
-  Text,
-  Center,
-} from "native-base";
+import { NativeBaseProvider, extendTheme } from "native-base";
 import { Home } from "./Screens/Home/Home";
 import { Settings } from "./Screens/Settings/Settings";
 import { Measure } from "./Screens/Measure/Measure";
@@ -20,8 +14,6 @@ import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
 import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
-import { Content } from "./Content";
-import { initializeApp } from "firebase/app";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider } from "./Hooks/Contexts/Plant_Context";

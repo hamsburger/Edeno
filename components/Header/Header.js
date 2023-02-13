@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, Flex, Box, Menu, Pressable, Center } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
+import Add from "../../assets/icons/add.svg";
 
 const Header = ({ navigation }) => {
   return (
@@ -11,43 +12,14 @@ const Header = ({ navigation }) => {
       px="30px"
       paddingBottom="15px"
     >
-      <Flex position="absolute" width="30%" top={0} right={0}>
-        <Menu
-          placement="bottom left"
-          trigger={(triggerProps) => {
-            return (
-              <Pressable
-                w="100%"
-                accessibilityLabel="More options menu"
-                {...triggerProps}
-              >
-                <Flex
-                  w="100%"
-                  justifyContent="flex-end"
-                  alignItems="center"
-                  pr={9}
-                  pt={9}
-                  pb={5}
-                  flexDirection="row"
-                >
-                  <Kabob width={7} height={29} />
-                </Flex>
-              </Pressable>
-            );
-          }}
+      <Flex justifyContent="flex-end" alignItems="center" flexDirection="row">
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("AddPlantLandingPage", { progress: 1 })
+          }
         >
-          <Menu.Item>Edit My Eden</Menu.Item>
-          <Menu.Item>
-            <Pressable
-              key="1"
-              onPress={() =>
-                navigation.navigate("AddPlantLandingPage", { progress: 1 })
-              }
-            >
-              <Text color="black">Add New Plant</Text>
-            </Pressable>
-          </Menu.Item>
-        </Menu>
+          <Add width={29} height={29} />
+        </TouchableOpacity>
       </Flex>
       <Box>
         <Text fontSize="34px" style={styles.page_title}>
