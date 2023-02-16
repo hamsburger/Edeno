@@ -216,10 +216,6 @@ export default () => {
                 <Stack.Screen name="LiveMeasure">
                   {(props) => <LiveMeasure {...props} visible={1} />}
                 </Stack.Screen>
-
-                {/* <Stack.Screen name="PlantInfoPage">
-                  {(props) => <PlantInfoPage {...props} visible={1} />}
-                </Stack.Screen> */}
               </Stack.Navigator>
             </NavigationContainer>
           </AddPlantProvider>

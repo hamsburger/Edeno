@@ -155,6 +155,11 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "bold",
       textAlign: "center",
     },
+    textStyleCloseMeasurements: {
+      color: "#B9422C",
+      fontWeight: "bold",
+      textAlign: "center",
+    },
   });
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -183,6 +188,7 @@ const PlantInfoPage = ({ route, navigation }) => {
 
   const [expanded, setExpanded] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [measureModalVisible, setMeasureModalVisible] = useState(false);
 
   const handlePress = () => setExpanded(!expanded);
 
@@ -239,13 +245,7 @@ const PlantInfoPage = ({ route, navigation }) => {
           >
             <Menu.Item
               onPress={() => {
-                plantIndex = Plants.findIndex(
-                  (plant) => plant.id == plantInfo.id
-                );
-                // plantIndex is the index of the plant in the Plant Context
-                navigation.navigate("LiveMeasure", {
-                  plantIndex: plantIndex,
-                });
+                setMeasureModalVisible(true);
               }}
             >
               Take Measurements
@@ -346,7 +346,6 @@ const PlantInfoPage = ({ route, navigation }) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
       >
@@ -391,7 +390,83 @@ const PlantInfoPage = ({ route, navigation }) => {
                 style={[styles.button, styles.confirm]}
                 onPress={null}
               >
-                <Text style={styles.textStyleConfirm}>Yes, I'm sure</Text>
+                <Text
+                  style={styles.textStyleConfirm}
+                  onPress={() => {
+                    dispatch({
+                      type: "deleted",
+                      ...plantInfo,
+                    });
+
+                    navigation.navigate("Home");
+                  }}
+                >
+                  Yes, I'm sure
+                </Text>
+              </TouchableOpacity>
+            </Flex>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={measureModalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={[styles.modalView, { height: 150 }]}>
+            <Text
+              style={[
+                {
+                  color: "#B9422C",
+                  textAlign: "start",
+                  fontFamily: "SFProDisplay-Bold",
+                  fontSize: "15",
+                },
+              ]}
+            >
+              Place the device in your {plantInfo.plantName} before proceeding.
+            </Text>
+            <Flex
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="flex-end"
+              width="100%"
+              marginTop={5}
+            >
+              <TouchableOpacity
+                style={[styles.button, { borderColor: "#B9422C" }]}
+                onPress={() => setMeasureModalVisible(!measureModalVisible)}
+              >
+                <Text style={styles.textStyleCloseMeasurements}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  { backgroundColor: "#B9422C", borderColor: "#B9422C" },
+                ]}
+                onPress={null}
+              >
+                <Text
+                  style={styles.textStyleConfirm}
+                  onPress={() => {
+                    setMeasureModalVisible(!measureModalVisible);
+
+                    plantIndex = Plants.findIndex(
+                      (plant) => plant.id == plantInfo.id
+                    );
+                    // plantIndex is the index of the plant in the Plant Context
+                    navigation.navigate("LiveMeasure", {
+                      plantIndex: plantIndex,
+                    });
+                  }}
+                >
+                  Proceed
+                </Text>
               </TouchableOpacity>
             </Flex>
           </View>

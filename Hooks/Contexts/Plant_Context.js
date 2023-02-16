@@ -38,7 +38,7 @@ function PlantsReducer(Plants, action) {
       });
     }
     case "deleted": {
-      return Plants.filter((t) => t.platnName !== action.plantName);
+      return Plants.filter((t) => t.id !== action.id);
     }
     default: {
       throw Error("Unknown action: " + action.type);
