@@ -388,21 +388,16 @@ const PlantInfoPage = ({ route, navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.confirm]}
-                onPress={null}
-              >
-                <Text
-                  style={styles.textStyleConfirm}
-                  onPress={() => {
-                    dispatch({
-                      type: "deleted",
-                      ...plantInfo,
-                    });
+                onPress={() => {
+                  dispatch({
+                    type: "deleted",
+                    ...plantInfo,
+                  });
 
-                    navigation.navigate("Home");
-                  }}
-                >
-                  Yes, I'm sure
-                </Text>
+                  navigation.navigate("Home");
+                }}
+              >
+                <Text style={styles.textStyleConfirm}>Yes, I'm sure</Text>
               </TouchableOpacity>
             </Flex>
           </View>
@@ -449,24 +444,19 @@ const PlantInfoPage = ({ route, navigation }) => {
                   styles.button,
                   { backgroundColor: "#B9422C", borderColor: "#B9422C" },
                 ]}
-                onPress={null}
-              >
-                <Text
-                  style={styles.textStyleConfirm}
-                  onPress={() => {
-                    setMeasureModalVisible(!measureModalVisible);
+                onPress={() => {
+                  setMeasureModalVisible(!measureModalVisible);
 
-                    plantIndex = Plants.findIndex(
-                      (plant) => plant.id == plantInfo.id
-                    );
-                    // plantIndex is the index of the plant in the Plant Context
-                    navigation.navigate("LiveMeasure", {
-                      plantIndex: plantIndex,
-                    });
-                  }}
-                >
-                  Proceed
-                </Text>
+                  const selectedIndex = Plants.findIndex(
+                    (plant) => plant.id == plantInfo.id
+                  );
+                  // plantIndex is the index of the plant in the Plant Context
+                  navigation.navigate("LiveMeasure", {
+                    plantIndex: selectedIndex,
+                  });
+                }}
+              >
+                <Text style={styles.textStyleConfirm}>Proceed</Text>
               </TouchableOpacity>
             </Flex>
           </View>
