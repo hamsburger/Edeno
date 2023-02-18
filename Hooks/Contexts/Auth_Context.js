@@ -17,7 +17,6 @@ export function useAuth() {
 }
 
 function AuthReducer(isSignedIn, action) {
-  console.log(action);
   switch (action.type) {
     case "sign-in": {
       // can do backend stuff here for auth like storing tokens and stuff
@@ -26,7 +25,10 @@ function AuthReducer(isSignedIn, action) {
           isSignedIn = true;
         }
       }
-
+      return isSignedIn;
+    }
+    case "sign-out": {
+      isSignedIn = false;
       return isSignedIn;
     }
 

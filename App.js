@@ -186,7 +186,7 @@ export default () => {
   }
 
   const RootStack = () => {
-    const isSignedIn = useAuth()[0];
+    const [isSignedIn, dispatch] = useAuth();
 
     return isSignedIn ? (
       <Stack.Navigator
