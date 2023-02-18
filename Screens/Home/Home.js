@@ -29,7 +29,9 @@ const Home = ({ navigation }) => {
       <ScrollView>
         {Plants.length == 0 ? (
           <View style={styles.noPlantsContainer}>
-            <Text style={styles.noPlants}>Add a plant to get started</Text>
+            <Text style={styles.noPlants}>
+              Click "+" to add a plant and get started
+            </Text>
           </View>
         ) : (
           <View

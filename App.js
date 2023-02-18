@@ -1,5 +1,5 @@
 import AppLoading from "expo-app-loading";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { Home } from "./Screens/Home/Home";
 import { Settings } from "./Screens/Settings/Settings";
@@ -16,11 +16,13 @@ import StartMeasuring from "./assets/icons/start-measuring-trigger";
 import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
-import { PlantProvider } from "./Hooks/Contexts/Plant_Context";
+import { PlantProvider, usePlants } from "./Hooks/Contexts/Plant_Context";
 import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
 import { PlantInfoPage } from "./Screens/PlantInfoPage/PlantInfoPage";
 import { LogBox } from "react-native";
 import { FirebaseProvider } from "./Hooks/Contexts/Firebase_Context";
+import { AuthProvider, useAuth } from "./Hooks/Contexts/Auth_Context";
+import { Login } from "./Screens/SignInFlows/Login";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -79,8 +81,6 @@ const themeObject = {
 };
 
 export default () => {
-  const [showModal, setShowModal] = useState(false);
-
   const theme = extendTheme(themeObject);
 
   const [IsReady, SetIsReady] = useState(false);
@@ -185,41 +185,58 @@ export default () => {
     );
   }
 
+  const RootStack = () => {
+    const isSignedIn = useAuth()[0];
+
+    return isSignedIn ? (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        initialRouteName="Home"
+      >
+        <Stack.Screen name="Home" component={HomeTabs} />
+        <Stack.Group
+          screenOptions={({ navigation }) => ({
+            presentation: "modal",
+          })}
+        >
+          <Stack.Screen name="Measure" component={MeasureModal} />
+        </Stack.Group>
+        <Stack.Screen
+          name="AddPlantLandingPage"
+          component={AddPlantLandingPage}
+          getId={({ params }) => params.progress}
+        />
+
+        <Stack.Screen name="LiveMeasure">
+          {(props) => <LiveMeasure {...props} visible={1} />}
+        </Stack.Screen>
+      </Stack.Navigator>
+    ) : (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        initialRouteName="Login"
+      >
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
+    );
+  };
+
   return (
     <NativeBaseProvider theme={theme}>
       <FirebaseProvider>
-        <PlantProvider>
-          <AddPlantProvider>
-            <NavigationContainer>
-              <Stack.Navigator
-                screenOptions={{
-                  headerShown: false,
-                }}
-                initialRouteName="Home"
-              >
-                <Stack.Screen name="Home" component={HomeTabs} />
-
-                <Stack.Group
-                  screenOptions={({ navigation }) => ({
-                    presentation: "modal",
-                  })}
-                >
-                  <Stack.Screen name="Measure" component={MeasureModal} />
-                </Stack.Group>
-
-                <Stack.Screen
-                  name="AddPlantLandingPage"
-                  component={AddPlantLandingPage}
-                  getId={({ params }) => params.progress}
-                />
-
-                <Stack.Screen name="LiveMeasure">
-                  {(props) => <LiveMeasure {...props} visible={1} />}
-                </Stack.Screen>
-              </Stack.Navigator>
-            </NavigationContainer>
-          </AddPlantProvider>
-        </PlantProvider>
+        <AuthProvider>
+          <PlantProvider>
+            <AddPlantProvider>
+              <NavigationContainer>
+                <RootStack />
+              </NavigationContainer>
+            </AddPlantProvider>
+          </PlantProvider>
+        </AuthProvider>
       </FirebaseProvider>
     </NativeBaseProvider>
   );
