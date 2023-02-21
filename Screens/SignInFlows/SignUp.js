@@ -15,13 +15,17 @@ import { TouchableOpacity, StatusBar } from "react-native";
 import HidePassword from "../../assets/icons/visibility_off.svg";
 import ShowPassword from "../../assets/icons/visibility.svg";
 
-const Login = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const [isSignedIn, dispatch] = useAuth();
 
   const [errors, setErrors] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleChangeFirstName = (text) => setFirstName(text);
+  const handleChangeLastName = (text) => setLastName(text);
   const handleChangeEmail = (text) => setEmail(text);
   const handleChangePassword = (text) => setPassword(text);
   const [show, setShow] = useState(false);
@@ -45,8 +49,30 @@ const Login = ({ navigation }) => {
           source={require("../../assets/icons/edeno-logo.png")}
         />
         <Text style={styles.motto}>lorem ipsum our motto</Text>
-        <Text style={styles.loginTitle}>Login to get started</Text>
+        <Text style={styles.loginTitle}>Let's get you signed up!</Text>
         <View style={styles.inputsContainer}>
+          <Box alignItems="center">
+            <Input
+              style={styles.inputs}
+              variant="underlined"
+              value={firstName}
+              w="100%"
+              onChangeText={handleChangeFirstName}
+              placeholderTextColor="#A0999E"
+              placeholder="First Name"
+            />
+          </Box>
+          <Box alignItems="center">
+            <Input
+              style={styles.inputs}
+              variant="underlined"
+              value={lastName}
+              w="100%"
+              onChangeText={handleChangeLastName}
+              placeholderTextColor="#A0999E"
+              placeholder="Last Name"
+            />
+          </Box>
           <Box alignItems="center">
             <Input
               style={styles.inputs}
@@ -84,52 +110,50 @@ const Login = ({ navigation }) => {
           marginTop={4}
           bg="secondary_green"
           _disabled={{ opacity: 1, bg: "faded_green" }}
-          isDisabled={email.length == 0 || password.length == 0}
+          isDisabled={
+            email.length == 0 ||
+            password.length == 0 ||
+            firstName.length == 0 ||
+            lastName.length == 0
+          }
           onPress={() => {
-            const loginInfo = { email: email, password: password };
             let regEmail =
               /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (!regEmail.test(email)) {
               setErrors("Invalid email.");
               return;
             }
-            dispatch({
-              type: "sign-in",
-              ...loginInfo,
-            });
 
-            if (isSignedIn == false) {
-              setErrors("Invalid email or password. Please try again.");
-              return;
-            }
+            const signUpInfo = {
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              password: password,
+            };
+            dispatch({
+              type: "sign-up",
+              ...signUpInfo,
+            });
+            navigation.navigate("Login");
           }}
         >
-          <Text style={styles.logInButton}>Log in</Text>
+          <Text style={styles.logInButton}>Sign Up</Text>
         </Button>
 
-        <TouchableOpacity
-          onPress={() => {
-            null;
-          }}
-          style={{ marginTop: 27 }}
-        >
-          <Text style={styles.linkText}>Forgot your username or password?</Text>
-        </TouchableOpacity>
-
         <Text style={styles.signUpText}>
-          Don’t have an account?{" "}
+          Already have an account?{" "}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignUp");
+              navigation.navigate("Login");
             }}
+            style={{ paddingTop: 4 }}
           >
-            <Text style={styles.linkText}>Sign Up</Text>
+            <Text style={styles.linkText}>Sign In</Text>
           </TouchableOpacity>
-          .
         </Text>
       </Flex>
     </View>
   );
 };
 
-export { Login };
+export { SignUp };

@@ -20,11 +20,15 @@ function AuthReducer(isSignedIn, action) {
   switch (action.type) {
     case "sign-in": {
       // can do backend stuff here for auth like storing tokens and stuff
-      if (action.username == "user") {
+      if (action.email == "user@gmail.com") {
         if (action.password == "123") {
           isSignedIn = true;
         }
       }
+      return isSignedIn;
+    }
+    case "sign-up": {
+      isSignedIn = false;
       return isSignedIn;
     }
     case "sign-out": {

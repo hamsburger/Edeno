@@ -23,6 +23,7 @@ import { LogBox } from "react-native";
 import { FirebaseProvider } from "./Hooks/Contexts/Firebase_Context";
 import { AuthProvider, useAuth } from "./Hooks/Contexts/Auth_Context";
 import { Login } from "./Screens/SignInFlows/Login";
+import { SignUp } from "./Screens/SignInFlows/SignUp";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -220,7 +221,12 @@ export default () => {
         }}
         initialRouteName="Login"
       >
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login">
+          {(props) => <Login {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="SignUp">
+          {(props) => <SignUp {...props} visible={1} />}
+        </Stack.Screen>
       </Stack.Navigator>
     );
   };

@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: "SFProDisplay-Semibold",
     fontSize: 24,
-    paddingTop: 102,
+    paddingTop: 60,
     color: "#432D1E",
   },
   inputsContainer: {
@@ -45,6 +45,12 @@ const styles = StyleSheet.create({
     color: "#432D1E",
     fontWeight: 700,
     marginTop: 12,
+  },
+  error: {
+    color: "#B9422C",
+    fontFamily: "SFProDisplay-Semibold",
+    marginTop: 10,
+    height: 18,
   },
 });
 
