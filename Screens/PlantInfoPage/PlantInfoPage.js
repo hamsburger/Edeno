@@ -20,15 +20,12 @@ import {
 } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
 import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
-<<<<<<< HEAD
-import { usePlants } from "../../hooks/Contexts/Plant_Context";
-=======
->>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { MetricInfoBox } from "./MetricInfoBox";
 import { plantData } from "../../MockPlantData/plantData";
 import calculateTimePast from "../../utilities/calculateTimePast";
 import { MetricInfoBoxNoData } from "./MetricInfoBoxNoData";
 import convertDateToFullMDYHM from "../../utilities/convertDateToFullMDYHM";
+import { usePlants } from "../../hooks/Contexts/Plant_Context";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantId, plantIconId } = route.params;
