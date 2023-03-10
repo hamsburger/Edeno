@@ -20,7 +20,7 @@ import {
 } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
 import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { usePlants } from "../../hooks/Contexts/Plant_Context";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;

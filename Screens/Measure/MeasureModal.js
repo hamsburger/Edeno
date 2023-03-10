@@ -10,7 +10,7 @@ import {
   Flex,
   Icon,
 } from "native-base";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { usePlants } from "../../hooks/Contexts/Plant_Context";
 import { SelectPlantCard } from "../../Components/Measure/SelectPlantCard";
 import AlertIcon from "../../assets/icons/alert.svg";
 

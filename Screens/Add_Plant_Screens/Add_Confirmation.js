@@ -1,8 +1,8 @@
 import { React, useEffect } from "react";
 import { Image } from "react-native";
 import { Text, Center, Box } from "native-base";
-import { usePlant } from "../../Hooks/Contexts/AddPlant_Context";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { usePlant } from "../../hooks/Contexts/AddPlant_Context";
+import { usePlants } from "../../hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 
 export function Add_Confirmation({ setContinue }) {

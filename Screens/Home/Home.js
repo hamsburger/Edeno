@@ -1,7 +1,7 @@
 import React from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { Header } from "../../Components/Header/Header";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { usePlants } from "../../hooks/Contexts/Plant_Context";
 import { PlantCard } from "../../Components/PlantCard";
 
 const Home = ({ navigation }) => {

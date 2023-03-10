@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: "SFProDisplay-BoldItalic",
     fontSize: 23,
-    letterSpacing: "2",
+    letterSpacing: 2,
     paddingTop: 13,
     color: "#432D1E",
   },
@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
     fontFamily: "SFProDisplay-Semibold",
     fontSize: 15,
     color: "#597F51",
-    fontWeight: 510,
+    fontWeight: "510",
   },
 
   signUpText: {
     fontFamily: "SFProDisplay-Regular",
     fontSize: 15,
     color: "#432D1E",
-    fontWeight: 700,
+    fontWeight: "700",
     marginTop: 12,
   },
   error: {

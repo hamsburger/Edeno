@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Image, Animated } from "react-native";
 import { View, Text, Box, Button, Flex, Center } from "native-base";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { usePlants } from "../../hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
-import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
+import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
 import LiveIcon from "../../assets/icons/live-circle.svg";
 
 const LiveMeasure = ({ route, navigation }) => {

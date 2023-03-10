@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Header } from "../../Components/Header/Header";
-import { useAuth } from "../../Hooks/Contexts/Auth_Context";
+import { useAuth } from "../../hooks/Contexts/Auth_Context";
 
 const Settings = (props) => {
   const [isSignedIn, dispatch] = useAuth();

@@ -14,14 +14,14 @@ import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
 import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
-import useFonts from "./Hooks/Use_Fonts";
-import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
-import { PlantProvider, usePlants } from "./Hooks/Contexts/Plant_Context";
+import useFonts from "./hooks/Use_Fonts";
+import { AddPlantProvider } from "./hooks/Contexts/AddPlant_Context";
+import { PlantProvider, usePlants } from "./hooks/Contexts/Plant_Context";
 import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
 import { PlantInfoPage } from "./Screens/PlantInfoPage/PlantInfoPage";
 import { LogBox } from "react-native";
-import { FirebaseProvider } from "./Hooks/Contexts/Firebase_Context";
-import { AuthProvider, useAuth } from "./Hooks/Contexts/Auth_Context";
+import { FirebaseProvider } from "./hooks/Contexts/Firebase_Context";
+import { AuthProvider, useAuth } from "./hooks/Contexts/Auth_Context";
 import { Login } from "./Screens/SignInFlows/Login";
 import { SignUp } from "./Screens/SignInFlows/SignUp";
 
@@ -157,7 +157,7 @@ export default () => {
         />
         <Tab.Screen
           name="MeasureTrigger"
-          component={Measure}
+          component={Measure} 
           options={{
             tabBarLabel: "",
             tabBarIcon: ({}) => <StartMeasuring />,
