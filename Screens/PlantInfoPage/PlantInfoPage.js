@@ -21,6 +21,7 @@ import {
 import Kabob from "../../assets/icons/kabob.svg";
 import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { MetricInfoBox } from "./MetricInfoBox";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;
@@ -266,7 +267,7 @@ const PlantInfoPage = ({ route, navigation }) => {
         </Box>
       </Box>
       <View paddingLeft="20px" paddingRight="20px">
-        <AccordionComponent
+        {/* <AccordionComponent
           viewInside={
             <View>
               <Text>hello</Text>
@@ -281,41 +282,8 @@ const PlantInfoPage = ({ route, navigation }) => {
           }
           iconName="info"
           sectionTitle="Information"
-        />
+        /> */}
 
-        <AccordionComponent
-          viewInside={
-            <View>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-            </View>
-          }
-          iconName="measurements"
-          sectionTitle="Recent Measurements"
-        />
-
-        <AccordionComponent
-          viewInside={
-            <View>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-            </View>
-          }
-          iconName="reccos"
-          sectionTitle="Recommendations & Reminders"
-        />
         <View marginTop="16px">
           <Text style={styles.sectionTitle}>Plant Health Scanner</Text>
           <View paddingTop={"5px"}>
@@ -327,7 +295,7 @@ const PlantInfoPage = ({ route, navigation }) => {
             justifyContent="center"
             alignItems="center"
             marginTop={"10px"}
-            marginBottom={"50px"}
+            marginBottom={"30px"}
           >
             <TouchableOpacity onPress={null}>
               <Image
@@ -339,6 +307,56 @@ const PlantInfoPage = ({ route, navigation }) => {
               </Animated.Text>
             </TouchableOpacity>
           </Flex>
+        </View>
+        <View marginBottom={"40px"}>
+          <MetricInfoBox
+            title="Last Watered"
+            date="03/21/2023 2:20 PM"
+            measurement="3"
+            unit="days ago"
+          />
+          <MetricInfoBox
+            title="Last Fertilized"
+            date="03/17/2023 2:20 PM"
+            measurement="1"
+            unit="week ago"
+          />
+          <MetricInfoBox
+            title="pH"
+            date="03/24/2023 2:20 PM"
+            measurement="5.2"
+            unit=""
+          />
+          <MetricInfoBox
+            title="Soil Moisture"
+            date="03/24/2023 2:20 PM"
+            measurement="57"
+            unit="%"
+          />
+          <MetricInfoBox
+            title="Humidity"
+            date="03/24/2023 2:20 PM"
+            measurement="61"
+            unit="%"
+          />
+          <MetricInfoBox
+            title="Temperature"
+            date="03/24/2023 2:20 PM"
+            measurement="18"
+            unit="°C"
+          />
+          <MetricInfoBox
+            title="Light Intensity"
+            date="03/24/2023 2:20 PM"
+            measurement="54"
+            unit="LUX"
+          />
+          <MetricInfoBox
+            title="NDVI"
+            date="03/24/2023 2:20 PM"
+            measurement="Healthy"
+            unit=""
+          />
         </View>
       </View>
       <Modal
