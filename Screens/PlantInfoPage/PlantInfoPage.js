@@ -309,12 +309,20 @@ const PlantInfoPage = ({ route, navigation }) => {
           </Flex>
         </View>
         <View marginBottom={"40px"}>
-          <MetricInfoBox
-            title="Last Watered"
-            date="03/21/2023 2:20 PM"
-            measurement="3"
-            unit="days ago"
-          />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("PHInfo", {
+                plantInfo: plantInfo,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Last Watered"
+              date="03/21/2023 2:20 PM"
+              measurement="3"
+              unit="days ago"
+            />
+          </TouchableOpacity>
           <MetricInfoBox
             title="Last Fertilized"
             date="03/17/2023 2:20 PM"

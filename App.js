@@ -24,6 +24,7 @@ import { FirebaseProvider } from "./Hooks/Contexts/Firebase_Context";
 import { AuthProvider, useAuth } from "./Hooks/Contexts/Auth_Context";
 import { Login } from "./Screens/SignInFlows/Login";
 import { SignUp } from "./Screens/SignInFlows/SignUp";
+import { PHInfo } from "./Screens/PlantInfoPage/MetricPages/PHInfo";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -213,8 +214,12 @@ export default () => {
         <Stack.Screen name="LiveMeasure">
           {(props) => <LiveMeasure {...props} visible={1} />}
         </Stack.Screen>
+        <Stack.Screen name="PHInfo">
+          {(props) => <PHInfo {...props} visible={1} />}
+        </Stack.Screen>
       </Stack.Navigator>
     ) : (
+      // Screens accessible if not logged in
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
