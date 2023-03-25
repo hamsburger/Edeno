@@ -309,6 +309,19 @@ const PlantInfoPage = ({ route, navigation }) => {
           </Flex>
         </View>
         <View marginBottom={"40px"}>
+          <MetricInfoBox
+            title="Last Watered"
+            date="03/21/2023 2:20 PM"
+            measurement="3"
+            unit="days ago"
+          />
+
+          <MetricInfoBox
+            title="Last Fertilized"
+            date="03/17/2023 2:20 PM"
+            measurement="1"
+            unit="week ago"
+          />
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("PHInfo", {
@@ -317,24 +330,12 @@ const PlantInfoPage = ({ route, navigation }) => {
             }}
           >
             <MetricInfoBox
-              title="Last Watered"
-              date="03/21/2023 2:20 PM"
-              measurement="3"
-              unit="days ago"
+              title="pH"
+              date="03/24/2023 2:20 PM"
+              measurement="5.2"
+              unit=""
             />
           </TouchableOpacity>
-          <MetricInfoBox
-            title="Last Fertilized"
-            date="03/17/2023 2:20 PM"
-            measurement="1"
-            unit="week ago"
-          />
-          <MetricInfoBox
-            title="pH"
-            date="03/24/2023 2:20 PM"
-            measurement="5.2"
-            unit=""
-          />
           <MetricInfoBox
             title="Soil Moisture"
             date="03/24/2023 2:20 PM"
