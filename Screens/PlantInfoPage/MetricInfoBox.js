@@ -1,6 +1,7 @@
 import { React } from "react";
 import { StyleSheet } from "react-native";
 import { View, Text, Flex, Image } from "native-base";
+import convertDateToMDYHM from "../../utilities/convertDateToMDYHM";
 
 const MetricInfoBox = ({ title, date, measurement, unit }) => {
   const styles = StyleSheet.create({
@@ -58,7 +59,7 @@ const MetricInfoBox = ({ title, date, measurement, unit }) => {
         <Text style={styles.sectionTitle}>{title}</Text>
         <View flexDirection={"row"} alignItems={"center"}>
           <Text style={styles.date}>
-            {date} {"   "}
+            {convertDateToMDYHM(date)} {"   "}
           </Text>
           <Image
             style={styles.plantImage}

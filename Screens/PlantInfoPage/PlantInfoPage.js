@@ -22,6 +22,7 @@ import Kabob from "../../assets/icons/kabob.svg";
 import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { MetricInfoBox } from "./MetricInfoBox";
+import { plantData } from "./plantData";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;
@@ -311,14 +312,14 @@ const PlantInfoPage = ({ route, navigation }) => {
         <View marginBottom={"40px"}>
           <MetricInfoBox
             title="Last Watered"
-            date="03/21/2023 2:20 PM"
+            date={1679678124}
             measurement="3"
             unit="days ago"
           />
 
           <MetricInfoBox
             title="Last Fertilized"
-            date="03/17/2023 2:20 PM"
+            date={1679678124}
             measurement="1"
             unit="week ago"
           />
@@ -326,43 +327,51 @@ const PlantInfoPage = ({ route, navigation }) => {
             onPress={() => {
               navigation.navigate("PHInfo", {
                 plantInfo: plantInfo,
+                phDataExternal: plantData.phData,
               });
             }}
           >
             <MetricInfoBox
               title="pH"
-              date="03/24/2023 2:20 PM"
-              measurement="5.2"
+              date={
+                plantData.phData.dates[plantData.phData.dates.length - 1]
+                  .seconds
+              }
+              measurement={
+                plantData.phData.measurements[
+                  plantData.phData.measurements.length - 1
+                ]
+              }
               unit=""
             />
           </TouchableOpacity>
           <MetricInfoBox
             title="Soil Moisture"
-            date="03/24/2023 2:20 PM"
+            date={1679678124}
             measurement="57"
             unit="%"
           />
           <MetricInfoBox
             title="Humidity"
-            date="03/24/2023 2:20 PM"
+            date={1679678124}
             measurement="61"
             unit="%"
           />
           <MetricInfoBox
             title="Temperature"
-            date="03/24/2023 2:20 PM"
+            date={1679678124}
             measurement="18"
             unit="°C"
           />
           <MetricInfoBox
             title="Light Intensity"
-            date="03/24/2023 2:20 PM"
+            date={1679678124}
             measurement="54"
             unit="LUX"
           />
           <MetricInfoBox
             title="NDVI"
-            date="03/24/2023 2:20 PM"
+            date={1679678124}
             measurement="Healthy"
             unit=""
           />

@@ -7,33 +7,28 @@ import {
   Linking,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
+import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
+import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
 
 const PHInfo = ({ route, navigation }) => {
-  const { plantInfo } = route.params;
+  const { phDataExternal, plantInfo } = route.params;
 
   const chartWidth = 0.95 * Dimensions.get("window").width;
-
-  const phData = [
-    { date: "Feb 15", measurement: "5.2" },
-    { date: "Feb 27", measurement: "5.5" },
-    { date: "Mar 7", measurement: "6.5" },
-    { date: "Mar 14", measurement: "5.9" },
-    { date: "Mar 24", measurement: "7.1" },
-  ];
-
-  const idealUpper = "7";
-  const idealLower = "6";
+  const upperIdeal = phDataExternal.upperIdeal;
+  const lowerIdeal = phDataExternal.lowerIdeal;
+  const lastMeasurement =
+    phDataExternal.measurements[phDataExternal.measurements.length - 1];
+  const lastMeasurementDate =
+    phDataExternal.dates[phDataExternal.dates.length - 1].seconds;
 
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPH = () => {
-    let lastMeasurement = parseFloat(phData[phData.length - 1].measurement);
-
-    if (lastMeasurement > parseFloat(idealUpper)) {
+    if (lastMeasurement > upperIdeal) {
       return 1;
-    } else if (lastMeasurement < parseFloat(idealLower)) {
+    } else if (lastMeasurement < lowerIdeal) {
       return -1;
     }
 
@@ -41,20 +36,20 @@ const PHInfo = ({ route, navigation }) => {
   };
 
   const data = {
-    labels: ["Feb 15", "Feb 27", "Mar 7", "Mar 14", "Mar 24"],
+    labels: convertArrayofTimestampsToArrayOfMD(phDataExternal.dates),
     datasets: [
       {
-        data: [5.2, 5.5, 6.5, 5.9, 7.1],
+        data: phDataExternal.measurements,
         color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
         strokeWidth: 2, // optional
       },
       {
-        data: [6, 6, 6, 6, 6],
+        data: Array(phDataExternal.measurements.length).fill(lowerIdeal),
         color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
         strokeWidth: 2, // optional
       },
       {
-        data: [7, 7, 7, 7, 7],
+        data: Array(phDataExternal.measurements.length).fill(upperIdeal),
         color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
         strokeWidth: 2, // optional
       },
@@ -96,9 +91,11 @@ const PHInfo = ({ route, navigation }) => {
             paddingTop={"7px"}
             paddingBottom={"7px"}
           >
-            {parseFloat(phData[phData.length - 1].measurement)}
+            {lastMeasurement}
           </Text>
-          <Text style={styles.date}>03/24/2023 2:20 PM</Text>
+          <Text style={styles.date}>
+            {convertDateToMDYHM(lastMeasurementDate)}
+          </Text>
         </View>
         <Flex justifyContent={"center"} alignItems={"center"}>
           <LineChart
