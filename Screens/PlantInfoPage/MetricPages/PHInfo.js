@@ -31,7 +31,6 @@ const PHInfo = ({ route, navigation }) => {
     } else if (lastMeasurement < lowerIdeal) {
       return -1;
     }
-
     return 0;
   };
 
@@ -176,9 +175,6 @@ const PHInfo = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  nav_button: {
-    backgroundColor: "transparent",
-  },
   page_title: {
     color: "white",
     fontWeight: 700,

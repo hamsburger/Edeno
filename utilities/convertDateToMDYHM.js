@@ -3,9 +3,9 @@ const convertDateToMDYHM = (date) => {
   var month =
     fullDate.getMonth() < 10
       ? `0${fullDate.getMonth() + 1}`
-      : fullDate.getMonth();
+      : fullDate.getMonth() + 1;
   var dayOfMonth =
-    fullDate.getDate() < 10 ? `0${fullDate.getDate()}` : fullDate.getDate() + 1;
+    fullDate.getDate() < 10 ? `0${fullDate.getDate()}` : fullDate.getDate();
   var year = fullDate.getFullYear();
   var hour =
     fullDate.getHours() < 12 ? fullDate.getHours() : fullDate.getHours() - 12;

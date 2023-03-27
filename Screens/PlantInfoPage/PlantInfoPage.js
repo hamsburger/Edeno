@@ -23,6 +23,7 @@ import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { MetricInfoBox } from "./MetricInfoBox";
 import { plantData } from "./plantData";
+import calculateTimePast from "../../utilities/calculateTimePast";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;
@@ -310,12 +311,37 @@ const PlantInfoPage = ({ route, navigation }) => {
           </Flex>
         </View>
         <View marginBottom={"40px"}>
-          <MetricInfoBox
-            title="Last Watered"
-            date={1679678124}
-            measurement="3"
-            unit="days ago"
-          />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("LastWatered", {
+                plantInfo: plantInfo,
+                lastWateredData: plantData.lastWatered,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Last Watered"
+              date={
+                plantData.lastWatered.dates[
+                  plantData.lastWatered.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                calculateTimePast(
+                  plantData.lastWatered.dates[
+                    plantData.lastWatered.dates.length - 1
+                  ].seconds
+                )[0]
+              }
+              unit={
+                calculateTimePast(
+                  plantData.lastWatered.dates[
+                    plantData.lastWatered.dates.length - 1
+                  ].seconds
+                )[1]
+              }
+            />
+          </TouchableOpacity>
 
           <MetricInfoBox
             title="Last Fertilized"
