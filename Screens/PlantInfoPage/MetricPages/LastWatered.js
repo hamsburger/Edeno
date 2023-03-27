@@ -1,6 +1,14 @@
 import { React, useState } from "react";
 import { View, Text, Box, Flex, ScrollView } from "native-base";
-import { StyleSheet, TouchableOpacity, Modal } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertDateToFullMDYHM from "../../../utilities/convertDateToFullMDYHM";
 import calculateTimePast from "../../../utilities/calculateTimePast";
@@ -8,12 +16,18 @@ import Note from "../../../assets/icons/note.svg";
 
 const LastWatered = ({ route, navigation }) => {
   const { plantInfo, lastWateredData } = route.params;
+  const [date, setDate] = useState(new Date());
+  const [note, setNote] = useState("");
+  const [lastWateredDataInternal, setLastWateredDataInternal] =
+    useState(lastWateredData);
 
   const lastMeasurementDate =
-    lastWateredData.dates[lastWateredData.dates.length - 1].seconds;
+    lastWateredDataInternal.dates[lastWateredDataInternal.dates.length - 1]
+      .seconds;
 
   const [days, unit] = calculateTimePast(lastMeasurementDate);
   const [modalVisible, setModalVisible] = useState(false);
+  const [addNewModalVisible, setAddNewModalVisible] = useState(false);
   const [currentNoteNum, setCurrenNoteNum] = useState(0);
 
   return (
@@ -73,8 +87,8 @@ const LastWatered = ({ route, navigation }) => {
               Watering History
             </Text>
           </Box>
-          <ScrollView>
-            {lastWateredData.dates.map((date, i) => {
+          <ScrollView maxHeight="300px">
+            {lastWateredDataInternal.dates.map((date, i) => {
               return (
                 <Box
                   bgColor="#EEF0F2"
@@ -97,7 +111,7 @@ const LastWatered = ({ route, navigation }) => {
                     <Text style={styles.sectionTitle}>
                       {convertDateToFullMDYHM(date.seconds)}
                     </Text>
-                    {lastWateredData.notes[i] != "" ? (
+                    {lastWateredDataInternal.notes[i] != "" ? (
                       <TouchableOpacity
                         onPress={() => {
                           setCurrenNoteNum(i);
@@ -114,13 +128,14 @@ const LastWatered = ({ route, navigation }) => {
               );
             })}
           </ScrollView>
-          <TouchableOpacity onPress={null}>
+          <TouchableOpacity onPress={() => setAddNewModalVisible(true)}>
             <Box
               bgColor="#ADCDB0"
               borderColor="#432D1E"
-              borderBottomWidth="2px"
               borderLeftWidth="2px"
               borderRightWidth="2px"
+              borderBottomWidth="2px"
+              borderTopWidth="0.5px"
               paddingY="10px"
               borderBottomRadius="8px"
             >
@@ -146,7 +161,7 @@ const LastWatered = ({ route, navigation }) => {
                 Your Notes:
               </Text>
               <Text textAlign="left">
-                {lastWateredData.notes[currentNoteNum]}
+                {lastWateredDataInternal.notes[currentNoteNum]}
               </Text>
             </ScrollView>
             <Flex flexDirection="row" justifyContent="flex-end" width="100%">
@@ -155,6 +170,83 @@ const LastWatered = ({ route, navigation }) => {
                 onPress={() => setModalVisible(!modalVisible)}
               >
                 <Text style={styles.textStyleClose}>Close</Text>
+              </TouchableOpacity>
+            </Flex>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={addNewModalVisible}
+        onRequestClose={() => {
+          setModalVisible(!addNewModalVisible);
+        }}
+      >
+        <View style={styles.topView} paddingTop="60px">
+          <View style={styles.addNewRecModalView}>
+            <Text style={styles.modalTitle}>Add New Watering Record</Text>
+            <View>
+              <DateTimePicker
+                mode="datetime"
+                themeVariant="light"
+                value={date}
+                onChange={(e, date) => {
+                  setDate(date);
+                }}
+              />
+              <View
+                style={{
+                  borderBottomColor: "#000000",
+                  borderWidth: 2,
+                  marginVertical: 20,
+                }}
+              >
+                <TextInput
+                  editable
+                  height={200}
+                  multiline
+                  numberOfLines={6}
+                  maxLength={400}
+                  onChangeText={(text) => setNote(text)}
+                  value={note}
+                  style={{ padding: 10 }}
+                  placeholder="Add your notes here"
+                />
+              </View>
+            </View>
+            <Flex
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="flex-end"
+              width="100%"
+            >
+              <TouchableOpacity
+                style={[styles.button, styles.close]}
+                onPress={() => setAddNewModalVisible(false)}
+              >
+                <Text style={styles.textStyleClose}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.confirm]}
+                onPress={() => {
+                  // Save to database
+                  var dateToSave = date.getTime() / 1000;
+                  var noteToSave = note;
+
+                  let lastWateredDataNew = {
+                    dates: [
+                      ...lastWateredDataInternal.dates,
+                      { seconds: dateToSave, nanoseconds: 0 },
+                    ],
+                    notes: [...lastWateredDataInternal.notes, noteToSave],
+                  };
+
+                  setLastWateredDataInternal(lastWateredDataNew);
+                  setAddNewModalVisible(false);
+                }}
+              >
+                <Text style={styles.textStyleConfirm}>Add</Text>
               </TouchableOpacity>
             </Flex>
           </View>
@@ -231,6 +323,29 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  topView: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  addNewRecModalView: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "80%",
+    height: 400,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 
   button: {
     borderRadius: 4,
@@ -251,6 +366,23 @@ const styles = StyleSheet.create({
   },
   notesTitle: {
     fontFamily: "SFProDisplay-Bold",
+  },
+  confirm: {
+    backgroundColor: "#72A077",
+  },
+  textStyleConfirm: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalTitle: {
+    marginBottom: 10,
+    textAlign: "center",
+    fontWeight: "700",
+    fontFamily: "SFProDisplay-Bold",
+    fontStyle: "normal",
+    fontSize: "20",
+    color: "black",
   },
 });
 

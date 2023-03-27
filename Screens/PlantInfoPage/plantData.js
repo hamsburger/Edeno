@@ -1,6 +1,8 @@
 export const plantData = {
   lastWatered: {
     dates: [
+      { seconds: 1674662541, nanoseconds: 0 },
+      { seconds: 1675300761, nanoseconds: 0 },
       { seconds: 1676481324, nanoseconds: 0 },
       { seconds: 1677518124, nanoseconds: 0 },
       { seconds: 1678209324, nanoseconds: 0 },
@@ -8,6 +10,8 @@ export const plantData = {
       { seconds: 1679357961, nanoseconds: 0 },
     ],
     notes: [
+      "",
+      "",
       "3 cups of warm water",
       "1 cup of water morning and then evening 1 cup of water morning and then evening 1 cup of water morning and then evening 1 cup of water morning and then evening 1 cup of water morning and then evening 1 cup of water morning and then evening 1 cup of water morning and then evening 1 cup of water morning and then evening 1 cup of water morning and then evening",
       "1 cup of water",
