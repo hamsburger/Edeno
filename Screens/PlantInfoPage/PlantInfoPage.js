@@ -313,9 +313,10 @@ const PlantInfoPage = ({ route, navigation }) => {
         <View marginBottom={"40px"}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("LastWatered", {
+              navigation.navigate("LastWateredOrFertilized", {
                 plantInfo: plantInfo,
-                lastWateredData: plantData.lastWatered,
+                data: plantData.lastWatered,
+                type: "water",
               });
             }}
           >
@@ -342,13 +343,38 @@ const PlantInfoPage = ({ route, navigation }) => {
               }
             />
           </TouchableOpacity>
-
-          <MetricInfoBox
-            title="Last Fertilized"
-            date={1679678124}
-            measurement="1"
-            unit="week ago"
-          />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("LastWateredOrFertilized", {
+                plantInfo: plantInfo,
+                data: plantData.lastFertilized,
+                type: "fertilize",
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Last Fertilized"
+              date={
+                plantData.lastFertilized.dates[
+                  plantData.lastFertilized.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                calculateTimePast(
+                  plantData.lastFertilized.dates[
+                    plantData.lastFertilized.dates.length - 1
+                  ].seconds
+                )[0]
+              }
+              unit={
+                calculateTimePast(
+                  plantData.lastFertilized.dates[
+                    plantData.lastFertilized.dates.length - 1
+                  ].seconds
+                )[1]
+              }
+            />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("PHInfo", {

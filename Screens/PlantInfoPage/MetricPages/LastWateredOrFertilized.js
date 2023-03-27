@@ -1,34 +1,30 @@
 import { React, useState } from "react";
 import { View, Text, Box, Flex, ScrollView } from "native-base";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, Modal, TextInput } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertDateToFullMDYHM from "../../../utilities/convertDateToFullMDYHM";
 import calculateTimePast from "../../../utilities/calculateTimePast";
 import Note from "../../../assets/icons/note.svg";
 
-const LastWatered = ({ route, navigation }) => {
-  const { plantInfo, lastWateredData } = route.params;
+const LastWateredOrFertilized = ({ route, navigation }) => {
+  const { plantInfo, data, type } = route.params;
   const [date, setDate] = useState(new Date());
   const [note, setNote] = useState("");
-  const [lastWateredDataInternal, setLastWateredDataInternal] =
-    useState(lastWateredData);
+  const [dataInternal, setDataInternal] = useState(data);
 
   const lastMeasurementDate =
-    lastWateredDataInternal.dates[lastWateredDataInternal.dates.length - 1]
-      .seconds;
+    dataInternal.dates[dataInternal.dates.length - 1].seconds;
 
   const [days, unit] = calculateTimePast(lastMeasurementDate);
   const [modalVisible, setModalVisible] = useState(false);
   const [addNewModalVisible, setAddNewModalVisible] = useState(false);
   const [currentNoteNum, setCurrenNoteNum] = useState(0);
+
+  const titles =
+    type == "water"
+      ? ["Last Watered", "Watering"]
+      : ["Last Fertilized", "Fertilizing"];
 
   return (
     <View>
@@ -52,7 +48,7 @@ const LastWatered = ({ route, navigation }) => {
             {plantInfo.plantName}
           </Text>
           <Text fontSize="37px" style={styles.page_title}>
-            Last Watered
+            {titles[0]}
           </Text>
         </Box>
       </Box>
@@ -84,11 +80,11 @@ const LastWatered = ({ route, navigation }) => {
             borderTopRadius="8px"
           >
             <Text style={styles.sectionTitle} textAlign="center">
-              Watering History
+              {titles[1]} History
             </Text>
           </Box>
           <ScrollView maxHeight="300px">
-            {lastWateredDataInternal.dates.map((date, i) => {
+            {dataInternal.dates.map((date, i) => {
               return (
                 <Box
                   bgColor="#EEF0F2"
@@ -111,7 +107,7 @@ const LastWatered = ({ route, navigation }) => {
                     <Text style={styles.sectionTitle}>
                       {convertDateToFullMDYHM(date.seconds)}
                     </Text>
-                    {lastWateredDataInternal.notes[i] != "" ? (
+                    {dataInternal.notes[i] != "" ? (
                       <TouchableOpacity
                         onPress={() => {
                           setCurrenNoteNum(i);
@@ -160,9 +156,7 @@ const LastWatered = ({ route, navigation }) => {
               <Text textAlign="left" style={styles.notesTitle}>
                 Your Notes:
               </Text>
-              <Text textAlign="left">
-                {lastWateredDataInternal.notes[currentNoteNum]}
-              </Text>
+              <Text textAlign="left">{dataInternal.notes[currentNoteNum]}</Text>
             </ScrollView>
             <Flex flexDirection="row" justifyContent="flex-end" width="100%">
               <TouchableOpacity
@@ -185,7 +179,7 @@ const LastWatered = ({ route, navigation }) => {
       >
         <View style={styles.topView} paddingTop="60px">
           <View style={styles.addNewRecModalView}>
-            <Text style={styles.modalTitle}>Add New Watering Record</Text>
+            <Text style={styles.modalTitle}>Add New {titles[1]} Record</Text>
             <View>
               <DateTimePicker
                 mode="datetime"
@@ -230,19 +224,20 @@ const LastWatered = ({ route, navigation }) => {
               <TouchableOpacity
                 style={[styles.button, styles.confirm]}
                 onPress={() => {
-                  // Save to database
                   var dateToSave = date.getTime() / 1000;
                   var noteToSave = note;
 
-                  let lastWateredDataNew = {
+                  let dataNew = {
                     dates: [
-                      ...lastWateredDataInternal.dates,
+                      ...dataInternal.dates,
                       { seconds: dateToSave, nanoseconds: 0 },
                     ],
-                    notes: [...lastWateredDataInternal.notes, noteToSave],
+                    notes: [...dataInternal.notes, noteToSave],
                   };
 
-                  setLastWateredDataInternal(lastWateredDataNew);
+                  // TODO: SAVE TO BACKEND!
+
+                  setDataInternal(dataNew);
                   setAddNewModalVisible(false);
                 }}
               >
@@ -386,4 +381,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { LastWatered };
+export { LastWateredOrFertilized };

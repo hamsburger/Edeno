@@ -30,6 +30,26 @@ export const plantData = {
       { seconds: 1679854054, nanoseconds: 0 },
       { seconds: 1681854054, nanoseconds: 0 },
     ],
-    measurements: [5.2, 5.5, 6.5, 5.8, 6.1, 6.4],
+    measurements: [5.2, 5.5, 6.5, 5.8, 6.1, 5.9],
+  },
+  lastFertilized: {
+    dates: [
+      { seconds: 1674662541, nanoseconds: 0 },
+      { seconds: 1675300761, nanoseconds: 0 },
+      { seconds: 1676481324, nanoseconds: 0 },
+      { seconds: 1677518124, nanoseconds: 0 },
+      { seconds: 1678209324, nanoseconds: 0 },
+      { seconds: 1678814124, nanoseconds: 0 },
+      { seconds: 1679357961, nanoseconds: 0 },
+    ],
+    notes: [
+      "x amount of fertilizer with XYZ",
+      "",
+      "",
+      "",
+      "y amount of fertilizer with NPZ",
+      "",
+      "",
+    ],
   },
 };

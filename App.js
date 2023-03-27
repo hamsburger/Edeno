@@ -25,7 +25,7 @@ import { AuthProvider, useAuth } from "./Hooks/Contexts/Auth_Context";
 import { Login } from "./Screens/SignInFlows/Login";
 import { SignUp } from "./Screens/SignInFlows/SignUp";
 import { PHInfo } from "./Screens/PlantInfoPage/MetricPages/PHInfo";
-import { LastWatered } from "./Screens/PlantInfoPage/MetricPages/LastWatered";
+import { LastWateredOrFertilized } from "./Screens/PlantInfoPage/MetricPages/LastWateredOrFertilized";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -218,8 +218,8 @@ export default () => {
         <Stack.Screen name="PHInfo">
           {(props) => <PHInfo {...props} visible={1} />}
         </Stack.Screen>
-        <Stack.Screen name="LastWatered">
-          {(props) => <LastWatered {...props} visible={1} />}
+        <Stack.Screen name="LastWateredOrFertilized">
+          {(props) => <LastWateredOrFertilized {...props} visible={1} />}
         </Stack.Screen>
       </Stack.Navigator>
     ) : (

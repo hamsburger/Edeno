@@ -12,7 +12,7 @@ const calculateTimePast = (date) => {
     today.getMonth() == lastMeasuredDate.getMonth() &&
     today.getFullYear() == lastMeasuredDate.getFullYear()
   ) {
-    return ["today", ""];
+    return ["Today", ""];
   }
 
   // yesterday or more days ago
