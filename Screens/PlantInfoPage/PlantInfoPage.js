@@ -29,6 +29,20 @@ const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;
   const [Plants, dispatch] = usePlants();
 
+  // returns
+  // 1 if HIGH
+  // -1 if LOW
+  // 0 otherwise
+  const isHighOrLow = (upperIdeal, lowerIdeal, measurement) => {
+    if (measurement < lowerIdeal) {
+      return -1;
+    } else if (measurement > upperIdeal) {
+      return 1;
+    }
+
+    return 0;
+  };
+
   const styles = StyleSheet.create({
     plantImage: { height: 170, opacity: 0.7 },
     plantName: {
@@ -341,6 +355,7 @@ const PlantInfoPage = ({ route, navigation }) => {
                   ].seconds
                 )[1]
               }
+              highOrLow={0}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -373,6 +388,7 @@ const PlantInfoPage = ({ route, navigation }) => {
                   ].seconds
                 )[1]
               }
+              highOrLow={0}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -395,32 +411,135 @@ const PlantInfoPage = ({ route, navigation }) => {
                 ]
               }
               unit=""
+              highOrLow={isHighOrLow(
+                plantData.phData.upperIdeal,
+                plantData.phData.lowerIdeal,
+                plantData.phData.measurements[
+                  plantData.phData.measurements.length - 1
+                ]
+              )}
             />
           </TouchableOpacity>
-          <MetricInfoBox
-            title="Soil Moisture"
-            date={1679678124}
-            measurement="57"
-            unit="%"
-          />
-          <MetricInfoBox
-            title="Humidity"
-            date={1679678124}
-            measurement="61"
-            unit="%"
-          />
-          <MetricInfoBox
-            title="Temperature"
-            date={1679678124}
-            measurement="18"
-            unit="°C"
-          />
-          <MetricInfoBox
-            title="Light Intensity"
-            date={1679678124}
-            measurement="54"
-            unit="LUX"
-          />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("SoilMoistureInfo", {
+                plantInfo: plantInfo,
+                soilMoistureData: plantData.soilMoistureData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Soil Moisture"
+              date={
+                plantData.soilMoistureData.dates[
+                  plantData.soilMoistureData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.soilMoistureData.measurements[
+                  plantData.soilMoistureData.measurements.length - 1
+                ]
+              }
+              unit="%"
+              highOrLow={isHighOrLow(
+                plantData.soilMoistureData.upperIdeal,
+                plantData.soilMoistureData.lowerIdeal,
+                plantData.soilMoistureData.measurements[
+                  plantData.soilMoistureData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("HumidityInfo", {
+                plantInfo: plantInfo,
+                humidityData: plantData.humidityData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Humidity"
+              date={
+                plantData.humidityData.dates[
+                  plantData.humidityData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.humidityData.measurements[
+                  plantData.humidityData.measurements.length - 1
+                ]
+              }
+              unit="%"
+              highOrLow={isHighOrLow(
+                plantData.humidityData.upperIdeal,
+                plantData.humidityData.lowerIdeal,
+                plantData.humidityData.measurements[
+                  plantData.humidityData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("TemperatureInfo", {
+                plantInfo: plantInfo,
+                temperatureData: plantData.temperatureData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Temperature"
+              date={
+                plantData.temperatureData.dates[
+                  plantData.temperatureData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.temperatureData.measurements[
+                  plantData.temperatureData.measurements.length - 1
+                ]
+              }
+              unit="°C"
+              highOrLow={isHighOrLow(
+                plantData.temperatureData.upperIdeal,
+                plantData.temperatureData.lowerIdeal,
+                plantData.temperatureData.measurements[
+                  plantData.temperatureData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("LightIntensityInfo", {
+                plantInfo: plantInfo,
+                lightIntensityData: plantData.lightIntensityData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Light Intensity"
+              date={
+                plantData.lightIntensityData.dates[
+                  plantData.lightIntensityData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.lightIntensityData.measurements[
+                  plantData.lightIntensityData.measurements.length - 1
+                ]
+              }
+              unit="LUX"
+              highOrLow={isHighOrLow(
+                plantData.lightIntensityData.upperIdeal,
+                plantData.lightIntensityData.lowerIdeal,
+                plantData.lightIntensityData.measurements[
+                  plantData.lightIntensityData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
           <MetricInfoBox
             title="NDVI"
             date={1679678124}

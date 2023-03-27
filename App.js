@@ -26,6 +26,10 @@ import { Login } from "./Screens/SignInFlows/Login";
 import { SignUp } from "./Screens/SignInFlows/SignUp";
 import { PHInfo } from "./Screens/PlantInfoPage/MetricPages/PHInfo";
 import { LastWateredOrFertilized } from "./Screens/PlantInfoPage/MetricPages/LastWateredOrFertilized";
+import { SoilMoistureInfo } from "./Screens/PlantInfoPage/MetricPages/SoilMoistureInfo";
+import { HumidityInfo } from "./Screens/PlantInfoPage/MetricPages/HumidityInfo";
+import { TemperatureInfo } from "./Screens/PlantInfoPage/MetricPages/TemperatureInfo";
+import { LightIntensityInfo } from "./Screens/PlantInfoPage/MetricPages/LightIntensityInfo";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -220,6 +224,18 @@ export default () => {
         </Stack.Screen>
         <Stack.Screen name="LastWateredOrFertilized">
           {(props) => <LastWateredOrFertilized {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="SoilMoistureInfo">
+          {(props) => <SoilMoistureInfo {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="HumidityInfo">
+          {(props) => <HumidityInfo {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="TemperatureInfo">
+          {(props) => <TemperatureInfo {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="LightIntensityInfo">
+          {(props) => <LightIntensityInfo {...props} visible={1} />}
         </Stack.Screen>
       </Stack.Navigator>
     ) : (
