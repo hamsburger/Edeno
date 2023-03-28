@@ -93,13 +93,21 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
+<<<<<<< HEAD
       fontSize:  17,
+=======
+      fontSize: 17,
+>>>>>>> fa0044f (Changes)
     },
     sectionDesc: {
       fontWeight: "400",
       fontFamily: "SFProDisplay-Regular",
       fontStyle: "normal",
+<<<<<<< HEAD
       fontSize:  14,
+=======
+      fontSize: 14,
+>>>>>>> fa0044f (Changes)
     },
     diseaseScanner: {
       justifyContent: "center",
@@ -108,7 +116,11 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
+<<<<<<< HEAD
       fontSize:  20,
+=======
+      fontSize: 20,
+>>>>>>> fa0044f (Changes)
       color: "#597F51",
       textAlign: "center",
     },
@@ -595,7 +607,7 @@ const PlantInfoPage = ({ route, navigation }) => {
           </View>
         )}
       </View>
-      <Modal
+      {/* <Modal
         animationType="fade"
         transparent={true}
         visible={modalVisible}
@@ -714,7 +726,7 @@ const PlantInfoPage = ({ route, navigation }) => {
             </Flex>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </ScrollView>
   );
 };

@@ -19,7 +19,7 @@ const AccordionComponent = ({ viewInside, iconName, sectionTitle }) => {
   });
   return (
     <SimpleAccordion
-      style={styles.accordion}
+      // style={styles.accordion}
       viewInside={viewInside}
       title={
         <Flex flexDirection="row" alignItems="center">

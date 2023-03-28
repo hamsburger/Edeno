@@ -14,7 +14,7 @@ import selenium.webdriver.support.expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 import undetected_chromedriver as uc
-from .FirebaseSDK import FirebaseManager
+from utilities import FirebaseManager
 from utilities import camelCase
 
 class ChromeDriver:
@@ -232,6 +232,25 @@ class ChromeDriver:
 
             # Insert Plant Recommendation data to FireBase
             self.firebaseHandler.set_reference("recommendations/NGA")
+            plant_object = { 
+                camelCase(plant_common_name): {
+                    "scientificName" : plant_scientific_name,    
+                    "link" : a_link,
+                    "sunRequirements" : sunlight_information,
+                    "waterPreference" : water_information,
+                    "pHRequirements" : {
+                        "maxPH" : max_pH,
+                        "minPH" : min_pH 
+                    },
+                    "pHDescriptions" : all_pH_descriptors,
+                    "temperatureZones" : {
+                        "minZone" : min_temp_information,
+                        "maxZone" : max_temp_information
+                    },
+                    
+                }
+            }
+            
             self.firebaseHandler.insert_data_on_key(camelCase(plant_common_name), {
                     "scientificName" : plant_scientific_name,    
                     "link" : a_link,
@@ -249,7 +268,26 @@ class ChromeDriver:
                     
             })
             
-            
+
+            return { 
+                camelCase(plant_common_name): {
+                    "scientificName" : plant_scientific_name,    
+                    "link" : a_link,
+                    "sunRequirements" : sunlight_information,
+                    "waterPreference" : water_information,
+                    "pHRequirements" : {
+                        "maxPH" : max_pH,
+                        "minPH" : min_pH 
+                    },
+                    "pHDescriptions" : all_pH_descriptors,
+                    "temperatureZones" : {
+                        "minZone" : min_temp_information,
+                        "maxZone" : max_temp_information
+                    },
+                    
+                }
+            }
+
             # Bar for cleaning PH string: –
 
 
