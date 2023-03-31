@@ -30,6 +30,7 @@ import { SoilMoistureInfo } from "./Screens/PlantInfoPage/MetricPages/SoilMoistu
 import { HumidityInfo } from "./Screens/PlantInfoPage/MetricPages/HumidityInfo";
 import { TemperatureInfo } from "./Screens/PlantInfoPage/MetricPages/TemperatureInfo";
 import { LightIntensityInfo } from "./Screens/PlantInfoPage/MetricPages/LightIntensityInfo";
+import { TakePictureInstruction } from "./Screens/PlantHealthScanner/TakePictureInstruction";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -236,6 +237,9 @@ export default () => {
         </Stack.Screen>
         <Stack.Screen name="LightIntensityInfo">
           {(props) => <LightIntensityInfo {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="TakePictureInstruction">
+          {(props) => <TakePictureInstruction {...props} visible={1} />}
         </Stack.Screen>
       </Stack.Navigator>
     ) : (

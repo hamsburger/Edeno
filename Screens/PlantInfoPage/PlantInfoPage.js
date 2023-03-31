@@ -313,7 +313,13 @@ const PlantInfoPage = ({ route, navigation }) => {
             marginTop={"10px"}
             marginBottom={"30px"}
           >
-            <TouchableOpacity onPress={null}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("TakePictureInstruction", {
+                  type: "plant-health-scanner",
+                });
+              }}
+            >
               <Image
                 style={{ marginBottom: 13 }}
                 source={require("../../assets/icons/plant-info-page-icons/disease-scanner-icon.png")}
