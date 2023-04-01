@@ -12,10 +12,11 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 import selenium.webdriver.support.expected_conditions as EC 
 from webdriver_manager.chrome import ChromeDriverManager
+from pprint import pprint
 
 import undetected_chromedriver as uc
-from utilities import FirebaseManager
-from utilities import camelCase
+from utilities.FirebaseSDK import FirebaseManager
+from utilities.util_functions import camelCase, deriveNumericRequirements
 
 class ChromeDriver:
 
@@ -23,6 +24,7 @@ class ChromeDriver:
         options = self.configDriver()
         # self.windowIndex = 0
         self.driver = self.launchDriver(options)
+        # print(f"DRIVER VERSION: {self.driver.capabilities['browserVersion']}")
         self.firebaseHandler = FirebaseManager()
         # self.oldURL = self.driver.execute_script("return window.location.href")
         # self.oldTabs = []
@@ -52,11 +54,14 @@ class ChromeDriver:
     def configDriver(self):
         options = webdriver.ChromeOptions()
         ua = UserAgent()
-        userAgent = ua.random
+        # userAgent = ua.random
 
         # Will use headless mode later
-        # options.add_argument("--headless")
-        options.add_argument(f'user-agent={userAgent}')
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument('--proxy-server=ip:port')
+        # options.add_argument(f'user-agent={userAgent}')
         # options.add_experimental_option("detach", True)
         #                          
         # options.add_argument("--user-data-dir=C:/Users/harri/AppData/Local/Google/Chrome/User Data")
@@ -68,7 +73,7 @@ class ChromeDriver:
     
     def launchDriver(self, options):
         # subprocess.call("bash dGCache", shell=True) ## Remove Cache      
-        driver = uc.Chrome(version_main=110, options=options)
+        driver = uc.Chrome(options=options)
         # driver.implicitly_wait(4)
         print("Driver at launchDriver:", driver)
         driver.maximize_window()
@@ -77,28 +82,98 @@ class ChromeDriver:
     def maxWindow(self):
         self.driver.maximize_window()
 
-    def relevantHashTag(self, searchInterest):
-        """
-            Title: relevantHashTag
-            Description: Find All Relevant Hashtags related to a searchInterest
-            returns: All Hashtags 
-            params: 
-                @self.driver -- The WebDriver
-                @searchInterest -- User's search query on best-hashtags
-        """
-        ## Context
-        self.driver.get("https://best-hashtags.com/")
-        searchBar = self.driver.find_element_by_id("cauta")
-        searchButton = self.driver.find_element_by_css_selector(".btn-u")
+    def plantGeneralInfo(self, table):
+        plant = table.find_element(By.CSS_SELECTOR, "tr")
+        plant_link_tag = plant.find_element(By.CSS_SELECTOR, 'td:nth-child(2) > a')
+        # print(plant.text)
+        # print(plant_link_tag)
+        a_link = plant_link_tag.get_attribute("href")
+        a_text = plant_link_tag.text
+
+        plant_scientific_name = ''
+        if re.search(r"\([A-Za-z0-9\s]*", a_text):
+            plant_scientific_name = re.search(r"\([A-Za-z0-9\s]*", a_text)[0].strip("() ")
+
+        ## Append nickname to the common name
+        plant_nickname = ''
+        if re.search(r"\'[A-Za-z0-9\s]*", a_text):
+            plant_nickname = re.search(r"\'[A-Za-z0-9\s]*", a_text)[0].strip("' ")
+
+
+        plant_common_name = " ".join([re.match(r"^[A-Za-z\s]*", a_text)[0], plant_nickname])
+
+        return (a_link, plant_common_name, plant_scientific_name)
         
-        searchBar.send_keys(searchInterest)
-        searchButton.click() 
-        time.sleep(5)
-        firstTagBox = self.driver.find_element_by_css_selector(".tag-box:nth-child(5) *:first-child")
-        secondTagBox = self.driver.find_element_by_css_selector(".tag-box:nth-child(10) *:first-child")
-        print(firstTagBox.text + secondTagBox.text)
-        return firstTagBox.text + secondTagBox.text
-    
+    def getPlantInformation(self, link):
+        self.driver.get(f"{link}")
+        def get_plant_cell(postProcessor, selector_array=[]):
+                try:
+                    table_row = WebDriverWait(self.driver, timeout=10).until(
+                        EC.presence_of_element_located(selector_array)
+                    )
+                    cell = table_row.find_element(By.CSS_SELECTOR, "td:nth-child(2)")
+                    return postProcessor(cell)
+                except (TimeoutException, Exception) as e:
+                    print(e)
+                    return None
+                        
+        # Find Sunlight Information
+        sunlight_cell_post_processor = lambda cell: '\n'.join([text.strip() for text in cell.text.split('\n')])
+        sunlight_information = get_plant_cell(sunlight_cell_post_processor, [By.XPATH, "//tr[contains(., 'Sun Requirements')]"])
+
+        # Find Water Information
+        water_cell_post_processor = lambda cell: '\n'.join([text.strip() for text in cell.text.split('\n')])
+        water_information = get_plant_cell(water_cell_post_processor, [By.XPATH, "//tr[contains(., 'Water Preferences')]"])
+
+        if water_information is None:
+            water_information = get_plant_cell(lambda cell: cell, [By.XPATH, "//tr[contains(., 'Suitable Locations')]"])
+            if water_information.lower().includes("xerisca"):
+                water_information = "dry"
+            
+        # Find pH cell
+        def pH_postProcessor(cell):
+            
+            try:
+                pH_information = cell.text  
+                all_pH_descriptors = '\n'.join([descriptor.strip() for descriptor in re.findall(r'[A-Za-z\s]+', pH_information)
+                                                if descriptor.strip() != ''])
+                all_pH_ranges = re.findall(r'\(.+\)', pH_information) 
+                pH_range_array = []
+                
+                for pH_range in all_pH_ranges:
+                    pH_range_min, pH_range_max = pH_range.strip("()").split('–')
+                    pH_range_array.extend([float(pH_range_min.strip()), float(pH_range_max.strip())])
+
+                max_pH = max(pH_range_array)
+                min_pH = min(pH_range_array)
+                return (all_pH_descriptors, max_pH, min_pH)
+            except Exception as e:
+                print(e)
+
+        pH_information = get_plant_cell(pH_postProcessor, [By.XPATH, "//tr[contains(., 'Soil pH Preferences')]"])
+        all_pH_descriptors = None if pH_information is None else pH_information[0] 
+        max_pH = None if pH_information is None else pH_information[1] 
+        min_pH = None if pH_information is None else pH_information[2] 
+        
+        # Find Min Temperature Information
+        min_temp_post_processor = lambda cell: re.match(r'Zone [0-9a-zA-Z]+', cell.text.strip())[0].strip()
+        min_temp_information = get_plant_cell(min_temp_post_processor, [By.XPATH, "//tr[contains(., 'Minimum cold hardiness')]"])
+
+        # Find Max Temperature Information
+        max_temp_post_processor = lambda cell: re.match(r'Zone [0-9a-zA-Z]+', cell.text.strip())[0].strip()
+        max_temp_information = get_plant_cell(max_temp_post_processor, [By.XPATH, "//tr[contains(., 'Maximum recommended zone')]"])
+        
+
+        temperature_information = None
+        if min_temp_information:
+            temperature_information = min_temp_information
+        
+        if max_temp_information:
+            temperature_information = temperature_information + f"\n{max_temp_information}"
+
+        return (water_information, sunlight_information, (all_pH_descriptors, max_pH, min_pH),
+                temperature_information)
+        
     def scrapeNGA(self, plant_to_search, BASE_URL="garden.org"):
         
         ## Bypass ReCAPTCHA         
@@ -128,169 +203,61 @@ class ChromeDriver:
         
         
         ## Wait for Desired Table to Load
-        table = None
+        table = None    
         try:
-            table = WebDriverWait(self.driver, timeout=3).until(
+            table = WebDriverWait(self.driver, timeout=10).until(
                 EC.presence_of_element_located([By.CSS_SELECTOR, ".pretty-table tbody"])
             )
         except TimeoutException as e:
+            html = self.driver.page_source
+            pprint(html)
             print(e)
-
-        plants = table.find_elements(By.CSS_SELECTOR, "tr")
-
-        ## Save all links for Top 5 Results so that we don't have to query again
-        links_and_general_info = []
-
-        # Get Links for Top 5 Results
-        for i, plant in enumerate(plants):
-            if i == 5:
-                break
-
-            plant_link_tag = plant.find_element(By.CSS_SELECTOR, 'td:nth-child(2) > a')
-            # print(plant.text)
-            # print(plant_link_tag)
-            a_link = plant_link_tag.get_attribute("href")
-            a_text = plant_link_tag.text
-            print(a_text)
-
-            plant_scientific_name = ''
-            if re.search(r"\([A-Za-z0-9\s]*", a_text):
-                plant_scientific_name = re.search(r"\([A-Za-z0-9\s]*", a_text)[0].strip("() ")
-
-            ## Append nickname to the common name
-            plant_nickname = ''
-            if re.search(r"\'[A-Za-z0-9\s]*", a_text):
-                plant_nickname = re.search(r"\'[A-Za-z0-9\s]*", a_text)[0].strip("' ")
-
-
-            plant_common_name = " ".join([re.match(r"^[A-Za-z\s]*", a_text)[0], plant_nickname])
-
-
-            # Scroll function to simulate user movement
-            # self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight/(Math.floor(Math.random() * 2)));")
-
-            links_and_general_info.append((a_link, plant_common_name, plant_scientific_name))
-
-        def get_plant_cell(postProcessor, selector_array=[]):
-                try:
-                    table_row = WebDriverWait(self.driver, timeout=2).until(
-                        EC.presence_of_element_located(selector_array)
-                    )
-                    cell = table_row.find_element(By.CSS_SELECTOR, "td:nth-child(2)")
-                    return postProcessor(cell)
-                except (TimeoutException, Exception) as e:
-                    print(e)
-                    return None
-
-        # For every link, we fetch plant information
-        for a_link, plant_common_name, plant_scientific_name in links_and_general_info:
-            self.driver.get(f"{a_link}")
-
-            # Find Sunlight Information
-            sunlight_cell_post_processor = lambda cell: ', '.join([text.strip() for text in cell.text.split('\n')])
-            sunlight_information = get_plant_cell(sunlight_cell_post_processor, [By.XPATH, "//tr[contains(., 'Sun Requirements')]"])
-
-            # Find Water Information
-            water_cell_post_processor = lambda cell: cell.text.strip()
-            water_information = get_plant_cell(water_cell_post_processor, [By.XPATH, "//tr[contains(., 'Water Preferences')]"])
-
-            if water_information is None:
-                water_information = get_plant_cell(water_cell_post_processor, [By.XPATH, "//tr[contains(., 'Suitable Locations')]"])
             
-            # Find pH cell
-            def pH_postProcessor(cell):
+
+        
+        # Scroll function to simulate user movement
+        # self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight/(Math.floor(Math.random() * 2)));")
+
+        links_and_general_info = self.plantGeneralInfo(table)
+    
+        # Fetch plant information
+        a_link, plant_common_name, plant_scientific_name = links_and_general_info
+        water_information, sunlight_information, all_pH_information, \
+        temperature_information = self.getPlantInformation(a_link)    
+
+        all_pH_descriptors, max_pH, min_pH = all_pH_information
+        if temperature_information:    
+            temperature_information_for_numerical_prcessing = \
+                temperature_information.lower().replace("zone", "")
+
+        self.firebaseHandler.set_reference("recommendations/NGA")        
+        plant_object = { 
+            "scientificName" : camelCase(plant_scientific_name),    
+            "link" : a_link,
+            "lightIntensityData" : {
+                "lightDescriptions" : sunlight_information,
+                **deriveNumericRequirements("light", sunlight_information)
+            },
+            "humidityData" : {
+                "humidityDescriptions" : water_information,
+                **deriveNumericRequirements("humidity", water_information)
+            },
+            "phData" : {
+                "pHDescriptions" : all_pH_descriptors,
+                "upperIdeal" : max_pH,
+                "lowerIdeal" : min_pH 
+            },
+            "temperatureData" : {
+                "temperatureDescriptions" : temperature_information,
+                **deriveNumericRequirements("hardiness", 
+                                            temperature_information_for_numerical_prcessing)
                 
-                try:
-                    pH_information = cell.text  
-                    all_pH_descriptors = ', '.join([descriptor.strip() for descriptor in re.findall(r'[A-Za-z\s]+', pH_information)
-                                                    if descriptor.strip() != ''])
-                    all_pH_ranges = re.findall(r'\(.+\)', pH_information) 
-                    pH_range_array = []
-                    
-                    for pH_range in all_pH_ranges:
-                        pH_range_min, pH_range_max = pH_range.strip("()").split('–')
-                        pH_range_array.extend([float(pH_range_min.strip()), float(pH_range_max.strip())])
-
-                    max_pH = max(pH_range_array)
-                    min_pH = min(pH_range_array)
-                    return (all_pH_descriptors, max_pH, min_pH)
-                except Exception as e:
-                    print(e)
-
-            pH_information = get_plant_cell(pH_postProcessor, [By.XPATH, "//tr[contains(., 'Soil pH Preferences')]"])
-            all_pH_descriptors = None if pH_information is None else pH_information[0] 
-            max_pH = None if pH_information is None else pH_information[1] 
-            min_pH = None if pH_information is None else pH_information[2] 
-            
-            # Find Temperature Information
-            min_temp_post_processor = lambda cell: re.match(r'Zone [0-9a-zA-Z]+', cell.text.strip())[0].strip()
-            min_temp_information = get_plant_cell(min_temp_post_processor, [By.XPATH, "//tr[contains(., 'Minimum cold hardiness')]"])
-
-            # Find Max Temperature Information
-            max_temp_post_processor = lambda cell: re.match(r'Zone [0-9a-zA-Z]+', cell.text.strip())[0].strip()
-            max_temp_information = get_plant_cell(max_temp_post_processor, [By.XPATH, "//tr[contains(., 'Maximum recommended zone')]"])
-
-            # Insert Plant Recommendation data to FireBase
-            self.firebaseHandler.set_reference("recommendations/NGA")
-            plant_object = { 
-                camelCase(plant_common_name): {
-                    "scientificName" : plant_scientific_name,    
-                    "link" : a_link,
-                    "sunRequirements" : sunlight_information,
-                    "waterPreference" : water_information,
-                    "pHRequirements" : {
-                        "maxPH" : max_pH,
-                        "minPH" : min_pH 
-                    },
-                    "pHDescriptions" : all_pH_descriptors,
-                    "temperatureZones" : {
-                        "minZone" : min_temp_information,
-                        "maxZone" : max_temp_information
-                    },
-                    
-                }
             }
-            
-            self.firebaseHandler.insert_data_on_key(camelCase(plant_common_name), {
-                    "scientificName" : plant_scientific_name,    
-                    "link" : a_link,
-                    "sunRequirements" : sunlight_information,
-                    "waterPreference" : water_information,
-                    "pHRequirements" : {
-                        "maxPH" : max_pH,
-                        "minPH" : min_pH 
-                    },
-                    "pHDescriptions" : all_pH_descriptors,
-                    "temperatureZones" : {
-                        "minZone" : min_temp_information,
-                        "maxZone" : max_temp_information
-                    },
-                    
-            })
-            
-
-            return { 
-                camelCase(plant_common_name): {
-                    "scientificName" : plant_scientific_name,    
-                    "link" : a_link,
-                    "sunRequirements" : sunlight_information,
-                    "waterPreference" : water_information,
-                    "pHRequirements" : {
-                        "maxPH" : max_pH,
-                        "minPH" : min_pH 
-                    },
-                    "pHDescriptions" : all_pH_descriptors,
-                    "temperatureZones" : {
-                        "minZone" : min_temp_information,
-                        "maxZone" : max_temp_information
-                    },
-                    
-                }
-            }
-
-            # Bar for cleaning PH string: –
-
-
+        }            
+        ## Saved to update user plant's garden.org name
+        plant_object["gardenOrgCommonName"] = plant_common_name
+        
+        return plant_object
             
 
 

@@ -1,3 +1,3 @@
-from functions import *
-from FirebaseSDK import FirebaseManager
-from ChromeDriver import ChromeDriver
+from utilities.util_functions import *
+from utilities.FirebaseSDK import FirebaseManager
+from utilities.ChromeDriver import ChromeDriver

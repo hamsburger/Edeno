@@ -1,0 +1,24 @@
+{
+    "plant_id_obj" : {
+        "plant_details" : {
+            "taxonomy":{
+                "class":"Magnoliopsida",
+                "family":"Asteraceae",
+                "genus":"Aloe",
+                "kingdom":"Plantae",
+                "order":"Asterales",
+                "phylum":"Magnoliophyta"
+            },    
+            "wiki_description":{
+                "value":"Taraxacum officinale, the common dandelion (often simply called \"dandelion\"), is a flowering herbaceous...",
+                "citation":"https://en.wikipedia.org/wiki/Taraxacum_officinale",
+                "license_name":"CC BY-SA 3.0",
+                "license_url":"https://creativecommons.org/licenses/by-sa/3.0/"
+            },
+            "scientific_name":"aloe vera",
+            "common_names":[
+                "aloe vera"
+            ]
+        }
+    }
+}
