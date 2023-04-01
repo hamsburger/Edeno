@@ -1,11 +1,61 @@
-import { React } from "react";
-import { StyleSheet, Image } from "react-native";
+import { React, useState } from "react";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { View, Text, Box, Button, Flex } from "native-base";
+import { Camera } from "expo-camera";
+import { CameraPreview } from "./CameraPreview";
 import Check from "../../assets/icons/check_circle.svg";
 import Wrong from "../../assets/icons/wrong_circle.svg";
+import FlipCamera from "../../assets/icons/flip-camera.svg";
+import TakePicture from "../../assets/icons/take-picture.svg";
 
 const TakePictureInstruction = ({ route, navigation }) => {
   const { type } = route.params;
+
+  const [startCamera, setStartCamera] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+  const [flashMode, setFlashMode] = useState("off");
+
+  let camera: Camera;
+
+  const __startCamera = async () => {
+    const { status } = await Camera.requestPermissionsAsync();
+    if (status === "granted") {
+      setStartCamera(true);
+    } else {
+      Alert.alert("Access denied");
+    }
+  };
+
+  const __takePicture = async () => {
+    if (!camera) return;
+    const photo = await camera.takePictureAsync();
+    console.log(photo);
+    setPreviewVisible(true);
+    setCapturedImage(photo);
+  };
+
+  const __retakePicture = () => {
+    setCapturedImage(null);
+    setPreviewVisible(false);
+    __startCamera();
+  };
+
+  const __switchCamera = () => {
+    if (cameraType === "back") {
+      setCameraType("front");
+    } else {
+      setCameraType("back");
+    }
+  };
+
+  const __savePhoto = () => {
+    // TO DO: Send to back end to fetch results
+    // picture stored in capturedImage state variable
+
+    navigation.navigate("Home");
+  };
 
   const styles = StyleSheet.create({
     sectionTitle: {
@@ -38,7 +88,78 @@ const TakePictureInstruction = ({ route, navigation }) => {
     },
   });
 
-  return (
+  return startCamera ? (
+    previewVisible && capturedImage ? (
+      <CameraPreview
+        photo={capturedImage}
+        retakePicture={__retakePicture}
+        savePhoto={__savePhoto}
+      />
+    ) : (
+      <Camera
+        type={cameraType}
+        style={{ flex: 1, width: "100%" }}
+        ref={(r) => {
+          camera = r;
+        }}
+      >
+        <Box position="absolute" left={2} top={50}>
+          <Button
+            bg="transparent"
+            _text={{
+              fontSize: "19px",
+              color: "#B9422C",
+            }}
+            onPress={() => {
+              setStartCamera(false);
+            }}
+          >
+            Back
+          </Button>
+        </Box>
+        <TouchableOpacity
+          onPress={__switchCamera}
+          style={{
+            position: "absolute",
+            right: "4%",
+            top: "7%",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+            }}
+          >
+            <FlipCamera />
+          </Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            flexDirection: "row",
+            flex: 1,
+            width: "100%",
+            padding: 20,
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              alignSelf: "center",
+              flex: 1,
+              alignItems: "center",
+            }}
+            marginBottom={"30px"}
+          >
+            <TouchableOpacity onPress={__takePicture}>
+              <TakePicture />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Camera>
+    )
+  ) : (
     <View>
       <View>
         <Flex
@@ -156,17 +277,12 @@ const TakePictureInstruction = ({ route, navigation }) => {
               <Wrong style={{ position: "absolute", top: 75, left: 75 }} />
             </View>
           </Flex>
+
           <Button
             marginTop={"30px"}
             minW="3/5"
             bg="secondary_green"
-            onPress={() => {
-              if (type == "plant-health-scanner") {
-                null;
-              } else {
-                null;
-              }
-            }}
+            onPress={__startCamera}
           >
             <Text style={styles.button}>Got it!</Text>
           </Button>
