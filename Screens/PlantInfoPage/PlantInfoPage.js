@@ -20,11 +20,28 @@ import {
 } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
 import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
-import { usePlants } from "../../hooks/Contexts/Plant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { MetricInfoBox } from "./MetricInfoBox";
+import { plantData } from "./plantData";
+import calculateTimePast from "../../utilities/calculateTimePast";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantInfo } = route.params;
   const [Plants, dispatch] = usePlants();
+
+  // returns
+  // 1 if HIGH
+  // -1 if LOW
+  // 0 otherwise
+  const isHighOrLow = (upperIdeal, lowerIdeal, measurement) => {
+    if (measurement < lowerIdeal) {
+      return -1;
+    } else if (measurement > upperIdeal) {
+      return 1;
+    }
+
+    return 0;
+  };
 
   const styles = StyleSheet.create({
     plantImage: { height: 170, opacity: 0.7 },
@@ -266,7 +283,7 @@ const PlantInfoPage = ({ route, navigation }) => {
         </Box>
       </Box>
       <View paddingLeft="20px" paddingRight="20px">
-        <AccordionComponent
+        {/* <AccordionComponent
           viewInside={
             <View>
               <Text>hello</Text>
@@ -281,41 +298,8 @@ const PlantInfoPage = ({ route, navigation }) => {
           }
           iconName="info"
           sectionTitle="Information"
-        />
+        /> */}
 
-        <AccordionComponent
-          viewInside={
-            <View>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-            </View>
-          }
-          iconName="measurements"
-          sectionTitle="Recent Measurements"
-        />
-
-        <AccordionComponent
-          viewInside={
-            <View>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-              <Text>hello</Text>
-            </View>
-          }
-          iconName="reccos"
-          sectionTitle="Recommendations & Reminders"
-        />
         <View marginTop="16px">
           <Text style={styles.sectionTitle}>Plant Health Scanner</Text>
           <View paddingTop={"5px"}>
@@ -327,9 +311,15 @@ const PlantInfoPage = ({ route, navigation }) => {
             justifyContent="center"
             alignItems="center"
             marginTop={"10px"}
-            marginBottom={"50px"}
+            marginBottom={"30px"}
           >
-            <TouchableOpacity onPress={null}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("TakePictureInstruction", {
+                  type: "plant-health-scanner",
+                });
+              }}
+            >
               <Image
                 style={{ marginBottom: 13 }}
                 source={require("../../assets/icons/plant-info-page-icons/disease-scanner-icon.png")}
@@ -339,6 +329,229 @@ const PlantInfoPage = ({ route, navigation }) => {
               </Animated.Text>
             </TouchableOpacity>
           </Flex>
+        </View>
+        <View marginBottom={"40px"}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("LastWateredOrFertilized", {
+                plantInfo: plantInfo,
+                data: plantData.lastWatered,
+                type: "water",
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Last Watered"
+              date={
+                plantData.lastWatered.dates[
+                  plantData.lastWatered.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                calculateTimePast(
+                  plantData.lastWatered.dates[
+                    plantData.lastWatered.dates.length - 1
+                  ].seconds
+                )[0]
+              }
+              unit={
+                calculateTimePast(
+                  plantData.lastWatered.dates[
+                    plantData.lastWatered.dates.length - 1
+                  ].seconds
+                )[1]
+              }
+              highOrLow={0}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("LastWateredOrFertilized", {
+                plantInfo: plantInfo,
+                data: plantData.lastFertilized,
+                type: "fertilize",
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Last Fertilized"
+              date={
+                plantData.lastFertilized.dates[
+                  plantData.lastFertilized.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                calculateTimePast(
+                  plantData.lastFertilized.dates[
+                    plantData.lastFertilized.dates.length - 1
+                  ].seconds
+                )[0]
+              }
+              unit={
+                calculateTimePast(
+                  plantData.lastFertilized.dates[
+                    plantData.lastFertilized.dates.length - 1
+                  ].seconds
+                )[1]
+              }
+              highOrLow={0}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("PHInfo", {
+                plantInfo: plantInfo,
+                phDataExternal: plantData.phData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="pH"
+              date={
+                plantData.phData.dates[plantData.phData.dates.length - 1]
+                  .seconds
+              }
+              measurement={
+                plantData.phData.measurements[
+                  plantData.phData.measurements.length - 1
+                ]
+              }
+              unit=""
+              highOrLow={isHighOrLow(
+                plantData.phData.upperIdeal,
+                plantData.phData.lowerIdeal,
+                plantData.phData.measurements[
+                  plantData.phData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("SoilMoistureInfo", {
+                plantInfo: plantInfo,
+                soilMoistureData: plantData.soilMoistureData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Soil Moisture"
+              date={
+                plantData.soilMoistureData.dates[
+                  plantData.soilMoistureData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.soilMoistureData.measurements[
+                  plantData.soilMoistureData.measurements.length - 1
+                ]
+              }
+              unit="%"
+              highOrLow={isHighOrLow(
+                plantData.soilMoistureData.upperIdeal,
+                plantData.soilMoistureData.lowerIdeal,
+                plantData.soilMoistureData.measurements[
+                  plantData.soilMoistureData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("HumidityInfo", {
+                plantInfo: plantInfo,
+                humidityData: plantData.humidityData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Humidity"
+              date={
+                plantData.humidityData.dates[
+                  plantData.humidityData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.humidityData.measurements[
+                  plantData.humidityData.measurements.length - 1
+                ]
+              }
+              unit="%"
+              highOrLow={isHighOrLow(
+                plantData.humidityData.upperIdeal,
+                plantData.humidityData.lowerIdeal,
+                plantData.humidityData.measurements[
+                  plantData.humidityData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("TemperatureInfo", {
+                plantInfo: plantInfo,
+                temperatureData: plantData.temperatureData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Temperature"
+              date={
+                plantData.temperatureData.dates[
+                  plantData.temperatureData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.temperatureData.measurements[
+                  plantData.temperatureData.measurements.length - 1
+                ]
+              }
+              unit="°C"
+              highOrLow={isHighOrLow(
+                plantData.temperatureData.upperIdeal,
+                plantData.temperatureData.lowerIdeal,
+                plantData.temperatureData.measurements[
+                  plantData.temperatureData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("LightIntensityInfo", {
+                plantInfo: plantInfo,
+                lightIntensityData: plantData.lightIntensityData,
+              });
+            }}
+          >
+            <MetricInfoBox
+              title="Light Intensity"
+              date={
+                plantData.lightIntensityData.dates[
+                  plantData.lightIntensityData.dates.length - 1
+                ].seconds
+              }
+              measurement={
+                plantData.lightIntensityData.measurements[
+                  plantData.lightIntensityData.measurements.length - 1
+                ]
+              }
+              unit="LUX"
+              highOrLow={isHighOrLow(
+                plantData.lightIntensityData.upperIdeal,
+                plantData.lightIntensityData.lowerIdeal,
+                plantData.lightIntensityData.measurements[
+                  plantData.lightIntensityData.measurements.length - 1
+                ]
+              )}
+            />
+          </TouchableOpacity>
+          <MetricInfoBox
+            title="NDVI"
+            date={1679678124}
+            measurement="Healthy"
+            unit=""
+          />
         </View>
       </View>
       <Modal
