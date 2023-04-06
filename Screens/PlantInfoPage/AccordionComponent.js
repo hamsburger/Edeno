@@ -14,7 +14,7 @@ const AccordionComponent = ({ viewInside, iconName, sectionTitle }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "17",
+      fontSize: 17,
     },
   });
   return (
@@ -45,16 +45,16 @@ const AccordionComponent = ({ viewInside, iconName, sectionTitle }) => {
         </Flex>
       }
       bannerStyle={{
-        borderRadius: "8px",
+        borderRadius: 8,
         marginTop: 18,
         backgroundColor: "#F5F5F5",
-        borderWidth: "2px",
+        borderWidth: 2,
         borderColor: "#C6C7C4",
       }}
       viewContainerStyle={{
         shadowColor: "white",
         backgroundColor: "#F5F5F5",
-        borderWidth: "2px",
+        borderWidth: 2,
         borderColor: "#F5F5F5",
         borderBottomColor: "#C6C7C4",
         borderLeftColor: "#C6C7C4",

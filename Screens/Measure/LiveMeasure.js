@@ -57,7 +57,7 @@ const LiveMeasure = ({ route, navigation }) => {
         <Button
           bg="transparent"
           _text={{
-            fontSize: "19px",
+            fontSize: 19,
             color: "#B9422C",
           }}
           onPress={() => {

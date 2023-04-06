@@ -9,7 +9,7 @@ const Home = ({ navigation }) => {
 
   const styles = StyleSheet.create({
     noPlants: {
-      fontSize: "26px",
+      fontSize: 26,
       textAlign: "center",
       color: "#806B6B",
       textAlign: "center",

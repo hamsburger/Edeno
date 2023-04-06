@@ -51,13 +51,13 @@ const themeObject = {
         Box: {
           baseStyle: {
             borderColor: "cyan.500",
-            borderWidth: "1",
+            borderWidth: 1,
           },
         },
         View: {
           baseStyle: {
             borderColor: "cyan.500",
-            borderWidth: "1",
+            borderWidth: 1,
           },
         },
       }),
@@ -136,7 +136,7 @@ export default () => {
           },
           tabBarItemStyle: {
             backgroundColor: "#72A077",
-            fontSize: "12",
+            fontSize: 12,
           },
           tabBarOptions: {
             labelStyle: {

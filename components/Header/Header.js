@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     textAlign: "center",
-    // fontSize: "34px",
+    // fontSize: 34,
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },

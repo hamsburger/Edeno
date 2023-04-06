@@ -62,28 +62,28 @@ const TakePictureInstruction = ({ route, navigation }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "17",
+      fontSize: 17,
       textAlign: "center",
     },
     sectionDesc: {
       fontWeight: "400",
       fontFamily: "SFProDisplay-Regular",
       fontStyle: "normal",
-      fontSize: "14px",
+      fontSize: 14,
     },
     tips: {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "14",
-      color: "#432D1E",
-      lineHeight: "25%",
+      fontSize: 14,
+      color: "#432D1E"
+      // lineHeight: "25%",
     },
     button: {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "16",
+      fontSize: 16,
       color: "white",
     },
   });
@@ -107,7 +107,7 @@ const TakePictureInstruction = ({ route, navigation }) => {
           <Button
             bg="transparent"
             _text={{
-              fontSize: "19px",
+              fontSize: 19,
               color: "#B9422C",
             }}
             onPress={() => {
@@ -173,7 +173,7 @@ const TakePictureInstruction = ({ route, navigation }) => {
             <Button
               bg="transparent"
               _text={{
-                fontSize: "19px",
+                fontSize: 19,
                 color: "#B9422C",
               }}
               onPress={() => {
@@ -207,7 +207,7 @@ const TakePictureInstruction = ({ route, navigation }) => {
                 <Text
                   style={[
                     styles.sectionTitle,
-                    { textAlign: "left", fontSize: "14.3px" },
+                    { textAlign: "left", fontSize: 14 },
                   ]}
                 >
                   When taking your picture:

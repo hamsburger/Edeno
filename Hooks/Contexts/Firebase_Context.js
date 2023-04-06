@@ -26,43 +26,45 @@ const app = initializeApp(firebaseConfig);
 
 // Database Class for Firebase
 class Database {
+
     constructor(app){
         this.database = getDatabase(app);
         this.listeners = [];
     }
 
     pushToRealTimeDatabase(path, data){
-        const databaseRef = query(ref(this.database, path), limitToLast(100));
+        const databaseRef = ref(this.database, path);
         const newKeyRef = push(databaseRef);
         set(newKeyRef, data)
         // alert("New Data Set")
     }
 
-    listenForData(path, setData){
-        const databaseRef = query(ref(this.database, path), limitToLast(100));
-        onValue(databaseRef, (snapshot) => {
-            const data = snapshot.val();
-            setData(data);
-        })
-        this.listeners.push(databaseRef);
-    }
+    // listenForData(path, setData){
+    //     const databaseRef = query(ref(this.database, path), limitToLast(1));
+    //     onValue(databaseRef, (snapshot) => {
+    //         const data = snapshot.val();
+    //         setData(data);
+    //     })
+    //     this.listeners.push(databaseRef);
+    // }
 
     listenForChildUpdate(path, setData){
-        const databaseRef = query(ref(this.database, path), limitToLast(100));
+
+        // Initially receive only up to 1 child_added event
+        const databaseRef = query(ref(this.database, path), limitToLast(1));
 
         onChildAdded(databaseRef, (snapshot) => {
             /**
              * Function Name: onChildAdded
              * data: I believe this data returns the most recently updated child.
              */
-            const data = snapshot.val()
-            // Need input sanitization
-            // alert("Data Read")
-            // console.log(data);
+            let logData = (`${snapshot.key} : ${Date().toString()}`);
+            console.log(logData);
+            const data = snapshot.val();
             setData(data);
-          });
+        });
         
-          this.listeners.push(databaseRef);
+        this.listeners.push(databaseRef);
     }
 
     getDataOnce(path, setData){

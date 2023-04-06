@@ -20,7 +20,7 @@ import {
 } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
 import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
+import { usePlants } from "../../hooks/Contexts/Plant_Context";
 import { MetricInfoBox } from "./MetricInfoBox";
 import { plantData } from "./plantData";
 import calculateTimePast from "../../utilities/calculateTimePast";
@@ -63,13 +63,13 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "17",
+      fontSize:  17,
     },
     sectionDesc: {
       fontWeight: "400",
       fontFamily: "SFProDisplay-Regular",
       fontStyle: "normal",
-      fontSize: "14",
+      fontSize:  14,
     },
     diseaseScanner: {
       justifyContent: "center",
@@ -78,7 +78,7 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "20",
+      fontSize:  20,
       color: "#597F51",
       textAlign: "center",
     },
@@ -111,7 +111,7 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "20",
+      fontSize:  20,
       color: "black",
     },
     modalSub: {
@@ -133,7 +133,7 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "600",
       fontFamily: "SFProDisplay-Semibold",
       fontStyle: "normal",
-      fontSize: "16",
+      fontSize:  16,
       color: "black",
       paddingTop: 8,
     },
@@ -141,9 +141,9 @@ const PlantInfoPage = ({ route, navigation }) => {
       fontWeight: "600",
       fontFamily: "SFProDisplay-Regular",
       fontStyle: "normal",
-      fontSize: "14",
+      fontSize:  14,
       color: "black",
-      lineHeight: "20",
+      lineHeight: 20,
       paddingRight: 8,
       paddingBottom: 8,
     },
@@ -633,7 +633,7 @@ const PlantInfoPage = ({ route, navigation }) => {
                   color: "#B9422C",
                   textAlign: "start",
                   fontFamily: "SFProDisplay-Bold",
-                  fontSize: "15",
+                  fontSize:  15,
                 },
               ]}
             >

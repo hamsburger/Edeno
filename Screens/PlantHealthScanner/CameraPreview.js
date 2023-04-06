@@ -13,7 +13,7 @@ const CameraPreview = ({ photo, savePhoto, retakePicture }) => {
       fontWeight: "700",
       fontFamily: "SFProDisplay-Heavy",
       fontStyle: "normal",
-      fontSize: "20",
+      fontSize: 20,
     },
   });
 

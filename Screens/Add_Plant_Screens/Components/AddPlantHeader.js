@@ -24,7 +24,7 @@ export function AddPlantHeader() {
           <Button
             bg="transparent"
             _text={{
-              fontSize: "19px",
+              fontSize: 19,
               color: "red.700",
             }}
             onPress={() => {
