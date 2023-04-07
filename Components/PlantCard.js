@@ -13,6 +13,7 @@ export function PlantCard({ plantInfo, navigation }) {
       onPress={() => {
         navigation.navigate("PlantInfoPage", {
           plantId: id,
+          plantIconId: iconId,
         });
       }}
     >

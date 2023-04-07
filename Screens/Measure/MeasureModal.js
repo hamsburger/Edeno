@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
 import {
   Box,
@@ -10,25 +10,33 @@ import {
   Flex,
   Icon,
 } from "native-base";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { SelectPlantCard } from "../../Components/Measure/SelectPlantCard";
 import AlertIcon from "../../assets/icons/alert.svg";
+import myEdenPlants from "../../MockPlantData/myEdenData";
 
 const MeasureModal = ({ navigation }) => {
   const [selected, setSelected] = useState(-1);
-  const [Plants, dispatch] = usePlants();
+  const [myPlants, setMyPlants] = useState([]);
+
+  useEffect(() => {
+    // CALL BACKEND FOR PLANT INFORMATION
+    // GET /get-plants-from-user-id WITH user-id from context
+    // setMyPlants(response)
+
+    setMyPlants(myEdenPlants);
+  }, [myPlants.length]);
 
   const plantElements = useMemo(() => {
-    return Plants.map((elem, i) => (
+    return myPlants.map((elem, i) => (
       <SelectPlantCard
         i={i}
         iconNum={elem.iconId}
-        name={elem.plantName}
+        name={elem.commonName}
         selected={selected}
         setSelected={setSelected}
       />
     ));
-  }, [selected]);
+  }, [myPlants.length, selected]);
 
   return (
     <View style={styles.modal}>
@@ -67,7 +75,9 @@ const MeasureModal = ({ navigation }) => {
             navigation.goBack();
             // plantIndex is the index of the plant in the Plant Context
             navigation.navigate("LiveMeasure", {
-              plantIndex: selected,
+              plantName: myPlants[selected].commonName,
+              plantId: myPlants[selected].id,
+              plantIconId: myPlants[selected].iconId,
             });
           }}
         >

@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { Header } from "../../Components/Header/Header";
 import { PlantCard } from "../../Components/PlantCard";
 import myEdenPlants from "../../MockPlantData/myEdenData";
 
 const Home = ({ navigation }) => {
-  const [myPlants, setMyPlants] = useState(myEdenPlants);
+  const [myPlants, setMyPlants] = useState([]);
+
+  useEffect(() => {
+    // CALL BACKEND FOR PLANT INFORMATION
+    // GET /get-plants-from-user-id WITH user-id from context
+    // setMyPlants(response)
+
+    setMyPlants(myEdenPlants);
+  }, [myPlants.length]);
 
   const styles = StyleSheet.create({
     noPlants: {

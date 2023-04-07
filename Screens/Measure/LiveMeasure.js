@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Image, Animated } from "react-native";
 import { View, Text, Box, Button, Flex, Center } from "native-base";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import LiveIcon from "../../assets/icons/live-circle.svg";
 
 const LiveMeasure = ({ route, navigation }) => {
-  const { plantIndex } = route.params;
-  const [Plants, dispatch] = usePlants();
+  const { plantName, plantId, plantIconId } = route.params;
   const [readings, setReadings] = useState({});
   const db = useFirebaseDatabase();
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -68,10 +66,10 @@ const LiveMeasure = ({ route, navigation }) => {
         </Button>
       </Box>
       <View style={styles.container}>
-        <Text style={styles.plant_name}>{Plants[plantIndex].plantName}</Text>
+        <Text style={styles.plant_name}>{plantName}</Text>
         <Image
           style={{ height: 144, width: 144, marginBottom: 46 }}
-          source={plant_icons[Plants[plantIndex].iconId]}
+          source={plant_icons[plantIconId]}
         />
         <Flex flexDirection="row" alignItems="center">
           <Animated.View style={{ opacity: fadeAnim }}>

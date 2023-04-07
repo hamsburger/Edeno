@@ -28,7 +28,7 @@ import { MetricInfoBoxNoData } from "./MetricInfoBoxNoData";
 import convertDateToFullMDYHM from "../../utilities/convertDateToFullMDYHM";
 
 const PlantInfoPage = ({ route, navigation }) => {
-  const { plantId } = route.params;
+  const { plantId, plantIconId } = route.params;
   const [Plants, dispatch] = usePlants();
   const [plantInfo, setPlantInfo] = useState({});
 
@@ -706,7 +706,9 @@ const PlantInfoPage = ({ route, navigation }) => {
                   );
                   // plantIndex is the index of the plant in the Plant Context
                   navigation.navigate("LiveMeasure", {
-                    plantIndex: selectedIndex,
+                    plantName: plantInfo.plantName,
+                    plantId: plantId,
+                    plantIconId: plantIconId,
                   });
                 }}
               >

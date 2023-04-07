@@ -61,7 +61,6 @@ const PHInfo = ({ route, navigation }) => {
   };
 
   const getNPKValue = ({ index }) => {
-    console.log(index);
     setNPKValue(
       `N-P-K Measurement on ${dates[index]} is ${phDataExternal.npkMeasurements[index]}`
     );
