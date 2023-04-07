@@ -20,7 +20,6 @@ import {
 } from "native-base";
 import Kabob from "../../assets/icons/kabob.svg";
 import Warning from "../../assets/icons/plant-info-page-icons/warning.svg";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { MetricInfoBox } from "./MetricInfoBox";
 import { plantData } from "../../MockPlantData/plantData";
 import calculateTimePast from "../../utilities/calculateTimePast";
@@ -29,7 +28,6 @@ import convertDateToFullMDYHM from "../../utilities/convertDateToFullMDYHM";
 
 const PlantInfoPage = ({ route, navigation }) => {
   const { plantId, plantIconId } = route.params;
-  const [Plants, dispatch] = usePlants();
   const [plantInfo, setPlantInfo] = useState({});
 
   // Get plant information by id
@@ -701,9 +699,6 @@ const PlantInfoPage = ({ route, navigation }) => {
                 onPress={() => {
                   setMeasureModalVisible(!measureModalVisible);
 
-                  const selectedIndex = Plants.findIndex(
-                    (plant) => plant.id == plantInfo.id
-                  );
                   // plantIndex is the index of the plant in the Plant Context
                   navigation.navigate("LiveMeasure", {
                     plantName: plantInfo.plantName,
