@@ -79,7 +79,7 @@ export const plantData = [
         { seconds: 1679854054, nanoseconds: 0 },
         { seconds: 1680378999, nanoseconds: 0 },
       ],
-      npkMeasurements: ["4-2-1", "4-2-1", "4-2-1", "4-2-1", "4-2-1", "4-2-1"],
+      npkMeasurements: ["0-2-1", "4-2-1", "4-2-1", "4-3-1", "4-2-1", "4-2-1"],
       measurements: [5.2, 5.5, 6.5, 5.8, 6.1, 5.9],
     },
     lastFertilized: {
