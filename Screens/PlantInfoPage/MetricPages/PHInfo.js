@@ -82,7 +82,7 @@ const PHInfo = ({ route, navigation }) => {
           </Text>
         </Box>
       </Box>
-      <ScrollView paddingTop={"25px"} paddingBottom={"25px"}>
+      <ScrollView height={"100%"} paddingTop={"25px"} marginBottom={"100px"}>
         <View paddingLeft={"30px"} paddingRight={"30px"} marginBottom={"20px"}>
           <Text style={styles.sectionTitle}>Last Measurement</Text>
           <Text
@@ -98,6 +98,9 @@ const PHInfo = ({ route, navigation }) => {
         </View>
         <Flex justifyContent={"center"} alignItems={"center"}>
           <LineChart
+            onDataPointClick={() => {
+              console.log("display npk");
+            }}
             style={{
               paddingRight: 50,
               paddingLeft: 70,
@@ -119,6 +122,9 @@ const PHInfo = ({ route, navigation }) => {
               },
             }}
           />
+          <Text style={styles.npk_prompt}>
+            Tap a data point to see the N-P-K measurement
+          </Text>
         </Flex>
 
         <View paddingLeft={"30px"} paddingRight={"30px"} marginTop={"20px"}>
@@ -139,7 +145,8 @@ const PHInfo = ({ route, navigation }) => {
 
               <Text
                 style={styles.tips}
-              >{`\u2022 Consider using a lime-based compound`}</Text>
+              >{`\u2022 Consider using a lime-based compound such as dolomite lime and agricultural lime to help increase the pH of the soil`}</Text>
+
               <Text
                 style={[styles.tips, { color: "#72A077" }]}
                 onPress={() => Linking.openURL("http://google.com")}
@@ -231,6 +238,12 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: "15",
     color: "#432D1E",
+  },
+  npk_prompt: {
+    fontFamily: "SFProDisplay-RegularItalic",
+    fontSize: "15",
+    fontWeight: 700,
+    color: "#597F51",
   },
 });
 

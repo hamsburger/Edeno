@@ -2,15 +2,17 @@ import { React } from "react";
 import { Flex, Box, Text, Button, View } from "native-base";
 import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { plant_icons } from "../Constants/StaticPlantIconImages";
+import calculateTimePast from "../utilities/calculateTimePast";
+import Attention from "../assets/icons/attention-circle.svg";
 
 export function PlantCard({ plantInfo, navigation }) {
-  const { iconId, plantName } = plantInfo;
+  const { id, commonName, iconId, lastMeasuredDate, requiresAttention } =
+    plantInfo;
   return (
     <TouchableOpacity
       onPress={() => {
-        // plantIndex is the index of the plant in the Plant Context
         navigation.navigate("PlantInfoPage", {
-          plantInfo: plantInfo,
+          plantId: id,
         });
       }}
     >
@@ -30,12 +32,26 @@ export function PlantCard({ plantInfo, navigation }) {
           style={{ height: 75, width: 75, marginRight: 16 }}
         />
         <Box w="100%">
-          <Text style={styles.plant_name}>{plantName}</Text>
-          <Text style={styles.last_measured}>
-            Last Measured: Data Not Available
-          </Text>
-          <Text style={styles.rem_and_rec}>No Reminders</Text>
-          <Text style={styles.rem_and_rec}>No Recommendations</Text>
+          <View>
+            <Text style={styles.plant_name}>{commonName}</Text>
+          </View>
+
+          {lastMeasuredDate == -1 ? (
+            <Text style={styles.last_measured}>
+              No Measurement Data Available
+            </Text>
+          ) : (
+            <Text style={styles.last_measured}>
+              Last Measured: {calculateTimePast(lastMeasuredDate)}
+            </Text>
+          )}
+
+          {requiresAttention ? (
+            <Flex flexDirection={"row"} alignItems={"center"}>
+              <Attention />{" "}
+              <Text style={styles.needs_attention}>Requires Attention</Text>
+            </Flex>
+          ) : null}
         </Box>
       </Flex>
     </TouchableOpacity>
@@ -53,5 +69,10 @@ const styles = StyleSheet.create({
   },
   rem_and_rec: {
     color: "#000000",
+  },
+  needs_attention: {
+    color: "#B9422C",
+    fontWeight: 700,
+    fontFamily: "SFProDisplay-Bold",
   },
 });

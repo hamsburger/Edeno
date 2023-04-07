@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { Header } from "../../Components/Header/Header";
-import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { PlantCard } from "../../Components/PlantCard";
+import myEdenPlants from "../../MockPlantData/myEdenData";
 
 const Home = ({ navigation }) => {
-  const [Plants, dispatch] = usePlants();
+  const [myPlants, setMyPlants] = useState(myEdenPlants);
 
   const styles = StyleSheet.create({
     noPlants: {
@@ -27,7 +27,7 @@ const Home = ({ navigation }) => {
     <View>
       <Header navigation={navigation} />
       <ScrollView>
-        {Plants.length == 0 ? (
+        {myPlants.length == 0 ? (
           <View style={styles.noPlantsContainer}>
             <Text style={styles.noPlants}>
               Click "+" to add a plant and get started
@@ -44,7 +44,7 @@ const Home = ({ navigation }) => {
             paddingRight={22}
             bg="#FBFBFB"
           >
-            {Plants.map((elem) => (
+            {myPlants.map((elem) => (
               <PlantCard plantInfo={elem} navigation={navigation} />
             ))}
           </View>

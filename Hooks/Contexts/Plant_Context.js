@@ -19,6 +19,7 @@ export function usePlants() {
 function PlantsReducer(Plants, action) {
   switch (action.type) {
     case "added": {
+      console.log(action.iconId);
       return [
         ...Plants,
         {

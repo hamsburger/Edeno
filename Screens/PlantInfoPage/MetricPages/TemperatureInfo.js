@@ -162,7 +162,10 @@ const TemperatureInfo = ({ route, navigation }) => {
 
               <Text
                 style={styles.tips}
-              >{`\u2022 Consider using a lime-based compound`}</Text>
+              >{`\u2022 Consider moving your plant to a spot that gets less light`}</Text>
+              <Text
+                style={styles.tips}
+              >{`\u2022 Consider moving your plant to a spot that is cooler`}</Text>
               <Text
                 style={[styles.tips, { color: "#72A077" }]}
                 onPress={() => Linking.openURL("http://google.com")}
