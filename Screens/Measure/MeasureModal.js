@@ -82,7 +82,7 @@ const MeasureModal = ({ navigation }) => {
             });
           }}
         >
-          Start
+          <Text style={styles.button}>Start</Text>
         </Button>
       </Center>
     </View>
@@ -108,6 +108,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#B9422C",
     fontFamily: "SFProDisplay-Heavy",
+  },
+  button: {
+    fontWeight: "700",
+    fontFamily: "SFProDisplay-Bold",
+    fontStyle: "normal",
+    fontSize: "16",
+    color: "white",
   },
 });
 

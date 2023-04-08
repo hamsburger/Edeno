@@ -61,7 +61,7 @@ const Results = ({ route, navigation }) => {
               navigation.navigate("Home");
             }}
           >
-            <Text style={styles.button}>Return to My Eden</Text>
+            <Text style={styles.button}>Done</Text>
           </Button>
         </Center>
       </View>

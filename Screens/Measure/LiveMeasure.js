@@ -137,18 +137,12 @@ const LiveMeasure = ({ route, navigation }) => {
           <Text style={styles.measurement}>{readings.Light} LUX</Text>
         </Flex>
       </View>
-      <View marginTop={"60px"}>
-        {timerId ? (
-          <Text style={styles.continue_prompt}>{`Continue in ${
-            countdown / 1000
-          }...`}</Text>
-        ) : null}
-
+      <View marginTop={"40px"}>
         <Flex
-          marginTop={"10px"}
           flexDirection={"column"}
           justifyContent={"center"}
           alignItems={"center"}
+          marginBottom={"10px"}
         >
           <Button
             minW="1/5"
@@ -157,7 +151,7 @@ const LiveMeasure = ({ route, navigation }) => {
             onPress={startTimer}
             marginBottom={"10px"}
           >
-            Re-take Measurements
+            <Text style={styles.button}>Re-take Measurements</Text>
           </Button>
           <Button
             minW="1/5"
@@ -172,9 +166,14 @@ const LiveMeasure = ({ route, navigation }) => {
               });
             }}
           >
-            Save & Continue
+            <Text style={styles.button}>Save & Continue</Text>
           </Button>
         </Flex>
+        {timerId ? (
+          <Text style={styles.continue_prompt}>{`Continue in ${
+            countdown / 1000
+          }...`}</Text>
+        ) : null}
       </View>
     </View>
   );
@@ -212,6 +211,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: "SFProDisplay-Bold",
     textAlign: "center",
+  },
+  button: {
+    fontWeight: "700",
+    fontFamily: "SFProDisplay-Bold",
+    fontStyle: "normal",
+    fontSize: "16",
+    color: "white",
   },
 });
 
