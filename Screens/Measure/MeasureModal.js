@@ -53,14 +53,15 @@ const MeasureModal = ({ navigation }) => {
       </View>
       <Flex
         flexDirection="row"
-        paddingLeft="40px"
-        paddingRight="65px"
+        paddingLeft="30px"
+        paddingRight="30px"
         marginBottom="24px"
       >
         <AlertIcon />
         <View marginLeft="10px">
           <Text style={styles.alert}>
-            Place the device in the plant before proceeding
+            Place the device in the plant before proceeding. The timer will take
+            measurements for 5 seconds once you press "Start".
           </Text>
         </View>
       </Flex>

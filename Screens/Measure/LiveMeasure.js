@@ -11,7 +11,34 @@ const LiveMeasure = ({ route, navigation }) => {
   const db = useFirebaseDatabase();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const [countdown, setCountdown] = useState(5000);
+  const [timerId, setTimerId] = useState(null);
+  const [lastFetchedMeasurement, setLastFetchedMeasurement] = useState(null);
+
+  const fetchData = () => {
+    // fetch data from the database and save it
+    console.log("Fetching data...");
+    // setLastFetchedMeasurement(apiResponse)
+  };
+
+  const startTimer = () => {
+    setTimerId(
+      setInterval(() => {
+        setCountdown((countdown) => countdown - 1000);
+      }, 1000)
+    );
+  };
+
+  const resetTimer = () => {
+    clearInterval(timerId);
+    setTimerId(null);
+    setCountdown(5000);
+  };
+
   useEffect(() => {
+    // start timer
+    startTimer(); // Start the timer on initial mount
+
     db.listenForChildUpdate("readings", setReadings);
 
     // /* Get readings every five seconds */
@@ -28,26 +55,38 @@ const LiveMeasure = ({ route, navigation }) => {
     // );
 
     // Code for animating live icon
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
+    // Animated.loop(
+    //   Animated.sequence([
+    //     Animated.timing(fadeAnim, {
+    //       toValue: 1,
+    //       duration: 500,
+    //       useNativeDriver: true,
+    //     }),
+    //     Animated.timing(fadeAnim, {
+    //       toValue: 0,
+    //       duration: 500,
+    //       useNativeDriver: true,
+    //     }),
+    //   ])
+    // ).start();
 
     return () => {
       // clearInterval(interval);
       db.cleanListeners();
     };
   }, []);
+
+  useEffect(() => {
+    if (timerId) {
+      fetchData();
+    }
+  }, [timerId]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      resetTimer();
+    }
+  }, [countdown]);
 
   return (
     <View>
@@ -98,17 +137,42 @@ const LiveMeasure = ({ route, navigation }) => {
           <Text style={styles.measurement}>{readings.Light} LUX</Text>
         </Flex>
       </View>
-      <Center w="100%" marginTop={100}>
-        <Button
-          minW="1/5"
-          bg="secondary_green"
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
+      <View marginTop={"60px"}>
+        <Text style={styles.continue_prompt}>{`Continue in ${
+          countdown / 1000
+        }...`}</Text>
+        <Flex
+          marginTop={"10px"}
+          flexDirection={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
         >
-          Done
-        </Button>
-      </Center>
+          <Button
+            minW="1/5"
+            bg="secondary_green"
+            isDisabled={timerId}
+            onPress={startTimer}
+            marginBottom={"10px"}
+          >
+            Re-take Measurements
+          </Button>
+          <Button
+            minW="1/5"
+            bg="secondary_green"
+            isDisabled={timerId}
+            onPress={() => {
+              // persist whatever is in lastFetchedMeasurement to db in SavedReadings
+
+              navigation.navigate("PlantInfoPage", {
+                plantId: plantId,
+                plantIconId: plantIconId,
+              });
+            }}
+          >
+            Save & Continue
+          </Button>
+        </Flex>
+      </View>
     </View>
   );
 };
@@ -140,6 +204,11 @@ const styles = StyleSheet.create({
     color: "#432D1E",
     fontFamily: "SFProDisplay-Regular",
     fontSize: 17,
+  },
+  continue_prompt: {
+    fontSize: 17,
+    fontFamily: "SFProDisplay-Bold",
+    textAlign: "center",
   },
 });
 
