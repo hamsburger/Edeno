@@ -319,6 +319,7 @@ const PlantInfoPage = ({ route, navigation }) => {
               onPress={() => {
                 navigation.navigate("TakePictureInstruction", {
                   type: "plant-health-scanner",
+                  plantName: plantInfo.plantName,
                 });
               }}
             >

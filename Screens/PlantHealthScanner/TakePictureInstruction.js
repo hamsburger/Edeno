@@ -9,7 +9,7 @@ import FlipCamera from "../../assets/icons/flip-camera.svg";
 import TakePicture from "../../assets/icons/take-picture.svg";
 
 const TakePictureInstruction = ({ route, navigation }) => {
-  const { type } = route.params;
+  const { type, plantName } = route.params;
 
   const [startCamera, setStartCamera] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -54,7 +54,14 @@ const TakePictureInstruction = ({ route, navigation }) => {
     // TO DO: Send to back end to fetch results
     // picture stored in capturedImage state variable
 
-    navigation.navigate("Home");
+    if (type == "plant-health-scanner") {
+      navigation.navigate("NDVIInstructions", {
+        photo: capturedImage,
+        plantName: plantName,
+      });
+    } else {
+      null;
+    }
   };
 
   const styles = StyleSheet.create({

@@ -55,20 +55,20 @@ const LiveMeasure = ({ route, navigation }) => {
     // );
 
     // Code for animating live icon
-    // Animated.loop(
-    //   Animated.sequence([
-    //     Animated.timing(fadeAnim, {
-    //       toValue: 1,
-    //       duration: 500,
-    //       useNativeDriver: true,
-    //     }),
-    //     Animated.timing(fadeAnim, {
-    //       toValue: 0,
-    //       duration: 500,
-    //       useNativeDriver: true,
-    //     }),
-    //   ])
-    // ).start();
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
 
     return () => {
       // clearInterval(interval);
@@ -138,9 +138,12 @@ const LiveMeasure = ({ route, navigation }) => {
         </Flex>
       </View>
       <View marginTop={"60px"}>
-        <Text style={styles.continue_prompt}>{`Continue in ${
-          countdown / 1000
-        }...`}</Text>
+        {timerId ? (
+          <Text style={styles.continue_prompt}>{`Continue in ${
+            countdown / 1000
+          }...`}</Text>
+        ) : null}
+
         <Flex
           marginTop={"10px"}
           flexDirection={"column"}

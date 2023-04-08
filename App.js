@@ -31,6 +31,9 @@ import { HumidityInfo } from "./Screens/PlantInfoPage/MetricPages/HumidityInfo";
 import { TemperatureInfo } from "./Screens/PlantInfoPage/MetricPages/TemperatureInfo";
 import { LightIntensityInfo } from "./Screens/PlantInfoPage/MetricPages/LightIntensityInfo";
 import { TakePictureInstruction } from "./Screens/PlantHealthScanner/TakePictureInstruction";
+import NDVIInstructions from "./Screens/PlantHealthScanner/NDVIInstructions";
+import NDVILiveMeasure from "./Screens/PlantHealthScanner/NDVILiveMeasure";
+import { Results } from "./Screens/PlantHealthScanner/Results";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -216,7 +219,6 @@ export default () => {
           component={AddPlantLandingPage}
           getId={({ params }) => params.progress}
         />
-
         <Stack.Screen name="LiveMeasure">
           {(props) => <LiveMeasure {...props} visible={1} />}
         </Stack.Screen>
@@ -240,6 +242,15 @@ export default () => {
         </Stack.Screen>
         <Stack.Screen name="TakePictureInstruction">
           {(props) => <TakePictureInstruction {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="NDVIInstructions">
+          {(props) => <NDVIInstructions {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="NDVILiveMeasure">
+          {(props) => <NDVILiveMeasure {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="Results">
+          {(props) => <Results {...props} visible={1} />}
         </Stack.Screen>
       </Stack.Navigator>
     ) : (
