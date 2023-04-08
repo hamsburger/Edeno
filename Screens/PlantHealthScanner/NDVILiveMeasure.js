@@ -68,6 +68,8 @@ const NDVILiveMeasure = ({ route, navigation }) => {
             width="3/5"
             bg="secondary_green"
             onPress={() => {
+              // STOP SENSOR
+
               navigation.navigate("Results", {
                 showNDVI: true,
                 photo: photo,

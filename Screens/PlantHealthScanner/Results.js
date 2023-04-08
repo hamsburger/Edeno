@@ -1,9 +1,50 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import { View, Text, Flex, ScrollView, Box, Center, Button } from "native-base";
 import { TouchableOpacity, StyleSheet } from "react-native";
+import {
+  diseaseData,
+  NDVIAssessmentData,
+} from "../../MockPlantData/healthAssessmentData";
 
 const Results = ({ route, navigation }) => {
   const { showNDVI, photo, plantName } = route.params;
+  const [ndviResult, setNDVIResult] = useState({});
+  const [diseaseResult, setDiseaseResult] = useState({});
+
+  // async function sendImage(imageUri) {
+  //   const convertImageUriToBlob = await (async (imageUri) => {
+  //     return new Promise((resolve, reject) => {
+  //       fetch(imageUri)
+  //         .then((response) => response.blob())
+  //         .then((blob) => {
+  //           resolve(blob);
+  //         })
+  //         .catch((error) => {
+  //           reject(error);
+  //         });
+  //     });
+  //   });
+
+  //   const formData = new FormData();
+  //   formData.append("image", convertImageUriToBlob);
+
+  //   const response = await fetch("https://<YOUR_CLOUD_FUNCTION_URL>", {
+  //     method: "POST",
+  //     body: formData,
+  //   });
+
+  //   return response;
+  // }
+
+  useEffect(() => {
+    // use `photo` to get disease results
+    // const res = sendImage(photo.uri);
+    // if showNDVI = true, get latest NDVI results
+
+    setDiseaseResult(diseaseData[2]);
+    showNDVI ? setNDVIResult(NDVIAssessmentData[2]) : null;
+  }, [Object.keys(ndviResult), Object.keys(diseaseResult)]);
+
   return (
     <ScrollView>
       <Box
@@ -27,15 +68,42 @@ const Results = ({ route, navigation }) => {
         paddingLeft={"20px"}
         paddingRight={"20px"}
       >
-        <Text style={styles.healthy}>Your plant looks healthy!</Text>
-        <View marginTop={"10px"}>
-          <Text style={styles.healthyDesc}>
-            No diseases were detected for your plant. {"\n"} Great job!
-          </Text>
-        </View>
+        {diseaseResult.isHealthy ? (
+          <View>
+            <Text style={styles.resTitle}>Your plant looks healthy!</Text>
+            <View marginTop={"10px"}>
+              <Text style={styles.resDesc}>
+                No diseases were detected for your plant. {"\n"} Great job!
+              </Text>
+            </View>
+          </View>
+        ) : (
+          <View>
+            <Text style={styles.resTitle}>We found something...</Text>
+            <View marginTop={"10px"}>
+              <Text style={styles.resDesc}>
+                It looks like your plant may be suffering from:{"\n"}
+                <Text style={styles.yourIndex}>{diseaseResult.name}</Text>
+              </Text>
+              <View marginTop={"20px"}>
+                <Text style={styles.diseaseInfoTitle}>
+                  What is {diseaseResult.name}?
+                </Text>
+                <Text style={styles.normalText}>
+                  {diseaseResult.description}
+                </Text>
+              </View>
+              <View marginTop={"20px"} marginBottom={"20px"}>
+                <Text style={styles.diseaseInfoTitle}>How to Treat It:</Text>
+                <Text style={styles.normalText}>{diseaseResult.treatment}</Text>
+              </View>
+            </View>
+          </View>
+        )}
+
         {showNDVI ? (
           <View marginTop={"22px"}>
-            <Text style={styles.sectionTitle}>NDVI Assessment</Text>
+            <Text style={styles.ndviSectionTitle}>NDVI Assessment</Text>
             <Text style={styles.normalText}>
               The normalized difference vegetation index (NDVI) detects and
               quantifies the presence of live green vegetation using this
@@ -92,7 +160,7 @@ const styles = StyleSheet.create({
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
-  healthy: {
+  resTitle: {
     color: "#597F51",
     fontWeight: 700,
     textAlign: "center",
@@ -100,19 +168,19 @@ const styles = StyleSheet.create({
     fontSize: "25px",
     lineHeight: "25%",
   },
-  healthyDesc: {
+  resDesc: {
     color: "#432D1E",
     fontWeight: 700,
     textAlign: "center",
     fontFamily: "SFProDisplay-Medium",
     fontSize: "16px",
   },
-  sectionTitle: {
+  ndviSectionTitle: {
     color: "#432D1E",
     fontWeight: 700,
     textAlign: "left",
-    fontFamily: "SFProDisplay-Heavy",
-    fontSize: "16px",
+    fontFamily: "SFProDisplay-Bold",
+    fontSize: "18px",
   },
   yourIndex: {
     color: "#432D1E",
@@ -149,6 +217,13 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: "16",
     color: "white",
+  },
+  diseaseInfoTitle: {
+    color: "#432D1E",
+    fontWeight: 700,
+    textAlign: "left",
+    fontFamily: "SFProDisplay-Bold",
+    fontSize: "17px",
   },
 });
 

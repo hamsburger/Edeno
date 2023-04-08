@@ -31,7 +31,6 @@ const TakePictureInstruction = ({ route, navigation }) => {
   const __takePicture = async () => {
     if (!camera) return;
     const photo = await camera.takePictureAsync();
-    console.log(photo);
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
