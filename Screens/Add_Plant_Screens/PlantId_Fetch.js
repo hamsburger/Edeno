@@ -4,7 +4,7 @@ import {
   Text,
   Center,
   Input,
-  SearchIcon,
+  AddIcon,
   Box,
   Button,
   Flex,
@@ -13,9 +13,7 @@ import {
   FormControl,
   WarningOutlineIcon,
 } from "native-base";
-import {
-  usePlant,
-} from "../../Hooks/Contexts/AddPlant_Context";
+import { usePlant } from "../../Hooks/Contexts/AddPlant_Context";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 
@@ -60,17 +58,17 @@ export function PlantId_Fetch(props) {
       <Center width="90%">
         <Text fontSize="lg" fontWeight="bold">
           {" "}
-          Let's Find Your Plant{" "}
+          Input Your Plant Name{" "}
         </Text>
-        <Text fontSize="sm">
-          Type in the name of your plant and tap the magnifying glass to search.{" "}
+        <Text fontSize="sm" textAlign={"center"}>
+          Type in the name of your plant below and press the '+' icon
         </Text>
         <Box mt={3} width="75%">
           <FormControl isInvalid={isInputTextInvalid}>
             <Input
               size="md"
               variant="underlined"
-              placeholder="Find Your Plant!"
+              placeholder="Plant Name"
               onChangeText={(text) => setText(text)}
               InputRightElement={
                 <Button
@@ -79,31 +77,36 @@ export function PlantId_Fetch(props) {
                     // Input is invalid if we don't have any string entered.
                     if (inputText === "") {
                       setInputTextInvalid(true);
-                      setInputTextErrorMessage("Please Enter a Valid Plant Name");
+                      setInputTextErrorMessage(
+                        "Please Enter a Valid Plant Name"
+                      );
                       setContinue(false);
                       return;
                     }
 
                     // If the Input already exists in Plant Database
-                    if (Plants.filter(e => e.plantName === inputText).length > 0){
+                    if (
+                      Plants.filter((e) => e.plantName === inputText).length > 0
+                    ) {
                       setInputTextInvalid(true);
-                      setInputTextErrorMessage("Plant Name Already Exists in Database");
+                      setInputTextErrorMessage(
+                        "Plant Name Already Exists in Database"
+                      );
                       setContinue(false);
                       return;
                     }
-
 
                     // else it is valid
                     setInputTextInvalid(false);
                     setSearched(!hasSearched); // Toggle search
                     setPlant((prevPlant) => ({
                       ...prevPlant,
-                      id : inputText,
+                      id: inputText,
                       plantName: inputText,
                     })); // Set the plant name
                     Keyboard.dismiss();
                   }}
-                  startIcon={<SearchIcon color="edeno_green" />}
+                  startIcon={<AddIcon color="edeno_green" />}
                 />
               }
             />

@@ -7,7 +7,7 @@ let isResetFetch = false;
 
 export function AddPlantHeader() {
   const { navigation, route } = useRouteContext();
-  const progress = (!route.params.progress) ? 1 : route.params.progress;
+  const progress = !route.params.progress ? 1 : route.params.progress;
 
   return (
     <>
@@ -35,12 +35,12 @@ export function AddPlantHeader() {
                  * Toggle to notify first screen to reset fetch from plant.id if we navigate backwards
                  */
                 isResetFetch = !isResetFetch;
-                navigation.navigate("AddPlantLandingPage", {
+                navigation.navigate("AddPlantManually", {
                   progress: progress - 1,
                   resetFetch: isResetFetch,
                 });
               } else {
-                navigation.navigate("AddPlantLandingPage", {
+                navigation.navigate("AddPlantManually", {
                   progress: progress - 1,
                 });
               }

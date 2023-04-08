@@ -1,42 +1,75 @@
-import { React, useState, createContext, useEffect } from "react";
-import { Box, Button, Center } from "native-base";
-import { PlantId_Fetch } from "./PlantId_Fetch";
-import { AddPlantHeader } from "./Components/AddPlantHeader";
-import { Icon_Selection } from "./Icon_Selection";
-import { Add_Confirmation } from "./Add_Confirmation";
-import { RouteProvider } from "../../Hooks/Contexts/Route_Context";
+import { Text, Box, Button, Center } from "native-base";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 
-export function AddPlantLandingPage(props) {
-  const { route, navigation } = props;
-  const [canContinue, setContinue] = useState(false);
-  const progress = !route.params.progress ? 1 : route.params.progress;
+const AddPlantLandingPage = ({ route, navigation }) => {
   return (
-    <RouteProvider route={route} navigation={navigation}>
-      <Box h="100%" w="100%" bg="white" pt={6}>
-        <AddPlantHeader />
-        {progress === 1 && <PlantId_Fetch setContinue={setContinue} />}
-        {progress === 2 && <Icon_Selection setContinue={setContinue} />}
-        {progress === 3 && <Add_Confirmation setContinue={setContinue} />}
-
-        {/* Button at bottom to push landing page onto history stack, but with progress + 1 */}
-        <Center w="100%">
-          <Button
-            minW="1/5"
-            bg="secondary_green"
-            onPress={() =>
-              progress === 3
-                ? navigation.navigate("Home")
-                : navigation.navigate("AddPlantLandingPage", {
-                    progress: progress + 1,
-                  })
-            }
-            _disabled={{ opacity: 1, bg: "faded_green" }}
-            isDisabled={!canContinue}
-          >
-            {(progress == 3 && "Return to Home") || "Next"}
-          </Button>
-        </Center>
+    <>
+      <Box
+        position="absolute"
+        top={10}
+        left={2}
+        w="100%"
+        pl={2}
+        justifyContent="flex-start"
+        flexDirection="row"
+      >
+        <Button
+          bg="transparent"
+          _text={{
+            fontSize: "19px",
+            color: "red.700",
+          }}
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          Cancel
+        </Button>
       </Box>
-    </RouteProvider>
+      <Center w="100%" p={2} mt={20}>
+        <Center mt={3}>
+          <Text fontSize="4xl">Add Plant</Text>
+        </Center>
+      </Center>
+      <Center width="100%" marginTop={"84px"} mb={10}>
+        <Center width="90%">
+          <Text fontSize="lg" fontWeight="bold">
+            {" "}
+            Let's Find Your Plant{" "}
+          </Text>
+          <Text fontSize="sm">Choose an option below.</Text>
+        </Center>
+      </Center>
+      <Center w="100%" marginTop={"51px"}>
+        <Button width="3/5" bg="secondary_green" onPress={() => null}>
+          <Text style={styles.button}>Take a Picture and Identify</Text>
+        </Button>
+        <Button
+          marginTop={"26px"}
+          width="3/5"
+          bg="secondary_green"
+          onPress={() =>
+            navigation.navigate("AddPlantManually", {
+              progress: 1,
+            })
+          }
+        >
+          <Text style={styles.button}>Add Manually</Text>
+        </Button>
+      </Center>
+    </>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  button: {
+    fontWeight: "700",
+    fontFamily: "SFProDisplay-Bold",
+    fontStyle: "normal",
+    fontSize: "16",
+    color: "white",
+  },
+});
+
+export default AddPlantLandingPage;

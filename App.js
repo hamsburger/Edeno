@@ -13,7 +13,7 @@ import HomeNotSelected from "./assets/icons/my-eden-not-selected";
 import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
-import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
+import { AddPlantManually } from "./Screens/Add_Plant_Screens/AddPlantManually";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider, usePlants } from "./Hooks/Contexts/Plant_Context";
@@ -34,6 +34,7 @@ import { TakePictureInstruction } from "./Screens/PlantHealthScanner/TakePicture
 import NDVIInstructions from "./Screens/PlantHealthScanner/NDVIInstructions";
 import NDVILiveMeasure from "./Screens/PlantHealthScanner/NDVILiveMeasure";
 import { Results } from "./Screens/PlantHealthScanner/Results";
+import AddPlantLandingPage from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -215,9 +216,13 @@ export default () => {
           <Stack.Screen name="Measure" component={MeasureModal} />
         </Stack.Group>
         <Stack.Screen
+          name="AddPlantManually"
+          component={AddPlantManually}
+          getId={({ params }) => params.progress}
+        />
+        <Stack.Screen
           name="AddPlantLandingPage"
           component={AddPlantLandingPage}
-          getId={({ params }) => params.progress}
         />
         <Stack.Screen name="LiveMeasure">
           {(props) => <LiveMeasure {...props} visible={1} />}

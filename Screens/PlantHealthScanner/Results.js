@@ -11,37 +11,41 @@ const Results = ({ route, navigation }) => {
   const [ndviResult, setNDVIResult] = useState({});
   const [diseaseResult, setDiseaseResult] = useState({});
 
-  // async function sendImage(imageUri) {
-  //   const convertImageUriToBlob = await (async (imageUri) => {
-  //     return new Promise((resolve, reject) => {
-  //       fetch(imageUri)
-  //         .then((response) => response.blob())
-  //         .then((blob) => {
-  //           resolve(blob);
-  //         })
-  //         .catch((error) => {
-  //           reject(error);
-  //         });
-  //     });
-  //   });
+  function sendImage() {
+    console.log(photo.uri);
+    fetch(photo.uri)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const formData = new FormData();
+        formData.append("image", blob);
+        console.log("helloooo", blob);
 
-  //   const formData = new FormData();
-  //   formData.append("image", convertImageUriToBlob);
-
-  //   const response = await fetch("https://<YOUR_CLOUD_FUNCTION_URL>", {
-  //     method: "POST",
-  //     body: formData,
-  //   });
-
-  //   return response;
-  // }
+        fetch(
+          "https://us-central1-edeno-b66fc.cloudfunctions.net/healthAssessment",
+          {
+            method: "POST",
+            body: formData,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("data", data);
+            setDiseaseResult(data);
+          })
+          .catch((err) => {
+            console.log("error:", err);
+          });
+      })
+      .catch((error) => {});
+  }
 
   useEffect(() => {
     // use `photo` to get disease results
-    // const res = sendImage(photo.uri);
+    sendImage();
+
     // if showNDVI = true, get latest NDVI results
 
-    setDiseaseResult(diseaseData[2]);
+    // setDiseaseResult(diseaseData[2]);
     showNDVI ? setNDVIResult(NDVIAssessmentData[2]) : null;
   }, [Object.keys(ndviResult), Object.keys(diseaseResult)]);
 
