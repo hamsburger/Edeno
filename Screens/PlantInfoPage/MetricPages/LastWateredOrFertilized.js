@@ -14,7 +14,9 @@ const LastWateredOrFertilized = ({ route, navigation }) => {
   const [dataInternal, setDataInternal] = useState(data);
 
   const lastMeasurementDate =
-    dataInternal.dates[dataInternal.dates.length - 1].seconds;
+    dataInternal.dates.length > 0
+      ? dataInternal.dates[dataInternal.dates.length - 1].seconds
+      : "No Data Available";
 
   const [days, unit] = calculateTimePast(lastMeasurementDate);
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,10 +67,14 @@ const LastWateredOrFertilized = ({ route, navigation }) => {
             paddingTop={"7px"}
             paddingBottom={"7px"}
           >
-            {days} {unit}
+            {lastMeasurementDate == "No Data Available"
+              ? "No Data Available"
+              : `${days} ${unit}`}
           </Text>
           <Text style={styles.date}>
-            {convertDateToMDYHM(lastMeasurementDate)}
+            {lastMeasurementDate == "No Data Available"
+              ? ""
+              : convertDateToMDYHM(lastMeasurementDate)}
           </Text>
         </View>
         <View>

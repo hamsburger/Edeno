@@ -14,9 +14,7 @@ const Header = ({ navigation }) => {
     >
       <Flex justifyContent="flex-end" alignItems="center" flexDirection="row">
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("AddPlantLandingPage", { progress: 1 })
-          }
+          onPress={() => navigation.navigate("AddPlantLandingPage")}
         >
           <Add width={29} height={29} />
         </TouchableOpacity>

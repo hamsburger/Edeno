@@ -1,19 +1,48 @@
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Image, Animated } from "react-native";
 import { View, Text, Box, Button, Flex, Center } from "native-base";
+<<<<<<< HEAD
 import { usePlants } from "../../hooks/Contexts/Plant_Context";
+=======
+>>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
 import LiveIcon from "../../assets/icons/live-circle.svg";
 
 const LiveMeasure = ({ route, navigation }) => {
-  const { plantIndex } = route.params;
-  const [Plants, dispatch] = usePlants();
+  const { plantName, plantId, plantIconId } = route.params;
   const [readings, setReadings] = useState({});
   const db = useFirebaseDatabase();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const [countdown, setCountdown] = useState(5000);
+  const [timerId, setTimerId] = useState(null);
+  const [lastFetchedMeasurement, setLastFetchedMeasurement] = useState(null);
+
+  const fetchData = () => {
+    // fetch data from the database and save it
+    console.log("Fetching data...");
+    // setLastFetchedMeasurement(apiResponse)
+  };
+
+  const startTimer = () => {
+    setTimerId(
+      setInterval(() => {
+        setCountdown((countdown) => countdown - 1000);
+      }, 1000)
+    );
+  };
+
+  const resetTimer = () => {
+    clearInterval(timerId);
+    setTimerId(null);
+    setCountdown(5000);
+  };
+
   useEffect(() => {
+    // start timer
+    startTimer(); // Start the timer on initial mount
+
     db.listenForChildUpdate("readings", setReadings);
 
     // /* Get readings every five seconds */
@@ -51,6 +80,18 @@ const LiveMeasure = ({ route, navigation }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (timerId) {
+      fetchData();
+    }
+  }, [timerId]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      resetTimer();
+    }
+  }, [countdown]);
+
   return (
     <View>
       <Box position="absolute" left={2} top={43}>
@@ -68,10 +109,10 @@ const LiveMeasure = ({ route, navigation }) => {
         </Button>
       </Box>
       <View style={styles.container}>
-        <Text style={styles.plant_name}>{Plants[plantIndex].plantName}</Text>
+        <Text style={styles.plant_name}>{plantName}</Text>
         <Image
           style={{ height: 144, width: 144, marginBottom: 46 }}
-          source={plant_icons[Plants[plantIndex].iconId]}
+          source={plant_icons[plantIconId]}
         />
         <Flex flexDirection="row" alignItems="center">
           <Animated.View style={{ opacity: fadeAnim }}>
@@ -100,17 +141,44 @@ const LiveMeasure = ({ route, navigation }) => {
           <Text style={styles.measurement}>{readings.Light} LUX</Text>
         </Flex>
       </View>
-      <Center w="100%" marginTop={100}>
-        <Button
-          minW="1/5"
-          bg="secondary_green"
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
+      <View marginTop={"40px"}>
+        <Flex
+          flexDirection={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          marginBottom={"10px"}
         >
-          Done
-        </Button>
-      </Center>
+          <Button
+            minW="1/5"
+            bg="secondary_green"
+            isDisabled={timerId}
+            onPress={startTimer}
+            marginBottom={"10px"}
+          >
+            <Text style={styles.button}>Re-take Measurements</Text>
+          </Button>
+          <Button
+            minW="1/5"
+            bg="secondary_green"
+            isDisabled={timerId}
+            onPress={() => {
+              // persist whatever is in lastFetchedMeasurement to db in SavedReadings
+
+              navigation.navigate("PlantInfoPage", {
+                plantId: plantId,
+                plantIconId: plantIconId,
+              });
+            }}
+          >
+            <Text style={styles.button}>Save & Continue</Text>
+          </Button>
+        </Flex>
+        {timerId ? (
+          <Text style={styles.continue_prompt}>{`Continue in ${
+            countdown / 1000
+          }...`}</Text>
+        ) : null}
+      </View>
     </View>
   );
 };
@@ -142,6 +210,18 @@ const styles = StyleSheet.create({
     color: "#432D1E",
     fontFamily: "SFProDisplay-Regular",
     fontSize: 17,
+  },
+  continue_prompt: {
+    fontSize: 17,
+    fontFamily: "SFProDisplay-Bold",
+    textAlign: "center",
+  },
+  button: {
+    fontWeight: "700",
+    fontFamily: "SFProDisplay-Bold",
+    fontStyle: "normal",
+    fontSize: "16",
+    color: "white",
   },
 });
 

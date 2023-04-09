@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
 import {
   Box,
@@ -10,25 +10,37 @@ import {
   Flex,
   Icon,
 } from "native-base";
+<<<<<<< HEAD
 import { usePlants } from "../../hooks/Contexts/Plant_Context";
+=======
+>>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { SelectPlantCard } from "../../Components/Measure/SelectPlantCard";
 import AlertIcon from "../../assets/icons/alert.svg";
+import myEdenPlants from "../../MockPlantData/myEdenData";
 
 const MeasureModal = ({ navigation }) => {
   const [selected, setSelected] = useState(-1);
-  const [Plants, dispatch] = usePlants();
+  const [myPlants, setMyPlants] = useState([]);
+
+  useEffect(() => {
+    // CALL BACKEND FOR PLANT INFORMATION
+    // GET /get-plants-from-user-id WITH user-id from context
+    // setMyPlants(response)
+
+    setMyPlants(myEdenPlants);
+  }, [myPlants.length]);
 
   const plantElements = useMemo(() => {
-    return Plants.map((elem, i) => (
+    return myPlants.map((elem, i) => (
       <SelectPlantCard
         i={i}
         iconNum={elem.iconId}
-        name={elem.plantName}
+        name={elem.commonName}
         selected={selected}
         setSelected={setSelected}
       />
     ));
-  }, [selected]);
+  }, [myPlants.length, selected]);
 
   return (
     <View style={styles.modal}>
@@ -45,14 +57,15 @@ const MeasureModal = ({ navigation }) => {
       </View>
       <Flex
         flexDirection="row"
-        paddingLeft="40px"
-        paddingRight="65px"
+        paddingLeft="30px"
+        paddingRight="30px"
         marginBottom="24px"
       >
         <AlertIcon />
         <View marginLeft="10px">
           <Text style={styles.alert}>
-            Place the device in the plant before proceeding
+            Place the device in the plant before proceeding. The timer will take
+            measurements for 5 seconds once you press "Start".
           </Text>
         </View>
       </Flex>
@@ -67,11 +80,13 @@ const MeasureModal = ({ navigation }) => {
             navigation.goBack();
             // plantIndex is the index of the plant in the Plant Context
             navigation.navigate("LiveMeasure", {
-              plantIndex: selected,
+              plantName: myPlants[selected].commonName,
+              plantId: myPlants[selected].id,
+              plantIconId: myPlants[selected].iconId,
             });
           }}
         >
-          Start
+          <Text style={styles.button}>Start</Text>
         </Button>
       </Center>
     </View>
@@ -97,6 +112,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#B9422C",
     fontFamily: "SFProDisplay-Heavy",
+  },
+  button: {
+    fontWeight: "700",
+    fontFamily: "SFProDisplay-Bold",
+    fontStyle: "normal",
+    fontSize: "16",
+    color: "white",
   },
 });
 

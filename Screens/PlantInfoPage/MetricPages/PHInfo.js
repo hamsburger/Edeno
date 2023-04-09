@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { View, Text, Box, Flex, ScrollView } from "native-base";
 import {
   TouchableOpacity,
@@ -12,7 +12,9 @@ import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArray
 
 const PHInfo = ({ route, navigation }) => {
   const { phDataExternal, plantInfo } = route.params;
-
+  const [npkValue, setNPKValue] = useState(
+    "Tap on a datapoint to see the N-P-K measurement"
+  );
   const chartWidth = 0.95 * Dimensions.get("window").width;
   const upperIdeal = phDataExternal.upperIdeal;
   const lowerIdeal = phDataExternal.lowerIdeal;
@@ -34,8 +36,10 @@ const PHInfo = ({ route, navigation }) => {
     return 0;
   };
 
+  const dates = convertArrayofTimestampsToArrayOfMD(phDataExternal.dates);
+
   const data = {
-    labels: convertArrayofTimestampsToArrayOfMD(phDataExternal.dates),
+    labels: dates,
     datasets: [
       {
         data: phDataExternal.measurements,
@@ -54,6 +58,12 @@ const PHInfo = ({ route, navigation }) => {
       },
     ],
     legend: ["Your Measurements", "Ideal Range"],
+  };
+
+  const getNPKValue = ({ index }) => {
+    setNPKValue(
+      `N-P-K Measurement on ${dates[index]} is ${phDataExternal.npkMeasurements[index]}`
+    );
   };
 
   return (
@@ -82,7 +92,7 @@ const PHInfo = ({ route, navigation }) => {
           </Text>
         </Box>
       </Box>
-      <ScrollView paddingTop={"25px"} paddingBottom={"25px"}>
+      <ScrollView height={"100%"} paddingTop={"25px"} marginBottom={"100px"}>
         <View paddingLeft={"30px"} paddingRight={"30px"} marginBottom={"20px"}>
           <Text style={styles.sectionTitle}>Last Measurement</Text>
           <Text
@@ -98,6 +108,9 @@ const PHInfo = ({ route, navigation }) => {
         </View>
         <Flex justifyContent={"center"} alignItems={"center"}>
           <LineChart
+            onDataPointClick={(e) => {
+              getNPKValue(e);
+            }}
             style={{
               paddingRight: 50,
               paddingLeft: 70,
@@ -119,6 +132,7 @@ const PHInfo = ({ route, navigation }) => {
               },
             }}
           />
+          <Text style={styles.npk_prompt}>{npkValue}</Text>
         </Flex>
 
         <View paddingLeft={"30px"} paddingRight={"30px"} marginTop={"20px"}>
@@ -139,7 +153,8 @@ const PHInfo = ({ route, navigation }) => {
 
               <Text
                 style={styles.tips}
-              >{`\u2022 Consider using a lime-based compound`}</Text>
+              >{`\u2022 Consider using a lime-based compound such as dolomite lime and agricultural lime to help increase the pH of the soil`}</Text>
+
               <Text
                 style={[styles.tips, { color: "#72A077" }]}
                 onPress={() => Linking.openURL("http://google.com")}
@@ -231,6 +246,12 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 15,
     color: "#432D1E",
+  },
+  npk_prompt: {
+    fontFamily: "SFProDisplay-RegularItalic",
+    fontSize: "15",
+    fontWeight: 700,
+    color: "#597F51",
   },
 });
 

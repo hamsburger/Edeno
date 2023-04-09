@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { Header } from "../../Components/Header/Header";
+<<<<<<< HEAD
 import { usePlants } from "../../hooks/Contexts/Plant_Context";
+=======
+>>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { PlantCard } from "../../Components/PlantCard";
+import myEdenPlants from "../../MockPlantData/myEdenData";
 
 const Home = ({ navigation }) => {
-  const [Plants, dispatch] = usePlants();
+  const [myPlants, setMyPlants] = useState([]);
+
+  useEffect(() => {
+    // CALL BACKEND FOR PLANT INFORMATION
+    // GET /get-plants-from-user-id WITH user-id from context
+    // setMyPlants(response)
+
+    setMyPlants(myEdenPlants);
+  }, [myPlants.length]);
 
   const styles = StyleSheet.create({
     noPlants: {
@@ -27,7 +39,7 @@ const Home = ({ navigation }) => {
     <View>
       <Header navigation={navigation} />
       <ScrollView>
-        {Plants.length == 0 ? (
+        {myPlants.length == 0 ? (
           <View style={styles.noPlantsContainer}>
             <Text style={styles.noPlants}>
               Click "+" to add a plant and get started
@@ -44,7 +56,7 @@ const Home = ({ navigation }) => {
             paddingRight={22}
             bg="#FBFBFB"
           >
-            {Plants.map((elem) => (
+            {myPlants.map((elem) => (
               <PlantCard plantInfo={elem} navigation={navigation} />
             ))}
           </View>

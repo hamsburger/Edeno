@@ -78,7 +78,7 @@ const LightIntensityInfo = ({ route, navigation }) => {
             {plantInfo.plantName}
           </Text>
           <Text fontSize="37px" style={styles.page_title}>
-            Temperature
+            Light Intensity
           </Text>
         </Box>
       </Box>
@@ -110,7 +110,7 @@ const LightIntensityInfo = ({ route, navigation }) => {
               backgroundColor: "#F2F2F2",
               backgroundGradientFrom: "#F2F2F2",
               backgroundGradientTo: "#F2F2F2",
-              decimalPlaces: 1, // optional, defaults to 2dp
+              decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               propsForDots: {

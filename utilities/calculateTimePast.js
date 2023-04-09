@@ -18,7 +18,7 @@ const calculateTimePast = (date) => {
   // yesterday or more days ago
   if (parseInt(diffInDays) == 1) {
     return ["1", "day ago"];
-  } else return [parseInt(diffInDays), "days ago"];
+  } else return [parseInt(diffInDays), " days ago"];
 };
 
 export default calculateTimePast;
