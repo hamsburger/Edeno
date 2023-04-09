@@ -14,6 +14,7 @@ import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
 import { AddPlantManually } from "./Screens/Add_Plant_Screens/AddPlantManually";
+import { AddPlantWithImage } from "./Screens/Add_Plant_Screens/AddPlantWithImage";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider, usePlants } from "./Hooks/Contexts/Plant_Context";
@@ -218,6 +219,11 @@ export default () => {
         <Stack.Screen
           name="AddPlantManually"
           component={AddPlantManually}
+          getId={({ params }) => params.progress}
+        />
+        <Stack.Screen
+          name="AddPlantWithImage"
+          component={AddPlantWithImage}
           getId={({ params }) => params.progress}
         />
         <Stack.Screen

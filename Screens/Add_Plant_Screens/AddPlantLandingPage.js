@@ -42,7 +42,15 @@ const AddPlantLandingPage = ({ route, navigation }) => {
         </Center>
       </Center>
       <Center w="100%" marginTop={"51px"}>
-        <Button width="3/5" bg="secondary_green" onPress={() => null}>
+        <Button
+          width="3/5"
+          bg="secondary_green"
+          onPress={() =>
+            navigation.navigate("TakePictureInstruction", {
+              type: "plant-identification",
+            })
+          }
+        >
           <Text style={styles.button}>Take a Picture and Identify</Text>
         </Button>
         <Button

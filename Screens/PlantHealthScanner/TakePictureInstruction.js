@@ -59,7 +59,9 @@ const TakePictureInstruction = ({ route, navigation }) => {
         plantName: plantName,
       });
     } else {
-      null;
+      navigation.navigate("AddPlantWithImage", {
+        photo: capturedImage,
+      });
     }
   };
 

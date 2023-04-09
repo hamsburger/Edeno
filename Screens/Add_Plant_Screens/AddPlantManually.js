@@ -5,6 +5,7 @@ import { AddPlantHeader } from "./Components/AddPlantHeader";
 import { Icon_Selection } from "./Icon_Selection";
 import { Add_Confirmation } from "./Add_Confirmation";
 import { RouteProvider } from "../../Hooks/Contexts/Route_Context";
+import { PlantClassification } from "./PlantClassification";
 
 export function AddPlantManually(props) {
   const { route, navigation } = props;
