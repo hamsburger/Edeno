@@ -1,0 +1,27 @@
+{
+    "humidityData": {
+        "humidityDescriptions": "Mesic\nDry Mesic\nDry",
+        "lowerIdeal": 40,
+        "upperIdeal": 60
+    },
+    "lightIntensityData": {
+        "lightDescriptions": "Full Sun\nFull Sun to Partial Shade",
+        "lowerIdeal": 40000,
+        "upperIdeal": 130000
+    },
+    "link": "https://garden.org/plants/view/71460/Aloe-Vera-Aloe-vera/",
+    "phData": {
+        "lowerIdeal": 5.6,
+        "pHDescriptions": "Moderately acid\nSlightly acid\nNeutral\nSlightly alkaline",
+        "upperIdeal": 7.8
+    },
+    "scientificName": "aloeVera",
+    "soilMoistureData": {
+        "lowerIdeal": 10
+    },
+    "temperatureData": {
+        "lowerIdeal": 20,
+        "temperatureDescriptions": "Zone 9a",
+        "upperIdeal": 25
+    }
+}

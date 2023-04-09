@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     # Get a database reference to plant.
     firebase_handler = FirebaseManager()
-    ref = db.reference("recommendations/rapitest/aloeVera")
+    ref = db.reference("users/XPhzPvyULVTvb25wJblsyRvdGed2/isSensorOn")
     print(type(ref.get()))
     # plant_snapshot = ref.get()
     # modified_snapshot = {}

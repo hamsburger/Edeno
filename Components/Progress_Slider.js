@@ -1,18 +1,23 @@
 import { React } from 'react';
 import { Box, Slider, Flex } from 'native-base';
 
-const numSteps = 3;
-
 let progressStates = {
     1 : [{"width" : "0%", "colorScheme" : "secondary_green"}, 
-         {"width" : "50%", "colorScheme" : "faded_green"}, 
-         {"width" : "50%", "colorScheme" : "faded_green"}], 
+         {"width" : "33%", "colorScheme" : "faded_green"}, 
+         {"width" : "33%", "colorScheme" : "faded_green"},
+         {"width" : "33%", "colorScheme" : "faded_green"}], 
     2 : [{"width" : "0%", "colorScheme" : "secondary_green"}, 
-         {"width" : "50%", "colorScheme" : "secondary_green"}, 
-         {"width" : "50%", "colorScheme" : "faded_green"}], 
+         {"width" : "33%", "colorScheme" : "secondary_green"}, 
+         {"width" : "33%", "colorScheme" : "faded_green"},
+         {"width" : "33%", "colorScheme" : "faded_green"}], 
     3 : [{"width" : "0%", "colorScheme" : "secondary_green"}, 
-         {"width" : "50%", "colorScheme" : "secondary_green"}, 
-         {"width" : "50%", "colorScheme" : "secondary_green"}], 
+         {"width" : "33%", "colorScheme" : "secondary_green"}, 
+         {"width" : "33%", "colorScheme" : "secondary_green"},
+         {"width" : "33%", "colorScheme" : "faded_green"}], 
+    4 : [{"width" : "0%", "colorScheme" : "secondary_green"}, 
+         {"width" : "33%", "colorScheme" : "secondary_green"}, 
+         {"width" : "33%", "colorScheme" : "secondary_green"},
+         {"width" : "33%", "colorScheme" : "secondary_green"}], 
 }
 
 export function ProgressSlider(props){
@@ -36,7 +41,7 @@ export function ProgressSlider(props){
 
     return (<Flex w="80%" flexDirection="row" justifyContent="center">
     {
-        (progress >= 1 && progress <= 3) && progressStates[progress].map((elem, index) => 
+        (progress >= 1 && progress <= 4) && progressStates[progress].map((elem, index) => 
             <Slider w={elem["width"]} defaultValue={100} colorScheme={elem["colorScheme"]} 
                     _disabled={{ opacity: 1 }} isDisabled>
                 <Slider.Track>

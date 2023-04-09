@@ -10,34 +10,23 @@ import {
   Flex,
   Icon,
 } from "native-base";
-<<<<<<< HEAD
 import { usePlants } from "../../hooks/Contexts/Plant_Context";
-=======
->>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { SelectPlantCard } from "../../Components/Measure/SelectPlantCard";
 import AlertIcon from "../../assets/icons/alert.svg";
 import myEdenPlants from "../../MockPlantData/myEdenData";
 
 const MeasureModal = ({ navigation }) => {
   const [selected, setSelected] = useState(-1);
-  const [myPlants, setMyPlants] = useState([]);
+  const [Plants, setPlants] = usePlants();
 
-  useEffect(() => {
-    // CALL BACKEND FOR PLANT INFORMATION
-    // GET /get-plants-from-user-id WITH user-id from context
-    // setMyPlants(response)
-
-    setMyPlants(myEdenPlants);
-  }, [myPlants.length]);
-
+  console.log(Plants)
   const plantElements = useMemo(() => {
     return myPlants.map((elem, i) => (
       <SelectPlantCard
         i={i}
-        iconNum={elem.iconId}
-        name={elem.commonName}
         selected={selected}
         setSelected={setSelected}
+        plantObj={elem}
       />
     ));
   }, [myPlants.length, selected]);
@@ -107,7 +96,7 @@ const styles = StyleSheet.create({
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
-  plants: { height: "65%", width: "65%", marginTop: 25, marginBottom: 30 },
+  plants: { height: "65%", width: "80%", marginTop: 25, marginBottom: 30 },
   alert: {
     textAlign: "center",
     color: "#B9422C",

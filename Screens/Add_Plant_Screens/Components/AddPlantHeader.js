@@ -22,7 +22,7 @@ export function AddPlantHeader(props) {
         justifyContent="flex-start"
         flexDirection="row"
       >
-        {progress !== 3 && (
+        {progress !== 4 && (
           <Button
             bg="transparent"
             _text={{

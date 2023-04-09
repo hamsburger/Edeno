@@ -9,6 +9,7 @@ import {
   Pressable,
   Button,
 } from "native-base";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../../hooks/Contexts/Auth_Context";
 import { styles } from "./LoginStyles";
 import { TouchableOpacity, StatusBar } from "react-native";
@@ -25,6 +26,8 @@ const Login = ({ navigation }) => {
   const handleChangeEmail = (text) => setEmail(text);
   const handleChangePassword = (text) => setPassword(text);
   const [show, setShow] = useState(false);
+
+  const auth = getAuth();
 
   return (
     <View>
@@ -93,15 +96,20 @@ const Login = ({ navigation }) => {
               setErrors("Invalid email.");
               return;
             }
-            dispatch({
-              type: "sign-in",
-              ...loginInfo,
-            });
 
-            if (isSignedIn == false) {
-              setErrors("Invalid email or password. Please try again.");
-              return;
-            }
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              // Signed in 
+              dispatch({
+                type: "sign-in",
+                ...loginInfo,
+              });
+  
+              // ...
+            })
+            .catch((error) => {
+              setErrors(`Firebase Error: User not found or incorrect password`);
+            });
           }}
         >
           <Text style={styles.logInButton}>Log in</Text>

@@ -22,7 +22,7 @@ function AuthReducer(isSignedIn, action) {
       // can do backend stuff here for auth like storing tokens and stuff
       if (true) {
         // if (action.password == "123") {
-          isSignedIn = true;
+        isSignedIn = true;
         // }
       }
       return isSignedIn;

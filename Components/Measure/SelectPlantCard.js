@@ -4,7 +4,7 @@ import { Button, Pressable, Flex, Box } from "native-base";
 
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 
-const SelectPlantCard = ({ i, iconNum, name, selected, setSelected }) => {
+const SelectPlantCard = ({ i, iconNum, plantObj, selected, setSelected }) => {
   return (
     <Pressable
       key={i}
@@ -24,7 +24,6 @@ const SelectPlantCard = ({ i, iconNum, name, selected, setSelected }) => {
         alignItems="center"
         justifyContent="flex-start"
         rounded={2}
-        pr={3}
       >
         <Image
           style={{
@@ -34,22 +33,29 @@ const SelectPlantCard = ({ i, iconNum, name, selected, setSelected }) => {
             marginTop: 20,
             marginBottom: 20,
           }}
-          source={plant_icons[iconNum]}
+          source={plant_icons[plantObj["iconId"]]}
         />
-        <Box>
-          <Text style={styles.plant_name}>{name}</Text>
+        <Box style={styles.text_overflow}>
+          <Text style={styles.plant_name}>{plantObj["nickName"]}: ({plantObj["commonName"]})</Text>
         </Box>
       </Flex>
     </Pressable>
   );
 };
 
+// {plantObj["nickName"]}: ({plantObj["commonName"]})
+
 const styles = StyleSheet.create({
-  plant: { backgroundColor: "transparent" },
+  plant: { backgroundColor: "transparent"},
+  text_overflow: {
+    overflowWrap: "break-word",
+    width: "65%"
+  },
   plant_name: {
     fontFamily: "SFProDisplay-Bold",
     fontWeight: "900",
     fontSize: 17,
+    // overflowWrap: "break-word"
   },
 });
 

@@ -6,8 +6,7 @@ import calculateTimePast from "../utilities/calculateTimePast";
 import Attention from "../assets/icons/attention-circle.svg";
 
 export function PlantCard({ plantInfo, navigation }) {
-  const { id, commonName, iconId, lastMeasuredDate, requiresAttention } =
-    plantInfo;
+  const { iconId, commonName, nickName, lastMeasured, requiresAttention } = plantInfo;
   return (
     <TouchableOpacity
       onPress={() => {
@@ -31,28 +30,14 @@ export function PlantCard({ plantInfo, navigation }) {
         <Image
           source={plant_icons[iconId]}
           style={{ height: 75, width: 75, marginRight: 16 }}
-        />
+        />  
         <Box w="100%">
-          <View>
-            <Text style={styles.plant_name}>{commonName}</Text>
-          </View>
-
-          {lastMeasuredDate == -1 ? (
-            <Text style={styles.last_measured}>
-              No Measurement Data Available
-            </Text>
-          ) : (
-            <Text style={styles.last_measured}>
-              Last Measured: {calculateTimePast(lastMeasuredDate)}
-            </Text>
-          )}
-
-          {requiresAttention ? (
-            <Flex flexDirection={"row"} alignItems={"center"}>
-              <Attention />{" "}
-              <Text style={styles.needs_attention}>Requires Attention</Text>
-            </Flex>
-          ) : null}
+          <Text style={styles.plant_name}>{nickName} ({commonName}) </Text>
+          <Text style={styles.last_measured}>
+            Last Measured: {lastMeasured}
+          </Text>
+          <Text style={styles.rem_and_rec}>No Reminders</Text>
+          <Text style={styles.rem_and_rec}>{(requiresAttention) && "Requires Attention"}</Text>
         </Box>
       </Flex>
     </TouchableOpacity>

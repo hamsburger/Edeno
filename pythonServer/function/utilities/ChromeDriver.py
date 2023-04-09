@@ -60,7 +60,7 @@ class ChromeDriver:
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
-        options.add_argument('--proxy-server=ip:port')
+        # options.add_argument('--proxy-server=ip:port')
         # options.add_argument(f'user-agent={userAgent}')
         # options.add_experimental_option("detach", True)
         #                          
@@ -73,7 +73,7 @@ class ChromeDriver:
     
     def launchDriver(self, options):
         # subprocess.call("bash dGCache", shell=True) ## Remove Cache      
-        driver = uc.Chrome(options=options)
+        driver = uc.Chrome(version_main=110, options=options)
         # driver.implicitly_wait(4)
         print("Driver at launchDriver:", driver)
         driver.maximize_window()

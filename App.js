@@ -13,18 +13,11 @@ import HomeNotSelected from "./assets/icons/my-eden-not-selected";
 import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
-<<<<<<< HEAD
-import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
-import useFonts from "./hooks/Use_Fonts";
-import { AddPlantProvider } from "./hooks/Contexts/AddPlant_Context";
-import { PlantProvider, usePlants } from "./hooks/Contexts/Plant_Context";
-=======
 import { AddPlantManually } from "./Screens/Add_Plant_Screens/AddPlantManually";
 import { AddPlantWithImage } from "./Screens/Add_Plant_Screens/AddPlantWithImage";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider, usePlants } from "./Hooks/Contexts/Plant_Context";
->>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { LiveMeasure } from "./Screens/Measure/LiveMeasure";
 import { PlantInfoPage } from "./Screens/PlantInfoPage/PlantInfoPage";
 import { LogBox } from "react-native";

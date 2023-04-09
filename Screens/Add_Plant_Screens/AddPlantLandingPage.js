@@ -1,16 +1,11 @@
-<<<<<<< HEAD
 import { React, useState, createContext, useEffect } from "react";
 import { Box, Button, Center } from "native-base";
-import { PlantId_Fetch } from "./PlantId_Fetch";
+import { PlantId_Fetch_Manual } from "./PlantId_Fetch_Manual";
 import { AddPlantHeader } from "./Components/AddPlantHeader";
 import { Icon_Selection } from "./Icon_Selection";
+import { Add_Nickname } from "./Add_Nickname"
 import { Add_Confirmation } from "./Add_Confirmation";
 import { RouteProvider } from "../../hooks/Contexts/Route_Context";
-=======
-import { Text, Box, Button, Center } from "native-base";
-import React from "react";
-import { View, StyleSheet } from "react-native";
->>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 
 const AddPlantLandingPage = ({ route, navigation }) => {
   return (

@@ -7,6 +7,7 @@ from flask import request
 import os
 from flask import Flask
 from utilities import FirebaseManager, ChromeDriver, camelCase
+from firebase_admin import auth
 
 firebase_handler = FirebaseManager()
 app = Flask(__name__)
@@ -24,8 +25,7 @@ firebase_admin.initialize_app(cred, {
 # 2. Fetch plant recommendation data using ChromeDriver
 # 3. Keep track of Firebase URL so we can write to our database later 
 # default_app = firebas.initialize_app()
-
-@app.route("/", methods=['POST'])
+@app.route("/get-plant-information-by-plant-id", methods=['POST'])
 def get_recommendation_data():
     '''
     1. Check if plant recommendations have already been populated in Firebase Database. If yes, return object.
@@ -104,5 +104,45 @@ def get_recommendation_data():
           
     return NGA_dict
 
+@app.route("/get-plants-from-user-id", methods=['GET'])
+def get_user_plants():
+    user_uid = None
+    if request.args.get("token"):
+        client_token = request.args.get('token')
+        decoded_token = auth.verify_id_token(client_token)
+        user_uid = decoded_token['uid']
+        print(f"User ID: {user_uid}")
+        
+    elif request.args.get("email"):
+        client_email = request.args.get("email")
+        user_uid = auth.get_user_by_email(client_email).uid
+    
+    
+
+    plants_ref = db.reference(f"users/{user_uid}/plants")
+    
+    plants = plants_ref.get()
+    if plants is None:
+        return {}
+        
+    restructured_plants = {}
+    for k,v in plants.items():
+        plant_ref = plants_ref.child(k)
+        ## Try just Saved Readings instead of readings/SavedReadings to see if it works
+        saved_readings_ref = plant_ref.child("readings/SavedReadings").order_by_child("dateTime").limit_to_last(1)
+        last_reading = saved_readings_ref.get()
+
+        restructured_plants[k] = { 
+            "plantId" : k,
+            "commonName" : v["commonName"],
+            "nickName" : v["nickName"],
+            "lastMeasured": None if last_reading is None else list(last_reading.values())[0]["dateTime"],
+            "requiresAttention": None,
+            # if last_reading is None else last_reading["isOutOfRange"], 
+            "iconId" : v["iconId"]
+        }
+    
+    return restructured_plants
+
 if __name__ == "__main__":
-    app.run(debug=True, host="192.168.2.11", port=int(os.environ.get("PORT", 8080)))
+    app.run(debug=True, host="100.67.1.246", port=int(os.environ.get("PORT", 8080)))

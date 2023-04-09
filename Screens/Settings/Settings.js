@@ -6,24 +6,38 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import {
+  Button
+} from 'native-base'
 import { Header } from "../../Components/Header/Header";
 import { useAuth } from "../../hooks/Contexts/Auth_Context";
+import { getAuth, signOut } from "firebase/auth";
 
 const Settings = (props) => {
   const [isSignedIn, dispatch] = useAuth();
+  const auth = getAuth();
   return (
     <View>
       <Header {...props} />
       <ScrollView>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
-            dispatch({
-              type: "sign-out",
-            });
+            signOut(auth).then(() => {
+              dispatch({
+                type: "sign-out",
+              });
+            })
+            
           }}
-        >
-          <Text>Log out</Text>
-        </TouchableOpacity>
+        > */}
+          <Button bgColor="secondary_green" margin={2} onPress={() => {
+            signOut(auth).then(() => {
+              dispatch({
+                type: "sign-out",
+              });
+            })
+          }}>Log out</Button>
+        {/* </TouchableOpacity> */}
       </ScrollView>
     </View>
   );

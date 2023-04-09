@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { React, useState, useEffect, useCallback } from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { Header } from "../../Components/Header/Header";
-<<<<<<< HEAD
 import { usePlants } from "../../hooks/Contexts/Plant_Context";
-=======
->>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { PlantCard } from "../../Components/PlantCard";
-import myEdenPlants from "../../MockPlantData/myEdenData";
+import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
+import { getAuth } from 'firebase/auth';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 
 const Home = ({ navigation }) => {
-  const [myPlants, setMyPlants] = useState([]);
-
-  useEffect(() => {
-    // CALL BACKEND FOR PLANT INFORMATION
-    // GET /get-plants-from-user-id WITH user-id from context
-    // setMyPlants(response)
-
-    setMyPlants(myEdenPlants);
-  }, [myPlants.length]);
-
+  const [Plants, setPlants] = usePlants();
   const styles = StyleSheet.create({
     noPlants: {
       fontSize: 26,
@@ -31,15 +21,35 @@ const Home = ({ navigation }) => {
     },
     noPlantsContainer: {
       padding: 10,
-      paddingTop: "60%",
+      paddingTop: "60%"
     },
   });
+  const auth = getAuth();
+
+  /* Need useCallback to avoid repeated calls */
+  useFocusEffect(
+      useCallback(() => {
+        auth.currentUser.getIdToken()
+        .then((idToken) => {
+            fetch(`http://100.67.1.246:8080/get-plants-from-user-id?token=${idToken}`, {
+              method: "get"
+            })
+            .then(response => response.json())
+            .then(data => {
+              let plantDict = Object.values(data)
+              setPlants(plantDict)
+            }).catch((error) => console.log(error))
+        }).catch((error) => {
+          console.log(error)
+        })
+    }, [])
+  );
+
 
   return (
-    <View>
+      <ScrollView stickyHeaderIndices={[0]}>
       <Header navigation={navigation} />
-      <ScrollView>
-        {myPlants.length == 0 ? (
+        {Plants.length == 0 ? (
           <View style={styles.noPlantsContainer}>
             <Text style={styles.noPlants}>
               Click "+" to add a plant and get started
@@ -62,7 +72,6 @@ const Home = ({ navigation }) => {
           </View>
         )}
       </ScrollView>
-    </View>
   );
 };
 

@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Image, Animated } from "react-native";
 import { View, Text, Box, Button, Flex, Center } from "native-base";
-<<<<<<< HEAD
 import { usePlants } from "../../hooks/Contexts/Plant_Context";
-=======
->>>>>>> dad4439c3fecd7ae5ab20ffc8b8853c9eecc8d71
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
+import { getAuth } from "firebase/auth";
 import LiveIcon from "../../assets/icons/live-circle.svg";
 
 const LiveMeasure = ({ route, navigation }) => {
@@ -14,6 +12,15 @@ const LiveMeasure = ({ route, navigation }) => {
   const [readings, setReadings] = useState({});
   const db = useFirebaseDatabase();
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const auth = getAuth();
+
+  function date_to_string_with_milliseconds(date){
+    let date_str = date.toString() 
+    let date_without_milliseconds = new Date(date_str) // truncated date since milliseconds are not included
+    let milliseconds_delta = date - date_without_milliseconds
+    let date_str_with_milliseconds = date_str.replace(/(^.*:\d\d:\d\d)(.*$)/, `$1:${milliseconds_delta}$2`)
+    return date_str_with_milliseconds
+  }
 
   const [countdown, setCountdown] = useState(5000);
   const [timerId, setTimerId] = useState(null);
@@ -45,7 +52,8 @@ const LiveMeasure = ({ route, navigation }) => {
 
     db.listenForChildUpdate("readings", setReadings);
 
-    // /* Get readings every five seconds */
+
+    // /* Get readings every two seconds */
     // const interval = setInterval(
     //   () =>
     //     db.pushToRealTimeDatabase("readings", {
@@ -54,8 +62,9 @@ const LiveMeasure = ({ route, navigation }) => {
     //       PH: Math.floor(Math.random() * 10) + [],
     //       Temp: Math.floor(Math.random() * 50 - 25) + [],
     //       Humidity: Math.floor(Math.random() * 50 - 25) + [],
+    //       dateTime: `${date_to_string_with_milliseconds(new Date(Date.now())).toString()}`
     //     }),
-    //   5000
+    //   2000
     // );
 
     // Code for animating live icon
@@ -109,7 +118,7 @@ const LiveMeasure = ({ route, navigation }) => {
         </Button>
       </Box>
       <View style={styles.container}>
-        <Text style={styles.plant_name}>{plantName}</Text>
+        <Text style={styles.plant_name}>{Plants[plantIndex].nickName} ({Plants[plantIndex].commonName})</Text>
         <Image
           style={{ height: 144, width: 144, marginBottom: 46 }}
           source={plant_icons[plantIconId]}
@@ -130,7 +139,7 @@ const LiveMeasure = ({ route, navigation }) => {
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Humidity:</Text>
-          <Text style={styles.measurement}>{readings.humidity}%</Text>
+          <Text style={styles.measurement}>{readings.Humidity}%</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Temperature:</Text>
@@ -163,6 +172,11 @@ const LiveMeasure = ({ route, navigation }) => {
             isDisabled={timerId}
             onPress={() => {
               // persist whatever is in lastFetchedMeasurement to db in SavedReadings
+              db.pushChildToRealTimeDatabase(`users/${auth.currentUser.uid}/plants/` +
+                                             `${Plants[plantIndex]["plantId"]}/readings/SavedReadings`, readings)
+              navigation.navigate("Home");
+              
+
 
               navigation.navigate("PlantInfoPage", {
                 plantId: plantId,
