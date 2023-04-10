@@ -5,7 +5,7 @@ import {
     Input,
     Text
 } from "native-base";
-import { usePlant } from '../../hooks/Contexts/AddPlant_Context';
+import { usePlant } from '../../Hooks/Contexts/AddPlant_Context';
 
 
 export function Add_Nickname({ setContinue }) {

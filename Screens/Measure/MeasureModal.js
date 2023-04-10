@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
 import {
   Box,
@@ -10,10 +10,9 @@ import {
   Flex,
   Icon,
 } from "native-base";
-import { usePlants } from "../../hooks/Contexts/Plant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { SelectPlantCard } from "../../Components/Measure/SelectPlantCard";
 import AlertIcon from "../../assets/icons/alert.svg";
-import myEdenPlants from "../../MockPlantData/myEdenData";
 
 const MeasureModal = ({ navigation }) => {
   const [selected, setSelected] = useState(-1);
@@ -21,7 +20,7 @@ const MeasureModal = ({ navigation }) => {
 
   console.log(Plants)
   const plantElements = useMemo(() => {
-    return myPlants.map((elem, i) => (
+    return Plants.map((elem, i) => (
       <SelectPlantCard
         i={i}
         selected={selected}
@@ -29,7 +28,7 @@ const MeasureModal = ({ navigation }) => {
         plantObj={elem}
       />
     ));
-  }, [myPlants.length, selected]);
+  }, [selected]);
 
   return (
     <View style={styles.modal}>
@@ -46,15 +45,14 @@ const MeasureModal = ({ navigation }) => {
       </View>
       <Flex
         flexDirection="row"
-        paddingLeft="30px"
-        paddingRight="30px"
+        paddingLeft="40px"
+        paddingRight="65px"
         marginBottom="24px"
       >
         <AlertIcon />
         <View marginLeft="10px">
           <Text style={styles.alert}>
-            Place the device in the plant before proceeding. The timer will take
-            measurements for 5 seconds once you press "Start".
+            Place the device in the plant before proceeding
           </Text>
         </View>
       </Flex>
@@ -69,13 +67,11 @@ const MeasureModal = ({ navigation }) => {
             navigation.goBack();
             // plantIndex is the index of the plant in the Plant Context
             navigation.navigate("LiveMeasure", {
-              plantName: myPlants[selected].commonName,
-              plantId: myPlants[selected].id,
-              plantIconId: myPlants[selected].iconId,
+              plantIndex: selected,
             });
           }}
         >
-          <Text style={styles.button}>Start</Text>
+          Start
         </Button>
       </Center>
     </View>
@@ -101,13 +97,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#B9422C",
     fontFamily: "SFProDisplay-Heavy",
-  },
-  button: {
-    fontWeight: "700",
-    fontFamily: "SFProDisplay-Bold",
-    fontStyle: "normal",
-    fontSize: "16",
-    color: "white",
   },
 });
 

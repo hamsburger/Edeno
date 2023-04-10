@@ -17,7 +17,7 @@ const TakePictureInstruction = ({ route, navigation }) => {
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [flashMode, setFlashMode] = useState("off");
 
-  let camera: Camera;
+  let camera;
 
   const __startCamera = async () => {
     const { status } = await Camera.requestPermissionsAsync();
@@ -84,7 +84,7 @@ const TakePictureInstruction = ({ route, navigation }) => {
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
       fontSize: 14,
-      color: "#432D1E"
+      color: "#432D1E",
       // lineHeight: "25%",
     },
     button: {

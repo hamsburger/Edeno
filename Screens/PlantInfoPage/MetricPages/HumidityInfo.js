@@ -9,6 +9,7 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
+import { buildDataset } from "../../../Functions/utilities";
 
 const HumidityInfo = ({ route, navigation }) => {
   const { humidityData, plantInfo } = route.params;
@@ -20,7 +21,8 @@ const HumidityInfo = ({ route, navigation }) => {
     humidityData.measurements[humidityData.measurements.length - 1];
   const lastMeasurementDate =
     humidityData.dates[humidityData.dates.length - 1].seconds;
-
+  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
+    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
@@ -36,28 +38,12 @@ const HumidityInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(humidityData.dates),
-    datasets: [
-      {
-        data: humidityData.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(humidityData.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(humidityData.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
-    legend: ["Your Measurements", "Ideal Range"],
+    datasets: buildDataset(humidityData.measurements, lowerIdeal, upperIdeal),
+    legend: ["Your Measurements", typeOfRange],
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -171,7 +157,7 @@ const HumidityInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 

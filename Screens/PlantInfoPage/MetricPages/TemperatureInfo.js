@@ -9,6 +9,7 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
+import { buildDataset } from "../../../Functions/utilities";
 
 const TemperatureInfo = ({ route, navigation }) => {
   const { temperatureData, plantInfo } = route.params;
@@ -20,7 +21,8 @@ const TemperatureInfo = ({ route, navigation }) => {
     temperatureData.measurements[temperatureData.measurements.length - 1];
   const lastMeasurementDate =
     temperatureData.dates[temperatureData.dates.length - 1].seconds;
-
+  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
+    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
@@ -36,28 +38,12 @@ const TemperatureInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(temperatureData.dates),
-    datasets: [
-      {
-        data: temperatureData.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(temperatureData.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(temperatureData.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
-    legend: ["Your Measurements", "Ideal Range"],
+    datasets: buildDataset(temperatureData.measurements, lowerIdeal, upperIdeal),
+    legend: ["Your Measurements", typeOfRange],
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -176,7 +162,7 @@ const TemperatureInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 

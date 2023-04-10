@@ -1,6 +1,5 @@
 import { React, useState, createContext, useEffect } from "react";
 import { Box, Button, Center } from "native-base";
-import { PlantId_Fetch } from "./PlantId_Fetch";
 import { AddPlantHeader } from "./Components/AddPlantHeader";
 import { Icon_Selection } from "./Icon_Selection";
 import { Add_Confirmation } from "./Add_Confirmation";

@@ -10,7 +10,7 @@ import {
   Button,
 } from "native-base";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from "../../hooks/Contexts/Auth_Context";
+import { useAuth } from "../../Hooks/Contexts/Auth_Context";
 import { styles } from "./LoginStyles";
 import { TouchableOpacity, StatusBar } from "react-native";
 import HidePassword from "../../assets/icons/visibility_off.svg";

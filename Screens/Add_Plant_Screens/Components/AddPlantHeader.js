@@ -1,7 +1,7 @@
 import { React, useContext, useEffect, useState } from "react";
 import { Box, Text, Center, Button } from "native-base";
 import { ProgressSlider } from "../../../Components/Progress_Slider";
-import { useRouteContext } from "../../../hooks/Contexts/Route_Context";
+import { useRouteContext } from "../../../Hooks/Contexts/Route_Context";
 
 let isResetFetch = false;
 

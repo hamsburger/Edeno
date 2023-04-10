@@ -9,6 +9,7 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
+import { buildDataset } from "../../../Functions/utilities";
 
 const SoilMoistureInfo = ({ route, navigation }) => {
   const { soilMoistureData, plantInfo } = route.params;
@@ -20,6 +21,9 @@ const SoilMoistureInfo = ({ route, navigation }) => {
     soilMoistureData.measurements[soilMoistureData.measurements.length - 1];
   const lastMeasurementDate =
     soilMoistureData.dates[soilMoistureData.dates.length - 1].seconds;
+
+  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
+  (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
 
   // returns:
   // 1 if above ideal pH
@@ -36,28 +40,12 @@ const SoilMoistureInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(soilMoistureData.dates),
-    datasets: [
-      {
-        data: soilMoistureData.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(soilMoistureData.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(soilMoistureData.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
-    legend: ["Your Measurements", "Ideal Range"],
+    datasets: buildDataset(soilMoistureData.measurements, lowerIdeal, upperIdeal),
+    legend: ["Your Measurements", typeOfRange],
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -173,7 +161,7 @@ const SoilMoistureInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -234,6 +222,12 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 15,
     color: "#432D1E",
+  },
+  prompt: {
+    fontFamily: "SFProDisplay-RegularItalic",
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#597F51",
   },
 });
 

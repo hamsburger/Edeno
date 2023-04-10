@@ -1,11 +1,11 @@
 import { React, useState, createContext, useEffect } from "react";
-import { Box, Button, Center } from "native-base";
-import { PlantId_Fetch_Manual } from "./PlantId_Fetch_Manual";
+import { Box, Button, Center, Text } from "native-base";
+import { StyleSheet } from "react-native";
 import { AddPlantHeader } from "./Components/AddPlantHeader";
 import { Icon_Selection } from "./Icon_Selection";
 import { Add_Nickname } from "./Add_Nickname"
 import { Add_Confirmation } from "./Add_Confirmation";
-import { RouteProvider } from "../../hooks/Contexts/Route_Context";
+import { RouteProvider } from "../../Hooks/Contexts/Route_Context";
 
 const AddPlantLandingPage = ({ route, navigation }) => {
   return (
@@ -22,7 +22,7 @@ const AddPlantLandingPage = ({ route, navigation }) => {
         <Button
           bg="transparent"
           _text={{
-            fontSize: "19px",
+            fontSize: 19,
             color: "red.700",
           }}
           onPress={() => {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "16",
+    fontSize: 16,
     color: "white",
   },
 });

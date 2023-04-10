@@ -9,8 +9,8 @@ import {
   Pressable,
   Button,
 } from "native-base";
-import { useAuth } from "../../hooks/Contexts/Auth_Context";
-import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
+import { useAuth } from "../../Hooks/Contexts/Auth_Context";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import { getAuth, createUserWithEmailAndPassword  } from "firebase/auth";
 import { styles } from "./LoginStyles";
 import { TouchableOpacity, StatusBar } from "react-native";

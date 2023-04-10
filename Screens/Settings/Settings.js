@@ -10,7 +10,7 @@ import {
   Button
 } from 'native-base'
 import { Header } from "../../Components/Header/Header";
-import { useAuth } from "../../hooks/Contexts/Auth_Context";
+import { useAuth } from "../../Hooks/Contexts/Auth_Context";
 import { getAuth, signOut } from "firebase/auth";
 
 const Settings = (props) => {

@@ -1,9 +1,10 @@
 import { React, useState, createContext, useEffect } from "react";
 import { Box, Button, Center } from "native-base";
-import { PlantId_Fetch } from "./PlantId_Fetch";
+import { PlantId_Fetch_Manual } from "./PlantId_Fetch_Manual";
 import { AddPlantHeader } from "./Components/AddPlantHeader";
 import { Icon_Selection } from "./Icon_Selection";
 import { Add_Confirmation } from "./Add_Confirmation";
+import { Add_Nickname } from "./Add_Nickname";
 import { RouteProvider } from "../../Hooks/Contexts/Route_Context";
 import { PlantClassification } from "./PlantClassification";
 
@@ -28,7 +29,7 @@ export function AddPlantManually(props) {
               onPress={() =>
                 progress === 4
                   ? navigation.navigate("Home")
-                  : navigation.navigate("AddPlantLandingPage", {
+                  : navigation.navigate("AddPlantManually", {
                       progress: progress + 1,
                     })
               }

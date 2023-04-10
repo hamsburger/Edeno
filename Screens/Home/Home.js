@@ -1,9 +1,9 @@
 import { React, useState, useEffect, useCallback } from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { Header } from "../../Components/Header/Header";
-import { usePlants } from "../../hooks/Contexts/Plant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { PlantCard } from "../../Components/PlantCard";
-import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import { getAuth } from 'firebase/auth';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 
@@ -31,7 +31,7 @@ const Home = ({ navigation }) => {
       useCallback(() => {
         auth.currentUser.getIdToken()
         .then((idToken) => {
-            fetch(`http://100.67.1.246:8080/get-plants-from-user-id?token=${idToken}`, {
+            fetch(`http://192.168.2.11:8080/get-plants-from-user-id?token=${idToken}`, {
               method: "get"
             })
             .then(response => response.json())
@@ -66,10 +66,10 @@ const Home = ({ navigation }) => {
             paddingRight={22}
             bg="#FBFBFB"
           >
-            {myPlants.map((elem) => (
+            {Plants.map((elem) => (
               <PlantCard plantInfo={elem} navigation={navigation} />
             ))}
-          </View>
+          </View> 
         )}
       </ScrollView>
   );

@@ -1,27 +1,94 @@
 {
-    "humidityData": {
-        "humidityDescriptions": "Mesic\nDry Mesic\nDry",
-        "lowerIdeal": 40,
-        "upperIdeal": 60
+    "plantName": "Bob (Aloe Vera)",
+    "lastMeasuredDate": {
+        "seconds": 1681130635.0,
+        "nanoseconds": 0
     },
-    "lightIntensityData": {
-        "lightDescriptions": "Full Sun\nFull Sun to Partial Shade",
-        "lowerIdeal": 40000,
-        "upperIdeal": 130000
+    "addedDate": 1680908084,
+    "lastWatered": {
+        "dates": [],
+        "notes": []
     },
-    "link": "https://garden.org/plants/view/71460/Aloe-Vera-Aloe-vera/",
     "phData": {
         "lowerIdeal": 5.6,
-        "pHDescriptions": "Moderately acid\nSlightly acid\nNeutral\nSlightly alkaline",
-        "upperIdeal": 7.8
+        "upperIdeal": 7.8,
+        "dates": [
+            {
+                "seconds": 1681130635.0,
+                "nanoseconds": 0
+            }
+        ],
+        "npkMeasurements": [
+            "0-2-1",
+            "4-2-1",
+            "4-2-1",
+            "4-3-1",
+            "4-2-1",
+            "4-2-1"
+        ],
+        "measurements": [
+            "4"
+        ],
+        "pHDescriptions": "Moderately acid\nSlightly acid\nNeutral\nSlightly alkaline"
     },
-    "scientificName": "aloeVera",
+    "lastFertilized": {
+        "dates": [],
+        "notes": []
+    },
     "soilMoistureData": {
-        "lowerIdeal": 10
+        "lowerIdeal": 10,
+        "upperIdeal": null,
+        "dates": [
+            {
+                "seconds": 1681130635.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "6"
+        ]
+    },
+    "humidityData": {
+        "lowerIdeal": 40,
+        "upperIdeal": 60,
+        "dates": [
+            {
+                "seconds": 1681130635.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "-24"
+        ],
+        "humidityDescriptions": "Mesic\nDry Mesic\nDry"
     },
     "temperatureData": {
         "lowerIdeal": 20,
-        "temperatureDescriptions": "Zone 9a",
-        "upperIdeal": 25
-    }
+        "upperIdeal": 25,
+        "dates": [
+            {
+                "seconds": 1681130635.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "-25"
+        ],
+        "temperatureDescriptions": "Zone 9a"
+    },
+    "lightIntensityData": {
+        "lowerIdeal": 40000,
+        "upperIdeal": 130000,
+        "dates": [
+            {
+                "seconds": 1681130635.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "46"
+        ],
+        "lightDescriptions": "Full Sun\nFull Sun to Partial Shade"
+    },
+    "plantId": "-NSfABc6ofgyZS49u4L_"
 }

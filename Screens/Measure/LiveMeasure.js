@@ -1,37 +1,66 @@
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Image, Animated } from "react-native";
 import { View, Text, Box, Button, Flex, Center } from "native-base";
-import { usePlants } from "../../hooks/Contexts/Plant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
-import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import { getAuth } from "firebase/auth";
 import LiveIcon from "../../assets/icons/live-circle.svg";
+import { toCamelCase } from "../../Functions/utilities";
 
 const LiveMeasure = ({ route, navigation }) => {
-  const { plantName, plantId, plantIconId } = route.params;
+  const { plantIndex } = route.params;
   const [readings, setReadings] = useState({});
+  const [cannotContinue, setContinue] = useState(true);
+  const [Plants, setPlants] = usePlants();
   const db = useFirebaseDatabase();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const auth = getAuth();
 
-  function date_to_string_with_milliseconds(date){
-    let date_str = date.toString() 
-    let date_without_milliseconds = new Date(date_str) // truncated date since milliseconds are not included
-    let milliseconds_delta = date - date_without_milliseconds
-    let date_str_with_milliseconds = date_str.replace(/(^.*:\d\d:\d\d)(.*$)/, `$1:${milliseconds_delta}$2`)
-    return date_str_with_milliseconds
-  }
+  // function date_to_string_with_milliseconds(date){
+  //   let date_str = date.toString() 
+  //   let date_without_milliseconds = new Date(date_str) // truncated date since milliseconds are not included
+  //   let milliseconds_delta = date - date_without_milliseconds
+  //   let date_str_with_milliseconds = date_str.replace(/(^.*:\d\d:\d\d)(.*$)/, `$1:${milliseconds_delta}$2`)
+  //   return date_str_with_milliseconds
+  // }
+
+  console.log(Plants)
 
   const [countdown, setCountdown] = useState(5000);
   const [timerId, setTimerId] = useState(null);
-  const [lastFetchedMeasurement, setLastFetchedMeasurement] = useState(null);
 
-  const fetchData = () => {
-    // fetch data from the database and save it
-    console.log("Fetching data...");
-    // setLastFetchedMeasurement(apiResponse)
-  };
+  const checkIfReadingsOutOfRange = (plantReadings) => {
+    db.getFetchPromise(`recommendations/NGA/${toCamelCase(Plants[plantIndex]["commonName"])}`).then((snapshot) => {
+      dictData = snapshot.val();
+      humidityData = dictData["humidityData"];
+      lightData = dictData["lightIntensityData"];
+      phData = dictData["phData"];
+      soilMoistureData = dictData["soilMoistureData"];
+      temperatureData = dictData["temperatureData"];
 
+      if (
+        ("lowerIdeal" in phData) && phData["lowerIdeal"] > plantReadings.PH || 
+        ("upperIdeal" in phData) && plantReadings.PH > phData["upperIdeal"] || 
+        ("lowerIdeal" in humidityData) && humidityData["lowerIdeal"] > plantReadings.Humidity || 
+        ("upperIdeal" in humidityData) && plantReadings.Humidity > humidityData["upperIdeal"] || 
+        ("lowerIdeal" in lightData) && lightData["lowerIdeal"] > plantReadings.Light || 
+        ("upperIdeal" in lightData) && plantReadings.Light > lightData["upperIdeal"] ||
+        ("lowerIdeal" in soilMoistureData) && soilMoistureData["lowerIdeal"] > plantReadings.Moisture || 
+        ("upperIdeal" in soilMoistureData) && plantReadings.Moisture > soilMoistureData["upperIdeal"] ||
+        ("lowerIdeal" in temperatureData) && temperatureData["lowerIdeal"] > plantReadings.Temp || 
+        ("upperIdeal" in temperatureData) && plantReadings.Temp > temperatureData["upperIdeal"]
+      ){
+        setReadings((prev) => ({...prev, 
+                              "isOutOfRange" : true}))
+      } else {
+        setReadings((prev) => ({...prev, 
+          "isOutOfRange" : false}))
+      }
+      setContinue(false);
+
+    }).catch(err => console.log(err));
+  }
   const startTimer = () => {
     setTimerId(
       setInterval(() => {
@@ -47,12 +76,12 @@ const LiveMeasure = ({ route, navigation }) => {
   };
 
   useEffect(() => {
+    
+  }, [readings]);
+
+  useEffect(() => {
     // start timer
     startTimer(); // Start the timer on initial mount
-
-    db.listenForChildUpdate("readings", setReadings);
-
-
     // /* Get readings every two seconds */
     // const interval = setInterval(
     //   () =>
@@ -82,21 +111,18 @@ const LiveMeasure = ({ route, navigation }) => {
         }),
       ])
     ).start();
-
-    return () => {
-      // clearInterval(interval);
-      db.cleanListeners();
-    };
   }, []);
 
   useEffect(() => {
     if (timerId) {
-      fetchData();
+      db.listenForChildUpdate("readings", setReadings);
     }
   }, [timerId]);
 
   useEffect(() => {
     if (countdown === 0) {
+      db.cleanListeners()
+      checkIfReadingsOutOfRange(readings)
       resetTimer();
     }
   }, [countdown]);
@@ -121,7 +147,7 @@ const LiveMeasure = ({ route, navigation }) => {
         <Text style={styles.plant_name}>{Plants[plantIndex].nickName} ({Plants[plantIndex].commonName})</Text>
         <Image
           style={{ height: 144, width: 144, marginBottom: 46 }}
-          source={plant_icons[plantIconId]}
+          source={plant_icons[Plants[plantIndex]["iconId"]]}
         />
         <Flex flexDirection="row" alignItems="center">
           <Animated.View style={{ opacity: fadeAnim }}>
@@ -151,6 +177,11 @@ const LiveMeasure = ({ route, navigation }) => {
         </Flex>
       </View>
       <View marginTop={"40px"}>
+        {timerId ? (
+          <Text style={styles.continue_prompt}>{`Continue in ${
+            countdown / 1000
+          }...`}</Text>
+        ) : null}
         <Flex
           flexDirection={"column"}
           justifyContent={"center"}
@@ -160,7 +191,8 @@ const LiveMeasure = ({ route, navigation }) => {
           <Button
             minW="1/5"
             bg="secondary_green"
-            isDisabled={timerId}
+            isDisabled={cannotContinue}
+            opacity={timerId ? 0.6: 1}
             onPress={startTimer}
             marginBottom={"10px"}
           >
@@ -169,29 +201,22 @@ const LiveMeasure = ({ route, navigation }) => {
           <Button
             minW="1/5"
             bg="secondary_green"
-            isDisabled={timerId}
+            isDisabled={cannotContinue}
+            opacity={timerId ? 0.6: 1}
             onPress={() => {
               // persist whatever is in lastFetchedMeasurement to db in SavedReadings
               db.pushChildToRealTimeDatabase(`users/${auth.currentUser.uid}/plants/` +
                                              `${Plants[plantIndex]["plantId"]}/readings/SavedReadings`, readings)
               navigation.navigate("Home");
-              
-
-
-              navigation.navigate("PlantInfoPage", {
-                plantId: plantId,
-                plantIconId: plantIconId,
-              });
+              navigation.navigate("PlantInfoPage",
+                { "plantInfo": Plants[plantIndex] }
+              );
             }}
           >
             <Text style={styles.button}>Save & Continue</Text>
           </Button>
         </Flex>
-        {timerId ? (
-          <Text style={styles.continue_prompt}>{`Continue in ${
-            countdown / 1000
-          }...`}</Text>
-        ) : null}
+       
       </View>
     </View>
   );
@@ -234,7 +259,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "16",
+    fontSize: 16,
     color: "white",
   },
 });

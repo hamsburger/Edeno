@@ -7,34 +7,34 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontFamily: "SFProDisplay-Regular",
     fontStyle: "normal",
-    fontSize: "14px",
+    fontSize: 14,
   },
   sectionTitle: {
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "17",
+    fontSize: 17,
     textAlign: "center",
   },
   ndviClass: {
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "14px",
+    fontSize: 14,
     textAlign: "left",
   },
   button: {
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "16",
+    fontSize: 16,
     color: "white",
   },
   skip: {
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "16",
+    fontSize: 16,
     color: "#597F51",
   },
 });
@@ -53,7 +53,7 @@ const NDVIInstructions = ({ route, navigation }) => {
         <Button
           bg="transparent"
           _text={{
-            fontSize: "19px",
+            fontSize: 19,
             color: "#B9422C",
           }}
           onPress={() => {

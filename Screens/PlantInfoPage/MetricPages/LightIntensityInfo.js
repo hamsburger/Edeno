@@ -9,7 +9,7 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
-
+import { buildDataset } from "../../../Functions/utilities";
 const LightIntensityInfo = ({ route, navigation }) => {
   const { lightIntensityData, plantInfo } = route.params;
 
@@ -20,7 +20,8 @@ const LightIntensityInfo = ({ route, navigation }) => {
     lightIntensityData.measurements[lightIntensityData.measurements.length - 1];
   const lastMeasurementDate =
     lightIntensityData.dates[lightIntensityData.dates.length - 1].seconds;
-
+  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
+    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
@@ -36,28 +37,12 @@ const LightIntensityInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(lightIntensityData.dates),
-    datasets: [
-      {
-        data: lightIntensityData.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(lightIntensityData.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(lightIntensityData.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
+    datasets: buildDataset(lightIntensityData.measurements, lowerIdeal, upperIdeal),
     legend: ["Your Measurements", "Ideal Range"],
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -173,7 +158,7 @@ const LightIntensityInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -15,12 +15,12 @@ import {
 } from "native-base";
 import {
   usePlant,
-} from "../../hooks/Contexts/AddPlant_Context";
-import { usePlants } from "../../hooks/Contexts/Plant_Context";
+} from "../../Hooks/Contexts/AddPlant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { getAuth } from "firebase/auth";
-import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 // import { plant_icons } from "../../Constants/StaticPlantIconImages";
-import { toCamelCase } from '../../functions/utilities';
+import { toCamelCase } from '../../Functions/utilities';
 
 export function PlantId_Fetch_Manual(props) {
   // const [hasSearched, setSearched] = useState(false);

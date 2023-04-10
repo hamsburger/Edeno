@@ -9,6 +9,7 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
+import { buildDataset } from "../../../Functions/utilities";
 
 const PHInfo = ({ route, navigation }) => {
   const { phDataExternal, plantInfo } = route.params;
@@ -22,7 +23,8 @@ const PHInfo = ({ route, navigation }) => {
     phDataExternal.measurements[phDataExternal.measurements.length - 1];
   const lastMeasurementDate =
     phDataExternal.dates[phDataExternal.dates.length - 1].seconds;
-
+  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
+    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
@@ -40,24 +42,8 @@ const PHInfo = ({ route, navigation }) => {
 
   const data = {
     labels: dates,
-    datasets: [
-      {
-        data: phDataExternal.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(phDataExternal.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(phDataExternal.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
-    legend: ["Your Measurements", "Ideal Range"],
+    datasets: buildDataset(phDataExternal.measurements, lowerIdeal, upperIdeal),
+    legend: ["Your Measurements", typeOfRange],
   };
 
   const getNPKValue = ({ index }) => {
@@ -67,7 +53,7 @@ const PHInfo = ({ route, navigation }) => {
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -185,7 +171,7 @@ const PHInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -249,8 +235,8 @@ const styles = StyleSheet.create({
   },
   npk_prompt: {
     fontFamily: "SFProDisplay-RegularItalic",
-    fontSize: "15",
-    fontWeight: 700,
+    fontSize: 15,
+    fontWeight: "700",
     color: "#597F51",
   },
 });

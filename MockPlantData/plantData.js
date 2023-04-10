@@ -3,16 +3,16 @@ export const plantData = [
     id: 1,
     plantName: "Anthurium",
     lastMeasuredDate: -1,
-    addedDate: 1680908084,
+    addedDate: 1680908084, 
     lastWatered: {
-      dates: [],
+      dates: [], 
       notes: [],
     },
     phData: {
       lowerIdeal: "6",
       upperIdeal: "7",
-      dates: [],
-      measurements: [],
+      dates: [], // unix timestamp
+      measurements: [], // loop comprehension
     },
     lastFertilized: {
       dates: [],

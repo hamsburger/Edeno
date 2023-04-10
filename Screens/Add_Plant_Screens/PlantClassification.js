@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontFamily: "SFProDisplay",
     fontStyle: "normal",
-    fontSize: "18px",
+    fontSize: 18,
     textAlign: "center",
   },
   plantName: {
@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontFamily: "SFProDisplay",
     fontStyle: "normal",
-    fontSize: "16px",
+    fontSize: 16,
     textAlign: "center",
   },
   button: {
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "16",
+    fontSize: 16,
     color: "white",
   },
 });

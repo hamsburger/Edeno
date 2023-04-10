@@ -1,10 +1,10 @@
 import { React, useEffect } from "react";
 import { Image } from "react-native";
 import { Text, Center, Box } from "native-base";
-import { usePlant } from "../../hooks/Contexts/AddPlant_Context";
-import { usePlants } from "../../hooks/Contexts/Plant_Context";
+import { usePlant } from "../../Hooks/Contexts/AddPlant_Context";
+import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
-import { useFirebaseDatabase } from "../../hooks/Contexts/Firebase_Context";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import { getAuth } from "firebase/auth";
 
 export function Add_Confirmation({ setContinue }) {

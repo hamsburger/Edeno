@@ -25,13 +25,13 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-function date_to_string_with_milliseconds(date){
-    let date_str = date.toString() 
-    let date_without_milliseconds = new Date(date_str) // truncated date since milliseconds are not included
-    let milliseconds_delta = date - date_without_milliseconds
-    let date_str_with_milliseconds = date_str.replace(/(^.*:\d\d:\d\d)(.*$)/, `$1:${milliseconds_delta}$2`)
-    return date_str_with_milliseconds
-  }
+// function date_to_string_with_milliseconds(date){
+//     let date_str = date.toISOString() 
+//     let date_without_milliseconds = new Date(date_str) // truncated date since milliseconds are not included
+//     let milliseconds_delta = date - date_without_milliseconds
+//     let date_str_with_milliseconds = date_str.replace(/(^.*:\d\d:\d\d)(.*$)/, `$1:${milliseconds_delta}000$2`)
+//     return date_str_with_milliseconds
+//   }
 
 
 // Database Class for Firebase
@@ -67,16 +67,32 @@ class Database {
 
         // Initially receive only up to 1 child_added event
         const databaseRef = query(ref(this.database, path), limitToLast(1));
-
+        let count = 0;
         onChildAdded(databaseRef, (snapshot) => {
             /**
              * Function Name: onChildAdded
              * data: I believe this data returns the most recently updated child.
              */
-            let logData = (`${snapshot.key} : ${date_to_string_with_milliseconds(new Date(Date.now())).toString()}`);
             const data = snapshot.val();
-            data["dateTime"] = date_to_string_with_milliseconds(new Date(Date.now())).toString();
+            let d = new Date(Date.now())
+            let timezone_offset_in_minutes = d.getTimezoneOffset();
+            let year = `${d.getFullYear()}`.padStart(4, '0');
+            let month = `${d.getMonth() + 1}`.padStart(2, '0');
+            let day = `${d.getDate()}`.padStart(2, '0');
+            let hour = `${d.getHours()}`.padStart(2, '0');
+            let minutes = `${d.getMinutes()}`.padStart(2, '0');
+            let seconds = `${d.getSeconds()}`.padStart(2, '0');
+
+            let sign = (timezone_offset_in_minutes > 0) ? "-" : "+";
+            let timezone_offset_in_hours = `${+(timezone_offset_in_minutes / 60)}`.padStart(4, '0');
+
+            let datestring = year  + "-" + month + "-"  + day + " " +
+hour + ":" + minutes + ":" + seconds + ":" + d.getMilliseconds() + "000" + `UTC${sign}${timezone_offset_in_hours}`;
+            
+            data["dateTime"] = datestring;
             setData(data);
+
+            
         });
         
         this.listeners.push(databaseRef);

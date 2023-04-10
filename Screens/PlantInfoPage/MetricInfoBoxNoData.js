@@ -6,39 +6,39 @@ import convertDateToMDYHM from "../../utilities/convertDateToMDYHM";
 const MetricInfoBoxNoData = ({ title }) => {
   const styles = StyleSheet.create({
     sectionTitle: {
-      fontWeight: 700,
+      fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "15",
+      fontSize: 15,
     },
     date: {
-      fontWeight: 510,
+      fontWeight: "510",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "14",
+      fontSize: 14,
       color: "#806B6B",
     },
     measurement: {
-      fontWeight: 700,
+      fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "28",
+      fontSize: 28,
       color: "#432D1E",
-      lineHeight: "35px",
+      lineHeight: 35,
     },
     unit: {
-      fontWeight: 700,
+      fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "18",
+      fontSize: 18,
       color: "#432D1E",
-      lineHeight: "40px",
+      lineHeight: 40,
     },
     indicatorText: {
-      fontWeight: 700,
+      fontWeight: "700",
       fontFamily: "SFProDisplay-Bold",
       fontStyle: "normal",
-      fontSize: "17",
+      fontSize: 17,
       color: "#FFFFFF",
     },
   });
@@ -47,8 +47,8 @@ const MetricInfoBoxNoData = ({ title }) => {
     <View
       style={{
         borderColor: "#C6C7C4",
-        borderWidth: "2px",
-        borderRadius: "8px",
+        borderWidth: 2,
+        borderRadius: 8,
       }}
       paddingLeft="20px"
       paddingRight="20px"
