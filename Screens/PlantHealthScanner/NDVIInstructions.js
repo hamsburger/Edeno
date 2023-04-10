@@ -1,6 +1,7 @@
 import React from "react";
 import { Flex, Text, View, Box, Button, Center } from "native-base";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 
 const styles = StyleSheet.create({
   sectionDesc: {
@@ -40,7 +41,8 @@ const styles = StyleSheet.create({
 });
 
 const NDVIInstructions = ({ route, navigation }) => {
-  const { photo, plantName } = route.params;
+  const { photo, plantName, plantInfo } = route.params;
+  const db = useFirebaseDatabase();
   return (
     <Flex
       justifyContent="center"
@@ -149,10 +151,11 @@ const NDVIInstructions = ({ route, navigation }) => {
             onPress={() => {
               // TURN SENSOR ON
               // TAKE NDVI MEASUREMENTS
-
+              db.pushWithKeyRealTimeDatabase("", "NDVIon", true);
               navigation.navigate("NDVILiveMeasure", {
                 plantName: plantName,
                 photo: photo,
+                plantInfo: plantInfo,
               });
             }}
           >

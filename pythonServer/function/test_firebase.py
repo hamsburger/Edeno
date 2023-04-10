@@ -13,21 +13,16 @@ firebase_obj = FirebaseManager()
 json_input = None
 
 def test_recommendation_req():
-    with open("./PipelineObjects/plant_id.json") as f:
-        json_input = json.load(f)
+    plants = [("jade plant", "jade plant")]
+    
+    for commonName, searchName in plants:
+        response = requests.post(
+            f"http://localhost:8040/scrape-nga?searchName={searchName}&commonName={commonName}",
+            # "https://python-http-plant-recommendation-container-63od3iyczq-uk.a.run.app/get", 
+        )
 
-
-    response = requests.post(
-        "http://127.0.0.1:5000/get-plant-information-by-plant-id",
-        # "https://python-http-plant-recommendation-container-63od3iyczq-uk.a.run.app/get", 
-        headers={
-        "Content-Type" : "application/json",
-    }, data=json.dumps(json_input))
-
-    print(response.content)
-
-    with open("./PipelineObjects/plant_recs_prod.json", mode="w") as f:
-        json.dump(response.json(), f, indent=4)
+        # with open("./PipelineObjects/plant_recs_prod.json", mode="w") as f:
+        #     json.dump(response.json(), f, indent=4)
 
 
 def test_measurement_interval(number_of_sends):

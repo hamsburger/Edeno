@@ -83,7 +83,13 @@ const LiveMeasure = ({ route, navigation }) => {
     setCountdown(5000);
   };
 
+<<<<<<< HEAD
   useEffect(() => {}, [readings]);
+=======
+  // useEffect(() => {
+    
+  // }, [readings]);
+>>>>>>> e53ea3f (Scraping Done)
 
   useEffect(() => {
     // start timer

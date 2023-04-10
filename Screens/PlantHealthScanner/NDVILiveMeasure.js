@@ -1,6 +1,8 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { Flex, Text, View, Box, Button, Center } from "native-base";
 import { StyleSheet } from "react-native";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
+import { getAuth } from "firebase/auth";
 
 const styles = StyleSheet.create({
   sectionDesc: {
@@ -27,7 +29,15 @@ const styles = StyleSheet.create({
 });
 
 const NDVILiveMeasure = ({ route, navigation }) => {
-  const { plantName, photo } = route.params;
+  const auth = getAuth();
+  const db = useFirebaseDatabase();
+  const [NDVIReadings, setNDVIReadings] = useState({})
+  
+  useEffect(() => {
+    db.listenForChildUpdate("NDVIReadings", setNDVIReadings);
+  }, [])
+
+  const { plantName, photo, plantInfo } = route.params;
   return (
     <Flex
       justifyContent="center"
@@ -69,11 +79,14 @@ const NDVILiveMeasure = ({ route, navigation }) => {
             bg="secondary_green"
             onPress={() => {
               // STOP SENSOR
-
+              db.pushWithKeyRealTimeDatabase("", "NDVIon", false); 
+              let save_reading_path = `users/${auth.currentUser.uid}/plants/${plantInfo.plantId}/readings/NDVIReadings`
+              db.pushChildToRealTimeDatabase(save_reading_path, NDVIReadings);
               navigation.navigate("Results", {
                 showNDVI: true,
                 photo: photo,
                 plantName: plantName,
+                NDVIReadings: NDVIReadings,
               });
             }}
           >

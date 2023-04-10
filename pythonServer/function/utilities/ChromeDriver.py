@@ -114,7 +114,6 @@ class ChromeDriver:
                     cell = table_row.find_element(By.CSS_SELECTOR, "td:nth-child(2)")
                     return postProcessor(cell)
                 except (TimeoutException, Exception) as e:
-                    print(e)
                     return None
                         
         # Find Sunlight Information
@@ -125,9 +124,11 @@ class ChromeDriver:
         water_cell_post_processor = lambda cell: '\n'.join([text.strip() for text in cell.text.split('\n')])
         water_information = get_plant_cell(water_cell_post_processor, [By.XPATH, "//tr[contains(., 'Water Preferences')]"])
 
+        
         if water_information is None:
-            water_information = get_plant_cell(lambda cell: cell, [By.XPATH, "//tr[contains(., 'Suitable Locations')]"])
-            if water_information.lower().includes("xerisca"):
+            water_information = get_plant_cell(lambda cell: cell.text, [By.XPATH, "//tr[contains(., 'Suitable Locations')]"])
+            print(water_information)
+            if "xerisca" in water_information.lower():
                 water_information = "dry"
             
         # Find pH cell
@@ -148,7 +149,7 @@ class ChromeDriver:
                 min_pH = min(pH_range_array)
                 return (all_pH_descriptors, max_pH, min_pH)
             except Exception as e:
-                print(e)
+                pass
 
         pH_information = get_plant_cell(pH_postProcessor, [By.XPATH, "//tr[contains(., 'Soil pH Preferences')]"])
         all_pH_descriptors = None if pH_information is None else pH_information[0] 
@@ -209,9 +210,9 @@ class ChromeDriver:
                 EC.presence_of_element_located([By.CSS_SELECTOR, ".pretty-table tbody"])
             )
         except TimeoutException as e:
-            html = self.driver.page_source
-            pprint(html)
-            print(e)
+            pass
+            # pprint(html)
+            # print(e)
             
 
         
@@ -225,22 +226,34 @@ class ChromeDriver:
         water_information, sunlight_information, all_pH_information, \
         temperature_information = self.getPlantInformation(a_link)    
 
+        # with open("rand.txt", mode="w+", encoding="utf-8") as f:
+        #     f.write("=========================================================")
+        #     f.write(f"Plant common name: {plant_common_name}\n")
+        #     f.write(f"Water Information: {water_information}\n")
+        #     f.write(f"Sunlight Information {sunlight_information}\n")
+        #     f.write(f"Temperature Information {temperature_information}\n")
+        #     f.write(f"All PH Information {all_pH_information}\n")
+
         all_pH_descriptors, max_pH, min_pH = all_pH_information
+
+        temperature_information_for_numerical_prcessing = None
         if temperature_information:    
             temperature_information_for_numerical_prcessing = \
                 temperature_information.lower().replace("zone", "")
 
-        self.firebaseHandler.set_reference("recommendations/NGA")        
+        self.firebaseHandler.set_reference("recommendations/NGA")   
+        light_requirements = deriveNumericRequirements("light", sunlight_information)   
+        water_requirements = deriveNumericRequirements("humidity", water_information)
+        temperature_requirements = deriveNumericRequirements("hardiness", 
+                                            temperature_information_for_numerical_prcessing)
         plant_object = { 
             "scientificName" : camelCase(plant_scientific_name),    
             "link" : a_link,
             "lightIntensityData" : {
                 "lightDescriptions" : sunlight_information,
-                **deriveNumericRequirements("light", sunlight_information)
             },
             "humidityData" : {
                 "humidityDescriptions" : water_information,
-                **deriveNumericRequirements("humidity", water_information)
             },
             "phData" : {
                 "pHDescriptions" : all_pH_descriptors,
@@ -249,15 +262,23 @@ class ChromeDriver:
             },
             "temperatureData" : {
                 "temperatureDescriptions" : temperature_information,
-                **deriveNumericRequirements("hardiness", 
-                                            temperature_information_for_numerical_prcessing)
-                
             }
         }            
-        ## Saved to update user plant's garden.org name
-        plant_object["gardenOrgCommonName"] = plant_common_name
+
+        if water_requirements:
+            plant_object["humidityData"].update(water_requirements)
+        
+        if light_requirements:
+            plant_object["lightIntensityData"].update(light_requirements)
+        
+        if temperature_requirements:
+            plant_object["temperatureData"].update(temperature_requirements)
+
+        # ## Saved to update user plant's garden.org name
+        # plant_object["gardenOrgCommonName"] = plant_common_name
         
         return plant_object
+        # return {}
             
 
 

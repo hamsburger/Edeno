@@ -7,7 +7,7 @@ import {
 } from "../../MockPlantData/healthAssessmentData";
 
 const Results = ({ route, navigation }) => {
-  const { showNDVI, photo, plantName } = route.params;
+  const { showNDVI, photo, plantName, NDVIReadings } = route.params;
   const [ndviResult, setNDVIResult] = useState({});
   const [diseaseResult, setDiseaseResult] = useState({});
 
@@ -44,11 +44,9 @@ const Results = ({ route, navigation }) => {
     sendImage();
 
     // if showNDVI = true, get latest NDVI results
-
-    // setDiseaseResult(diseaseData[2]);
-    showNDVI ? setNDVIResult(NDVIAssessmentData[2]) : null;
   }, [Object.keys(ndviResult), Object.keys(diseaseResult)]);
 
+  console.log(ndviResult)
   return (
     <ScrollView>
       <Box
@@ -115,12 +113,16 @@ const Results = ({ route, navigation }) => {
             </Text>
             <Flex marginY={"15px"}>
               <Text style={styles.yourIndex}>Your Index:</Text>
-              <Text style={styles.indexNum}>0.70</Text>
+              <Text style={styles.indexNum}>{NDVIReadings.index.toFixed(1)}</Text>
             </Flex>
             <Text style={[styles.normalText, styles.center]}>
               This indicates a{" "}
-              <Text style={styles.classificationColor}>Healthy Plant</Text>.
-              Yay!
+              {(NDVIReadings.value === "healthy") && 
+                <Text style={styles.classificationColor}>a{" "}Healthy Plant. {":)"}</Text> || 
+                <Text color="red.700" style={{fontFamily: "SFProDisplay-Bold"}}>an Unhealthy Plant. {":("}</Text>  
+              }
+              
+              
             </Text>
           </View>
         ) : null}

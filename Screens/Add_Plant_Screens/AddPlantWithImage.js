@@ -12,6 +12,7 @@ export function AddPlantWithImage(props) {
   const [canContinue, setContinue] = useState(false);
   const progress = !route.params.progress ? 1 : route.params.progress;
   const photo = route.params.photo;
+  console.log(photo)
 
   return (
     <RouteProvider route={route} navigation={navigation}>

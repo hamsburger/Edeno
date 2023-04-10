@@ -3,13 +3,14 @@ import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { View, Text, Box, Button, Flex } from "native-base";
 import { Camera } from "expo-camera";
 import { CameraPreview } from "./CameraPreview";
+import * as FileSystem from 'expo-file-system';
 import Check from "../../assets/icons/check_circle.svg";
 import Wrong from "../../assets/icons/wrong_circle.svg";
 import FlipCamera from "../../assets/icons/flip-camera.svg";
 import TakePicture from "../../assets/icons/take-picture.svg";
 
 const TakePictureInstruction = ({ route, navigation }) => {
-  const { type, plantName } = route.params;
+  const { type, plantName, plantInfo } = route.params;
 
   const [startCamera, setStartCamera] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -52,11 +53,15 @@ const TakePictureInstruction = ({ route, navigation }) => {
   const __savePhoto = () => {
     // TO DO: Send to back end to fetch results
     // picture stored in capturedImage state variable
+    FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 }).then((base64Image) => {
+        
+    });
 
     if (type == "plant-health-scanner") {
       navigation.navigate("NDVIInstructions", {
         photo: capturedImage,
         plantName: plantName,
+        plantInfo: plantInfo
       });
     } else {
       navigation.navigate("AddPlantWithImage", {

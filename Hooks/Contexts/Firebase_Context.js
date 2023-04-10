@@ -77,6 +77,7 @@ class Database {
             const data = snapshot.val();
             data["dateTime"] = getCurrentTime();
             setData(data);
+            
 
             
         });

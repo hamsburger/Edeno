@@ -347,6 +347,7 @@ const PlantInfoPage = ({ route, navigation }) => {
                 navigation.navigate("TakePictureInstruction", {
                   type: "plant-health-scanner",
                   plantName: plantRecs.plantName,
+                  plantInfo
                 });
               }}
             >
@@ -612,12 +613,12 @@ const PlantInfoPage = ({ route, navigation }) => {
               <MetricInfoBoxNoData title="Light Intensity" />
             )}
 
-            <MetricInfoBox
+            {(plantRecs.NDVI) && <MetricInfoBox
               title="NDVI"
-              date={1679678124}
-              measurement="Healthy"
+              date={plantRecs.NDVI.dateTime}
+              measurement={plantRecs.NDVI.value}
               unit=""
-            />
+            /> || <MetricInfoBoxNoData title="NDVI"></MetricInfoBoxNoData>}
           </View>
         )}
       </View>

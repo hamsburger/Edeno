@@ -34,24 +34,19 @@ def scrape_nga_data():
     INPUT: Plant.id object
     OUTPUT: JSON Recommendation Data for one plant, in addition to other possible common names
     '''
-    request_json = request.get_json(force=True)
-    if not request_json:
-        raise Exception("Request Object is not passed into Request correctly")
-    elif "plant_id_obj" not in request_json:
-        raise Exception("plant.id Request Object has invalid format")
+    searchName = request.args.get("searchName")
+    commonName = request.args.get("commonName") 
 
-    plant_details = request_json["plant_id_obj"]["plant_details"]
-    plant_common_name = plant_details["common_names"][0]
+    plant_common_name = commonName
     plant_common_name_cc = camelCase(plant_common_name)
-    plant_scientific_name = plant_details["scientific_name"].strip()
 
     # If not exists, Garden.org Scraper    
     newDriver = ChromeDriver()
-    NGA_dict = newDriver.scrapeNGA(plant_scientific_name)
+    NGA_dict = newDriver.scrapeNGA(searchName)
 
     # Attempt Genus only + Common Name search
-    taxonomy = camelCase(plant_details["taxonomy"]["genus"])
-    for elem in [plant_common_name_cc, taxonomy]:
+    # taxonomy = camelCase(plant_details["taxonomy"]["genus"])
+    for elem in [plant_common_name_cc]:
         rapi_reference = db.reference(f"recommendations/rapitest/{elem}")
         water_recommendation = rapi_reference.get()
         if water_recommendation:
@@ -64,21 +59,18 @@ def scrape_nga_data():
 
     # Add entry plant.id common name --> garden.org common name 
     # so that we do not have to rescrape plants identified by two users
-    firebase_handler.set_reference(
-        f"recommendations/plantIdToNGAMap"
-    )
+    # firebase_handler.set_reference(
+    #     f"recommendations/plantIdToNGAMap"
+    # )
 
-    garden_org_name = camelCase(NGA_dict["gardenOrgCommonName"])
-    firebase_handler.insert_data_on_key(
-        plant_common_name_cc, garden_org_name
-    )
-
-    NGA_dict.pop("gardenOrgCommonName")
-
+    # garden_org_name = camelCase(NGA_dict["gardenOrgCommonName"])
+    # firebase_handler.insert_data_on_key(
+    #     plant_common_name_cc, garden_org_name
+    # )
     ## Insert Actual Data
     firebase_handler.set_reference("recommendations/NGA")
-    firebase_handler.insert_data_on_key(garden_org_name, NGA_dict)          
-    return 
+    firebase_handler.insert_data_on_key(plant_common_name_cc, NGA_dict)          
+    return NGA_dict
 
 
 # 1. Check if recommendation data exist for specific plant/database key. If exists, we return that piece of data. If not, web scrape.
@@ -274,4 +266,4 @@ def get_user_plants():
     return restructured_plants
 
 if __name__ == "__main__":
-    app.run(debug=True, host="192.168.2.11", port=int(os.environ.get("PORT", 8080)))
+    app.run(debug=True, host="localhost", port=int(os.environ.get("PORT", 8040)))
