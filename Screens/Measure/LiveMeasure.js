@@ -116,12 +116,14 @@ const LiveMeasure = ({ route, navigation }) => {
   useEffect(() => {
     if (timerId) {
       db.listenForChildUpdate("readings", setReadings);
+      db.pushWithKeyRealTimeDatabase("", "isSensor", true)
     }
   }, [timerId]);
 
   useEffect(() => {
     if (countdown === 0) {
       db.cleanListeners()
+      db.pushWithKeyRealTimeDatabase("", "isSensor", false)
       checkIfReadingsOutOfRange(readings)
       resetTimer();
     }

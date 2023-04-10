@@ -6,6 +6,7 @@ import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
 import { getAuth } from "firebase/auth";
+import { getCurrentTime } from "../../Functions/utilities";
 
 export function Add_Confirmation({ setContinue }) {
   const [Plant, _] = usePlant();
@@ -15,7 +16,10 @@ export function Add_Confirmation({ setContinue }) {
 
   useEffect(() => {
     setContinue(true);
-    db.pushChildToRealTimeDatabase(`users/${auth.currentUser.uid}/plants`, Plant);
+    db.pushChildToRealTimeDatabase(`users/${auth.currentUser.uid}/plants`, {
+      ...Plant,
+      addedDate: getCurrentTime()
+    });
   }, []);
 
   return (

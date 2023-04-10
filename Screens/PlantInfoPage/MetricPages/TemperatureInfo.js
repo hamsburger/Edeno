@@ -28,9 +28,9 @@ const TemperatureInfo = ({ route, navigation }) => {
   // -1 if below ideal pH
   // 0 otherwise
   const checkPlantCondition = () => {
-    if (lastMeasurement > parseFloat(upperIdeal)) {
+    if ((upperIdeal) && lastMeasurement > parseFloat(upperIdeal)) {
       return 1;
-    } else if (lastMeasurement < parseFloat(lowerIdeal)) {
+    } else if ((lowerIdeal) && lastMeasurement < parseFloat(lowerIdeal)) {
       return -1;
     }
     return 0;

@@ -1,23 +1,15 @@
 {
-    "plantName": "Bob (Aloe Vera)",
-    "lastMeasuredDate": {
-        "seconds": 1681130635.0,
-        "nanoseconds": 0
-    },
-    "addedDate": 1680908084,
+    "plantName": "Bob (Jade Plant)",
+    "lastMeasuredDate": -1,
+    "addedDate": 1681138965.0,
     "lastWatered": {
         "dates": [],
         "notes": []
     },
     "phData": {
-        "lowerIdeal": 5.6,
-        "upperIdeal": 7.8,
-        "dates": [
-            {
-                "seconds": 1681130635.0,
-                "nanoseconds": 0
-            }
-        ],
+        "lowerIdeal": null,
+        "upperIdeal": null,
+        "dates": [],
         "npkMeasurements": [
             "0-2-1",
             "4-2-1",
@@ -26,69 +18,35 @@
             "4-2-1",
             "4-2-1"
         ],
-        "measurements": [
-            "4"
-        ],
-        "pHDescriptions": "Moderately acid\nSlightly acid\nNeutral\nSlightly alkaline"
+        "measurements": []
     },
     "lastFertilized": {
         "dates": [],
         "notes": []
     },
     "soilMoistureData": {
-        "lowerIdeal": 10,
+        "lowerIdeal": null,
         "upperIdeal": null,
-        "dates": [
-            {
-                "seconds": 1681130635.0,
-                "nanoseconds": 0
-            }
-        ],
-        "measurements": [
-            "6"
-        ]
+        "dates": [],
+        "measurements": []
     },
     "humidityData": {
-        "lowerIdeal": 40,
-        "upperIdeal": 60,
-        "dates": [
-            {
-                "seconds": 1681130635.0,
-                "nanoseconds": 0
-            }
-        ],
-        "measurements": [
-            "-24"
-        ],
-        "humidityDescriptions": "Mesic\nDry Mesic\nDry"
+        "lowerIdeal": null,
+        "upperIdeal": null,
+        "dates": [],
+        "measurements": []
     },
     "temperatureData": {
-        "lowerIdeal": 20,
-        "upperIdeal": 25,
-        "dates": [
-            {
-                "seconds": 1681130635.0,
-                "nanoseconds": 0
-            }
-        ],
-        "measurements": [
-            "-25"
-        ],
-        "temperatureDescriptions": "Zone 9a"
+        "lowerIdeal": null,
+        "upperIdeal": null,
+        "dates": [],
+        "measurements": []
     },
     "lightIntensityData": {
-        "lowerIdeal": 40000,
-        "upperIdeal": 130000,
-        "dates": [
-            {
-                "seconds": 1681130635.0,
-                "nanoseconds": 0
-            }
-        ],
-        "measurements": [
-            "46"
-        ],
-        "lightDescriptions": "Full Sun\nFull Sun to Partial Shade"
+        "lowerIdeal": null,
+        "upperIdeal": null,
+        "dates": [],
+        "measurements": []
     },
-    "plantId": "-NSfABc6ofgyZS49u4L_"
+    "plantId": "-NSfgCuh6ru5owWjEyqj"
 }

@@ -116,8 +116,10 @@ def get_recommendation_data():
     
     NGA_dict["plantName"] = f"{plant_nick_name} ({plant_common_name})"
     NGA_dict["plantId"] = plantId
+
     # Still need added date
-    # NGA_dict["addedDate"] = plant_details["addedDate"]
+    addedDate =  datetime.strptime(plant_details["addedDate"], "%Y-%m-%d %H:%M:%S.%f")
+    NGA_dict["addedDate"] = time.mktime(addedDate.timetuple())
     
     # Return Recommendations from Firebase. Assume they always exist
     rec_reference = db.reference(f"recommendations/NGA/{plant_common_name_cc}")
@@ -160,7 +162,7 @@ def get_recommendation_data():
         for v in measurements:
            newDateTimeName = v["dateTime"]
            print("Plant dateTime Now: ", newDateTimeName)
-           newDateTimeObject = datetime.strptime(newDateTimeName, "%Y-%m-%d %H:%M:%S:%f%Z%z")
+           newDateTimeObject = datetime.strptime(newDateTimeName, "%Y-%m-%d %H:%M:%S.%f")
            print("New dateTime Object: ", newDateTimeObject)
            plant_measurement_utc.append(time.mktime(newDateTimeObject.timetuple()))
         
@@ -186,8 +188,8 @@ def get_recommendation_data():
         NGA_dict["soilMoistureData"].update(moisture_object)
         NGA_dict["lightIntensityData"].update(light_object)
         NGA_dict["humidityData"].update(humidity_object)
-
-        NGA_dict["lastMeasuredDate"] = plant_measurement_times[-1]
+        NGA_dict["lastMeasuredDate"] = plant_measurement_utc[-1]
+        
 
     with open("./PipelineObjects/plant_recs_prod.json", mode="w") as f:
         json.dump(NGA_dict, f, indent=4)
@@ -261,7 +263,7 @@ def get_user_plants():
             "nickName" : v["nickName"],
             "lastMeasured": None if last_reading is None else list(last_reading.values())[0]["dateTime"],
             "requiresAttention": None if last_reading is None else list(last_reading.values())[0]["isOutOfRange"], 
-            "addedDate": None, # ISO 8601 Extended Format
+            "addedDate": v["addedDate"], # ISO 8601 Extended Format
             "iconId" : v["iconId"]
         }
     

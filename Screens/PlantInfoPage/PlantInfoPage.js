@@ -40,7 +40,10 @@ const PlantInfoPage = ({ route, navigation }) => {
     useCallback(() => {
       auth.currentUser.getIdToken()
         .then((idToken) => {
-            fetch(`https://python-http-plant-recommendation-container-63od3iyczq-uk.a.run.app/get-plant-information-by-plant-id?token=${idToken}&plantId=${plantInfo.plantId}`, {
+            fetch(
+              // `http://192.168.2.11:8080/get-plant-information-by-plant-id?token=${idToken}&plantId=${plantInfo.plantId}`,
+              `https://python-http-plant-recommendation-container-63od3iyczq-uk.a.run.app/get-plant-information-by-plant-id?token=${idToken}&plantId=${plantInfo.plantId}`,
+              {
               method: "post"
             })
             .then(response => response.json())
@@ -292,18 +295,19 @@ const PlantInfoPage = ({ route, navigation }) => {
         </Flex>
         <Box>
           <Text fontSize="34px" style={styles.plantName}>
-            {plantRecs.plantName}
+            {plantInfo.nickName} ({plantInfo.commonName}) 
           </Text>
-          {plantRecs.lastMeasuredDate == -1 ? null : (
+            <Text fontSize="14px" style={styles.plantDates}>
+              Added: {(plantRecs) && convertDateToFullMDYHM(plantRecs.addedDate)}
+            </Text>
             <Text fontSize="14px" style={styles.plantDates}>
               Last Measured:{" "}
+              {/* {plantRecs.lastMeasuredDate} */}
               {convertDateToFullMDYHM(plantRecs.lastMeasuredDate)}
             </Text>
-          )}
 
-          <Text fontSize="14px" style={styles.plantDates}>
-            Added: {convertDateToFullMDYHM(plantRecs.addedDate)}
-          </Text>
+
+          
         </Box>
       </Box>
       <View paddingLeft="20px" paddingRight="20px">

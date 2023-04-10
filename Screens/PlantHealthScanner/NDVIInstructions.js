@@ -49,7 +49,7 @@ const NDVIInstructions = ({ route, navigation }) => {
       paddingRight="5"
       paddingLeft="5"
     >
-      <Box position="absolute" left={2} top={43}>
+      <Box position="absolute" left={2} top={5}>
         <Button
           bg="transparent"
           _text={{
@@ -63,7 +63,7 @@ const NDVIInstructions = ({ route, navigation }) => {
           Cancel
         </Button>
       </Box>
-      <View>
+      <View mt={"55px"}>
         <Text style={styles.sectionTitle}>NDVI Assessment</Text>
         <View marginTop={"5px"} marginBottom="15px">
           <Text style={styles.sectionDesc}>

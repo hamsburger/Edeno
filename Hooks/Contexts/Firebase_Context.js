@@ -3,6 +3,7 @@ import { createContext, useState, useContext } from 'react';
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, get, child, onChildAdded, query, 
     limitToLast, push, set, off, remove} from "firebase/database";
+import { getCurrentTime } from '../../Functions/utilities';
  
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -74,22 +75,7 @@ class Database {
              * data: I believe this data returns the most recently updated child.
              */
             const data = snapshot.val();
-            let d = new Date(Date.now())
-            let timezone_offset_in_minutes = d.getTimezoneOffset();
-            let year = `${d.getFullYear()}`.padStart(4, '0');
-            let month = `${d.getMonth() + 1}`.padStart(2, '0');
-            let day = `${d.getDate()}`.padStart(2, '0');
-            let hour = `${d.getHours()}`.padStart(2, '0');
-            let minutes = `${d.getMinutes()}`.padStart(2, '0');
-            let seconds = `${d.getSeconds()}`.padStart(2, '0');
-
-            let sign = (timezone_offset_in_minutes > 0) ? "-" : "+";
-            let timezone_offset_in_hours = `${+(timezone_offset_in_minutes / 60)}`.padStart(4, '0');
-
-            let datestring = year  + "-" + month + "-"  + day + " " +
-hour + ":" + minutes + ":" + seconds + ":" + d.getMilliseconds() + "000" + `UTC${sign}${timezone_offset_in_hours}`;
-            
-            data["dateTime"] = datestring;
+            data["dateTime"] = getCurrentTime();
             setData(data);
 
             

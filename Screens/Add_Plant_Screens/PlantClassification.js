@@ -67,9 +67,7 @@ const PlantClassification = (props) => {
             onPress={() => {
               setPlant((prevPlant) => ({
                 ...prevPlant,
-                id: classificationResult[chosenIdentification].commonName,
-                plantName:
-                  classificationResult[chosenIdentification].commonName,
+                commonName: classificationResult[chosenIdentification].commonName,
               })); // Set the plant name
               navigation.navigate("AddPlantWithImage", {
                 progress: progress + 1,

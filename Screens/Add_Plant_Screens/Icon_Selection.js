@@ -7,7 +7,6 @@ import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 
 export function Icon_Selection(props) {
   // Code can be optimized. plant_icons.map does not have to be called every single time
-
   const [Plant, setPlant] = usePlant();
   const [pressed, setPressed] = useState(-1);
   const { setContinue } = props;
@@ -24,7 +23,7 @@ export function Icon_Selection(props) {
             }
             onPress={() => {
               setPressed(i);
-              setPlant((prevPlant) => ({ ...prevPlant, iconId: i }));
+              setPlant((prevPlant) => ({ ...prevPlant, iconId: i,  }));
               setContinue(true);
             }}
             _pressed={{ bg: "cultured_grey" }}

@@ -30,9 +30,9 @@ const PHInfo = ({ route, navigation }) => {
   // -1 if below ideal pH
   // 0 otherwise
   const checkPH = () => {
-    if (lastMeasurement > upperIdeal) {
+    if ((upperIdeal) && lastMeasurement > upperIdeal) {
       return 1;
-    } else if (lastMeasurement < lowerIdeal) {
+    } else if ((lowerIdeal) && lastMeasurement < lowerIdeal) {
       return -1;
     }
     return 0;

@@ -31,7 +31,10 @@ const Home = ({ navigation }) => {
       useCallback(() => {
         auth.currentUser.getIdToken()
         .then((idToken) => {
-            fetch(`https://python-http-plant-recommendation-container-63od3iyczq-uk.a.run.app/get-plants-from-user-id?token=${idToken}`, {
+            fetch(
+              // `http://192.168.2.11:8080/get-plants-from-user-id?token=${idToken}`,
+            `https://python-http-plant-recommendation-container-63od3iyczq-uk.a.run.app/get-plants-from-user-id?token=${idToken}`, 
+            {
               method: "get"
             })
             .then(response => response.json())
