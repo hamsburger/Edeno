@@ -42,4 +42,9 @@ def create_NGA_dict():
             "dates": [],
             "measurements": [],
         },
+        "NDVI" : None
+        # {
+        #  dateTime:
+        #  value:
+        # }
     }

@@ -117,9 +117,12 @@ def get_recommendation_data():
     NGA_dict["plantName"] = f"{plant_nick_name} ({plant_common_name})"
     NGA_dict["plantId"] = plantId
 
-    # Still need added date
-    addedDate =  datetime.strptime(plant_details["addedDate"], "%Y-%m-%d %H:%M:%S.%f")
-    NGA_dict["addedDate"] = time.mktime(addedDate.timetuple())
+
+    def process_time(time_obj):
+        the_time = datetime.strptime(time_obj, "%Y-%m-%d %H:%M:%S.%f")
+        return time.mktime(the_time.timetuple())
+    
+    NGA_dict["addedDate"] = process_time(plant_details["addedDate"])
     
     # Return Recommendations from Firebase. Assume they always exist
     rec_reference = db.reference(f"recommendations/NGA/{plant_common_name_cc}")
@@ -149,23 +152,15 @@ def get_recommendation_data():
     # Measurement Dates and Values
     measurements_ref = plant_ref.child("readings/SavedReadings")
     measurements_dict = measurements_ref.get()
-
-    def build_object(dates, measurements):
-        return {
-            "dates" : dates,
-            "measurements": measurements
-        }
-
     if measurements_dict:
+        def build_object(dates, measurements):
+            return {
+                "dates" : dates,
+                "measurements": measurements
+            }
+
         measurements = list(measurements_dict.values()) # Dictioanry of measurements
-        plant_measurement_utc = []
-        for v in measurements:
-           newDateTimeName = v["dateTime"]
-           print("Plant dateTime Now: ", newDateTimeName)
-           newDateTimeObject = datetime.strptime(newDateTimeName, "%Y-%m-%d %H:%M:%S.%f")
-           print("New dateTime Object: ", newDateTimeObject)
-           plant_measurement_utc.append(time.mktime(newDateTimeObject.timetuple()))
-        
+        plant_measurement_utc = [process_time(v["dateTime"]) for v in measurements]
         plant_measurement_times = [{
                "seconds": utc_seconds,
                "nanoseconds": 0
@@ -190,6 +185,15 @@ def get_recommendation_data():
         NGA_dict["humidityData"].update(humidity_object)
         NGA_dict["lastMeasuredDate"] = plant_measurement_utc[-1]
         
+    
+    NDVI_ref = plant_ref.child("readings/NDVIReadings")
+    NDVI_dict = NDVI_ref.get()
+
+    if NDVI_dict:
+        lastNDVI_value = list(NDVI_dict.values())[-1]
+        NGA_dict["NDVI"] = lastNDVI_value
+        unix_timestamp = time.mktime(datetime.strptime(NGA_dict['NDVI']["dateTime"] , "%Y-%m-%d %H:%M:%S.%f").timetuple())
+        NGA_dict["NDVI"]["dateTime"] = unix_timestamp
 
     with open("./PipelineObjects/plant_recs_prod.json", mode="w") as f:
         json.dump(NGA_dict, f, indent=4)
