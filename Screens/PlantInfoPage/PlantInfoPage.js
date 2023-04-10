@@ -40,7 +40,7 @@ const PlantInfoPage = ({ route, navigation }) => {
     useCallback(() => {
       auth.currentUser.getIdToken()
         .then((idToken) => {
-            fetch(`http://192.168.2.11:8080/get-plant-information-by-plant-id?token=${idToken}&plantId=${plantInfo.plantId}`, {
+            fetch(`https://python-http-plant-recommendation-container-63od3iyczq-uk.a.run.app/get-plant-information-by-plant-id?token=${idToken}&plantId=${plantInfo.plantId}`, {
               method: "post"
             })
             .then(response => response.json())
