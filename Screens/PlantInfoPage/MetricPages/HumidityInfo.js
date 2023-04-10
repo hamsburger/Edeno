@@ -21,16 +21,18 @@ const HumidityInfo = ({ route, navigation }) => {
     humidityData.measurements[humidityData.measurements.length - 1];
   const lastMeasurementDate =
     humidityData.dates[humidityData.dates.length - 1].seconds;
-  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
-    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPlantCondition = () => {
-    if ((upperIdeal) && lastMeasurement > upperIdeal) {
+    if (upperIdeal && lastMeasurement > upperIdeal) {
       return 1;
-    } else if ((lowerIdeal) && lastMeasurement < lowerIdeal) {
+    } else if (lowerIdeal && lastMeasurement < lowerIdeal) {
       return -1;
     }
     return 0;
@@ -39,7 +41,9 @@ const HumidityInfo = ({ route, navigation }) => {
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(humidityData.dates),
     datasets: buildDataset(humidityData.measurements, lowerIdeal, upperIdeal),
-    legend: ["Your Measurements", typeOfRange],
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
+    ],
   };
 
   return (

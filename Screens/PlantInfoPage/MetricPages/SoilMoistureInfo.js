@@ -22,17 +22,19 @@ const SoilMoistureInfo = ({ route, navigation }) => {
   const lastMeasurementDate =
     soilMoistureData.dates[soilMoistureData.dates.length - 1].seconds;
 
-  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
-  (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
 
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPlantCondition = () => {
-    if ((upperIdeal) && lastMeasurement > upperIdeal) {
+    if (upperIdeal && lastMeasurement > upperIdeal) {
       return 1;
-    } else if ((lowerIdeal) && lastMeasurement < lowerIdeal) {
+    } else if (lowerIdeal && lastMeasurement < lowerIdeal) {
       return -1;
     }
     return 0;
@@ -40,8 +42,14 @@ const SoilMoistureInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(soilMoistureData.dates),
-    datasets: buildDataset(soilMoistureData.measurements, lowerIdeal, upperIdeal),
-    legend: ["Your Measurements", typeOfRange],
+    datasets: buildDataset(
+      soilMoistureData.measurements,
+      lowerIdeal,
+      upperIdeal
+    ),
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
+    ],
   };
 
   return (

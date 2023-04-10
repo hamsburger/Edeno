@@ -20,16 +20,18 @@ const LightIntensityInfo = ({ route, navigation }) => {
     lightIntensityData.measurements[lightIntensityData.measurements.length - 1];
   const lastMeasurementDate =
     lightIntensityData.dates[lightIntensityData.dates.length - 1].seconds;
-  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
-    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPlantCondition = () => {
-    if ((upperIdeal) && lastMeasurement > parseFloat(upperIdeal)) {
+    if (upperIdeal && lastMeasurement > parseFloat(upperIdeal)) {
       return 1;
-    } else if ((lowerIdeal) && lastMeasurement < parseFloat(lowerIdeal)) {
+    } else if (lowerIdeal && lastMeasurement < parseFloat(lowerIdeal)) {
       return -1;
     }
     return 0;
@@ -37,8 +39,14 @@ const LightIntensityInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(lightIntensityData.dates),
-    datasets: buildDataset(lightIntensityData.measurements, lowerIdeal, upperIdeal),
-    legend: ["Your Measurements", "Ideal Range"],
+    datasets: buildDataset(
+      lightIntensityData.measurements,
+      lowerIdeal,
+      upperIdeal
+    ),
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
+    ],
   };
 
   return (

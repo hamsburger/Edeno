@@ -23,16 +23,18 @@ const PHInfo = ({ route, navigation }) => {
     phDataExternal.measurements[phDataExternal.measurements.length - 1];
   const lastMeasurementDate =
     phDataExternal.dates[phDataExternal.dates.length - 1].seconds;
-  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
-    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPH = () => {
-    if ((upperIdeal) && lastMeasurement > upperIdeal) {
+    if (upperIdeal && lastMeasurement > upperIdeal) {
       return 1;
-    } else if ((lowerIdeal) && lastMeasurement < lowerIdeal) {
+    } else if (lowerIdeal && lastMeasurement < lowerIdeal) {
       return -1;
     }
     return 0;
@@ -43,7 +45,9 @@ const PHInfo = ({ route, navigation }) => {
   const data = {
     labels: dates,
     datasets: buildDataset(phDataExternal.measurements, lowerIdeal, upperIdeal),
-    legend: ["Your Measurements", typeOfRange],
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
+    ],
   };
 
   const getNPKValue = ({ index }) => {

@@ -18,49 +18,57 @@ const LiveMeasure = ({ route, navigation }) => {
   const auth = getAuth();
 
   // function date_to_string_with_milliseconds(date){
-  //   let date_str = date.toString() 
+  //   let date_str = date.toString()
   //   let date_without_milliseconds = new Date(date_str) // truncated date since milliseconds are not included
   //   let milliseconds_delta = date - date_without_milliseconds
   //   let date_str_with_milliseconds = date_str.replace(/(^.*:\d\d:\d\d)(.*$)/, `$1:${milliseconds_delta}$2`)
   //   return date_str_with_milliseconds
   // }
 
-  console.log(Plants)
+  console.log(Plants);
 
   const [countdown, setCountdown] = useState(5000);
   const [timerId, setTimerId] = useState(null);
 
   const checkIfReadingsOutOfRange = (plantReadings) => {
-    db.getFetchPromise(`recommendations/NGA/${toCamelCase(Plants[plantIndex]["commonName"])}`).then((snapshot) => {
-      dictData = snapshot.val();
-      humidityData = dictData["humidityData"];
-      lightData = dictData["lightIntensityData"];
-      phData = dictData["phData"];
-      soilMoistureData = dictData["soilMoistureData"];
-      temperatureData = dictData["temperatureData"];
+    db.getFetchPromise(
+      `recommendations/NGA/${toCamelCase(Plants[plantIndex]["commonName"])}`
+    )
+      .then((snapshot) => {
+        let dictData = snapshot.val();
+        console.log(dictData);
+        let humidityData = dictData["humidityData"];
+        let lightData = dictData["lightIntensityData"];
+        let phData = dictData["phData"];
+        let soilMoistureData = dictData["soilMoistureData"];
+        let temperatureData = dictData["temperatureData"];
 
-      if (
-        ("lowerIdeal" in phData) && phData["lowerIdeal"] > plantReadings.PH || 
-        ("upperIdeal" in phData) && plantReadings.PH > phData["upperIdeal"] || 
-        ("lowerIdeal" in humidityData) && humidityData["lowerIdeal"] > plantReadings.Humidity || 
-        ("upperIdeal" in humidityData) && plantReadings.Humidity > humidityData["upperIdeal"] || 
-        ("lowerIdeal" in lightData) && lightData["lowerIdeal"] > plantReadings.Light || 
-        ("upperIdeal" in lightData) && plantReadings.Light > lightData["upperIdeal"] ||
-        ("lowerIdeal" in soilMoistureData) && soilMoistureData["lowerIdeal"] > plantReadings.Moisture || 
-        ("upperIdeal" in soilMoistureData) && plantReadings.Moisture > soilMoistureData["upperIdeal"] ||
-        ("lowerIdeal" in temperatureData) && temperatureData["lowerIdeal"] > plantReadings.Temp || 
-        ("upperIdeal" in temperatureData) && plantReadings.Temp > temperatureData["upperIdeal"]
-      ){
-        setReadings((prev) => ({...prev, 
-                              "isOutOfRange" : true}))
-      } else {
-        setReadings((prev) => ({...prev, 
-          "isOutOfRange" : false}))
-      }
-      setContinue(false);
-
-    }).catch(err => console.log(err));
-  }
+        if (
+          (phData && phData["lowerIdeal"] > plantReadings.PH) ||
+          (phData && plantReadings.PH > phData["upperIdeal"]) ||
+          (humidityData &&
+            humidityData["lowerIdeal"] > plantReadings.Humidity) ||
+          (humidityData &&
+            plantReadings.Humidity > humidityData["upperIdeal"]) ||
+          (lightData && lightData["lowerIdeal"] > plantReadings.Light) ||
+          (lightData && plantReadings.Light > lightData["upperIdeal"]) ||
+          (soilMoistureData &&
+            soilMoistureData["lowerIdeal"] > plantReadings.Moisture) ||
+          (soilMoistureData &&
+            plantReadings.Moisture > soilMoistureData["upperIdeal"]) ||
+          (temperatureData &&
+            temperatureData["lowerIdeal"] > plantReadings.Temp) ||
+          (temperatureData &&
+            plantReadings.Temp > temperatureData["upperIdeal"])
+        ) {
+          setReadings((prev) => ({ ...prev, isOutOfRange: true }));
+        } else {
+          setReadings((prev) => ({ ...prev, isOutOfRange: false }));
+        }
+        setContinue(false);
+      })
+      .catch((err) => console.log(err));
+  };
   const startTimer = () => {
     setTimerId(
       setInterval(() => {
@@ -75,9 +83,7 @@ const LiveMeasure = ({ route, navigation }) => {
     setCountdown(5000);
   };
 
-  useEffect(() => {
-    
-  }, [readings]);
+  useEffect(() => {}, [readings]);
 
   useEffect(() => {
     // start timer
@@ -116,15 +122,15 @@ const LiveMeasure = ({ route, navigation }) => {
   useEffect(() => {
     if (timerId) {
       db.listenForChildUpdate("readings", setReadings);
-      db.pushWithKeyRealTimeDatabase("", "isSensor", true)
+      db.pushWithKeyRealTimeDatabase("", "isSensor", true);
     }
   }, [timerId]);
 
   useEffect(() => {
     if (countdown === 0) {
-      db.cleanListeners()
-      db.pushWithKeyRealTimeDatabase("", "isSensor", false)
-      checkIfReadingsOutOfRange(readings)
+      db.cleanListeners();
+      db.pushWithKeyRealTimeDatabase("", "isSensor", false);
+      checkIfReadingsOutOfRange(readings);
       resetTimer();
     }
   }, [countdown]);
@@ -146,7 +152,9 @@ const LiveMeasure = ({ route, navigation }) => {
         </Button>
       </Box>
       <View style={styles.container}>
-        <Text style={styles.plant_name}>{Plants[plantIndex].nickName} ({Plants[plantIndex].commonName})</Text>
+        <Text style={styles.plant_name}>
+          {Plants[plantIndex].nickName} ({Plants[plantIndex].commonName})
+        </Text>
         <Image
           style={{ height: 144, width: 144, marginBottom: 46 }}
           source={plant_icons[Plants[plantIndex]["iconId"]]}
@@ -194,7 +202,7 @@ const LiveMeasure = ({ route, navigation }) => {
             minW="1/5"
             bg="secondary_green"
             isDisabled={cannotContinue}
-            opacity={timerId ? 0.6: 1}
+            opacity={timerId ? 0.6 : 1}
             onPress={startTimer}
             marginBottom={"10px"}
           >
@@ -204,21 +212,23 @@ const LiveMeasure = ({ route, navigation }) => {
             minW="1/5"
             bg="secondary_green"
             isDisabled={cannotContinue}
-            opacity={timerId ? 0.6: 1}
+            opacity={timerId ? 0.6 : 1}
             onPress={() => {
               // persist whatever is in lastFetchedMeasurement to db in SavedReadings
-              db.pushChildToRealTimeDatabase(`users/${auth.currentUser.uid}/plants/` +
-                                             `${Plants[plantIndex]["plantId"]}/readings/SavedReadings`, readings)
-              navigation.navigate("Home");
-              navigation.navigate("PlantInfoPage",
-                { "plantInfo": Plants[plantIndex] }
+              db.pushChildToRealTimeDatabase(
+                `users/${auth.currentUser.uid}/plants/` +
+                  `${Plants[plantIndex]["plantId"]}/readings/SavedReadings`,
+                readings
               );
+              navigation.navigate("Home");
+              navigation.navigate("PlantInfoPage", {
+                plantInfo: Plants[plantIndex],
+              });
             }}
           >
             <Text style={styles.button}>Save & Continue</Text>
           </Button>
         </Flex>
-       
       </View>
     </View>
   );

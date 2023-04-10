@@ -21,16 +21,18 @@ const TemperatureInfo = ({ route, navigation }) => {
     temperatureData.measurements[temperatureData.measurements.length - 1];
   const lastMeasurementDate =
     temperatureData.dates[temperatureData.dates.length - 1].seconds;
-  const typeOfRange = (upperIdeal && lowerIdeal) && "Ideal Range" ||
-    (upperIdeal) && "Upper Ideal" || (lowerIdeal) && "Lower Ideal"
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPlantCondition = () => {
-    if ((upperIdeal) && lastMeasurement > parseFloat(upperIdeal)) {
+    if (upperIdeal && lastMeasurement > parseFloat(upperIdeal)) {
       return 1;
-    } else if ((lowerIdeal) && lastMeasurement < parseFloat(lowerIdeal)) {
+    } else if (lowerIdeal && lastMeasurement < parseFloat(lowerIdeal)) {
       return -1;
     }
     return 0;
@@ -38,8 +40,14 @@ const TemperatureInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(temperatureData.dates),
-    datasets: buildDataset(temperatureData.measurements, lowerIdeal, upperIdeal),
-    legend: ["Your Measurements", typeOfRange],
+    datasets: buildDataset(
+      temperatureData.measurements,
+      lowerIdeal,
+      upperIdeal
+    ),
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
+    ],
   };
 
   return (
