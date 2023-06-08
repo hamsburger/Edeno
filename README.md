@@ -1,8 +1,4 @@
 # Edeno
 Plant-Care App
 
-Feel free to play around with the code on a separate local branch!
-
-## How did I do navigation?
-
-https://reactnavigation.org/docs/navigating
+An application to take care of your plants using live sensor readings from hardware
