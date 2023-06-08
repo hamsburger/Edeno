@@ -4,19 +4,97 @@ import { View, Text, Box, Button, Flex, Center } from "native-base";
 import { usePlants } from "../../Hooks/Contexts/Plant_Context";
 import { plant_icons } from "../../Constants/StaticPlantIconImages";
 import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
+import { getAuth } from "firebase/auth";
 import LiveIcon from "../../assets/icons/live-circle.svg";
+import { toCamelCase } from "../../Functions/utilities";
 
 const LiveMeasure = ({ route, navigation }) => {
   const { plantIndex } = route.params;
-  const [Plants, dispatch] = usePlants();
   const [readings, setReadings] = useState({});
+  const [cannotContinue, setContinue] = useState(true);
+  const [Plants, setPlants] = usePlants();
   const db = useFirebaseDatabase();
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const auth = getAuth();
+
+  // function date_to_string_with_milliseconds(date){
+  //   let date_str = date.toString()
+  //   let date_without_milliseconds = new Date(date_str) // truncated date since milliseconds are not included
+  //   let milliseconds_delta = date - date_without_milliseconds
+  //   let date_str_with_milliseconds = date_str.replace(/(^.*:\d\d:\d\d)(.*$)/, `$1:${milliseconds_delta}$2`)
+  //   return date_str_with_milliseconds
+  // }
+
+  console.log(Plants);
+
+  const [countdown, setCountdown] = useState(5000);
+  const [timerId, setTimerId] = useState(null);
+
+  const checkIfReadingsOutOfRange = (plantReadings) => {
+    db.getFetchPromise(
+      `recommendations/NGA/${toCamelCase(Plants[plantIndex]["commonName"])}`
+    )
+      .then((snapshot) => {
+        let dictData = snapshot.val();
+        console.log(dictData);
+        let humidityData = dictData["humidityData"];
+        let lightData = dictData["lightIntensityData"];
+        let phData = dictData["phData"];
+        let soilMoistureData = dictData["soilMoistureData"];
+        let temperatureData = dictData["temperatureData"];
+
+        if (
+          (phData && phData["lowerIdeal"] > plantReadings.PH) ||
+          (phData && plantReadings.PH > phData["upperIdeal"]) ||
+          (humidityData &&
+            humidityData["lowerIdeal"] > plantReadings.Humidity) ||
+          (humidityData &&
+            plantReadings.Humidity > humidityData["upperIdeal"]) ||
+          (lightData && lightData["lowerIdeal"] > plantReadings.Light) ||
+          (lightData && plantReadings.Light > lightData["upperIdeal"]) ||
+          (soilMoistureData &&
+            soilMoistureData["lowerIdeal"] > plantReadings.Moisture) ||
+          (soilMoistureData &&
+            plantReadings.Moisture > soilMoistureData["upperIdeal"]) ||
+          (temperatureData &&
+            temperatureData["lowerIdeal"] > plantReadings.Temp) ||
+          (temperatureData &&
+            plantReadings.Temp > temperatureData["upperIdeal"])
+        ) {
+          setReadings((prev) => ({ ...prev, isOutOfRange: true }));
+        } else {
+          setReadings((prev) => ({ ...prev, isOutOfRange: false }));
+        }
+        setContinue(false);
+      })
+      .catch((err) => console.log(err));
+  };
+  const startTimer = () => {
+    setTimerId(
+      setInterval(() => {
+        setCountdown((countdown) => countdown - 1000);
+      }, 1000)
+    );
+  };
+
+  const resetTimer = () => {
+    clearInterval(timerId);
+    setTimerId(null);
+    setCountdown(5000);
+  };
+
+<<<<<<< HEAD
+  useEffect(() => {}, [readings]);
+=======
+  // useEffect(() => {
+    
+  // }, [readings]);
+>>>>>>> e53ea3f (Scraping Done)
 
   useEffect(() => {
-    db.listenForChildUpdate("readings", setReadings);
-
-    // /* Get readings every five seconds */
+    // start timer
+    startTimer(); // Start the timer on initial mount
+    // /* Get readings every two seconds */
     // const interval = setInterval(
     //   () =>
     //     db.pushToRealTimeDatabase("readings", {
@@ -25,8 +103,9 @@ const LiveMeasure = ({ route, navigation }) => {
     //       PH: Math.floor(Math.random() * 10) + [],
     //       Temp: Math.floor(Math.random() * 50 - 25) + [],
     //       Humidity: Math.floor(Math.random() * 50 - 25) + [],
+    //       dateTime: `${date_to_string_with_milliseconds(new Date(Date.now())).toString()}`
     //     }),
-    //   5000
+    //   2000
     // );
 
     // Code for animating live icon
@@ -44,12 +123,23 @@ const LiveMeasure = ({ route, navigation }) => {
         }),
       ])
     ).start();
-
-    return () => {
-      // clearInterval(interval);
-      db.cleanListeners();
-    };
   }, []);
+
+  useEffect(() => {
+    if (timerId) {
+      db.listenForChildUpdate("readings", setReadings);
+      db.pushWithKeyRealTimeDatabase("", "isSensor", true);
+    }
+  }, [timerId]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      db.cleanListeners();
+      db.pushWithKeyRealTimeDatabase("", "isSensor", false);
+      checkIfReadingsOutOfRange(readings);
+      resetTimer();
+    }
+  }, [countdown]);
 
   return (
     <View>
@@ -57,7 +147,7 @@ const LiveMeasure = ({ route, navigation }) => {
         <Button
           bg="transparent"
           _text={{
-            fontSize: "19px",
+            fontSize: 19,
             color: "#B9422C",
           }}
           onPress={() => {
@@ -68,10 +158,12 @@ const LiveMeasure = ({ route, navigation }) => {
         </Button>
       </Box>
       <View style={styles.container}>
-        <Text style={styles.plant_name}>{Plants[plantIndex].plantName}</Text>
+        <Text style={styles.plant_name}>
+          {Plants[plantIndex].nickName} ({Plants[plantIndex].commonName})
+        </Text>
         <Image
           style={{ height: 144, width: 144, marginBottom: 46 }}
-          source={plant_icons[Plants[plantIndex].iconId]}
+          source={plant_icons[Plants[plantIndex]["iconId"]]}
         />
         <Flex flexDirection="row" alignItems="center">
           <Animated.View style={{ opacity: fadeAnim }}>
@@ -89,7 +181,7 @@ const LiveMeasure = ({ route, navigation }) => {
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Humidity:</Text>
-          <Text style={styles.measurement}>{readings.humidity}%</Text>
+          <Text style={styles.measurement}>{readings.Humidity}%</Text>
         </Flex>
         <Flex flexDirection="row">
           <Text style={styles.measurement_title}>Temperature:</Text>
@@ -100,17 +192,50 @@ const LiveMeasure = ({ route, navigation }) => {
           <Text style={styles.measurement}>{readings.Light} LUX</Text>
         </Flex>
       </View>
-      <Center w="100%" marginTop={100}>
-        <Button
-          minW="1/5"
-          bg="secondary_green"
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
+      <View marginTop={"40px"}>
+        {timerId ? (
+          <Text style={styles.continue_prompt}>{`Continue in ${
+            countdown / 1000
+          }...`}</Text>
+        ) : null}
+        <Flex
+          flexDirection={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          marginBottom={"10px"}
         >
-          Done
-        </Button>
-      </Center>
+          <Button
+            minW="1/5"
+            bg="secondary_green"
+            isDisabled={cannotContinue}
+            opacity={timerId ? 0.6 : 1}
+            onPress={startTimer}
+            marginBottom={"10px"}
+          >
+            <Text style={styles.button}>Re-take Measurements</Text>
+          </Button>
+          <Button
+            minW="1/5"
+            bg="secondary_green"
+            isDisabled={cannotContinue}
+            opacity={timerId ? 0.6 : 1}
+            onPress={() => {
+              // persist whatever is in lastFetchedMeasurement to db in SavedReadings
+              db.pushChildToRealTimeDatabase(
+                `users/${auth.currentUser.uid}/plants/` +
+                  `${Plants[plantIndex]["plantId"]}/readings/SavedReadings`,
+                readings
+              );
+              navigation.navigate("Home");
+              navigation.navigate("PlantInfoPage", {
+                plantInfo: Plants[plantIndex],
+              });
+            }}
+          >
+            <Text style={styles.button}>Save & Continue</Text>
+          </Button>
+        </Flex>
+      </View>
     </View>
   );
 };
@@ -142,6 +267,18 @@ const styles = StyleSheet.create({
     color: "#432D1E",
     fontFamily: "SFProDisplay-Regular",
     fontSize: 17,
+  },
+  continue_prompt: {
+    fontSize: 17,
+    fontFamily: "SFProDisplay-Bold",
+    textAlign: "center",
+  },
+  button: {
+    fontWeight: "700",
+    fontFamily: "SFProDisplay-Bold",
+    fontStyle: "normal",
+    fontSize: 16,
+    color: "white",
   },
 });
 

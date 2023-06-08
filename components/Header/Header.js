@@ -14,9 +14,7 @@ const Header = ({ navigation }) => {
     >
       <Flex justifyContent="flex-end" alignItems="center" flexDirection="row">
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("AddPlantLandingPage", { progress: 1 })
-          }
+          onPress={() => navigation.navigate("AddPlantLandingPage")}
         >
           <Add width={29} height={29} />
         </TouchableOpacity>
@@ -38,7 +36,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     textAlign: "center",
-    // fontSize: "34px",
+    // fontSize: 34,
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },

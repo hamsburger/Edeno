@@ -16,16 +16,16 @@ import AlertIcon from "../../assets/icons/alert.svg";
 
 const MeasureModal = ({ navigation }) => {
   const [selected, setSelected] = useState(-1);
-  const [Plants, dispatch] = usePlants();
+  const [Plants, setPlants] = usePlants();
 
+  console.log(Plants)
   const plantElements = useMemo(() => {
     return Plants.map((elem, i) => (
       <SelectPlantCard
         i={i}
-        iconNum={elem.iconId}
-        name={elem.plantName}
         selected={selected}
         setSelected={setSelected}
+        plantObj={elem}
       />
     ));
   }, [selected]);
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
-  plants: { height: "65%", width: "65%", marginTop: 25, marginBottom: 30 },
+  plants: { height: "65%", width: "80%", marginTop: 25, marginBottom: 30 },
   alert: {
     textAlign: "center",
     color: "#B9422C",

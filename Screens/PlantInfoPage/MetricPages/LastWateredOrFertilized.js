@@ -14,7 +14,9 @@ const LastWateredOrFertilized = ({ route, navigation }) => {
   const [dataInternal, setDataInternal] = useState(data);
 
   const lastMeasurementDate =
-    dataInternal.dates[dataInternal.dates.length - 1].seconds;
+    dataInternal.dates.length > 0
+      ? dataInternal.dates[dataInternal.dates.length - 1].seconds
+      : "No Data Available";
 
   const [days, unit] = calculateTimePast(lastMeasurementDate);
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,10 +67,14 @@ const LastWateredOrFertilized = ({ route, navigation }) => {
             paddingTop={"7px"}
             paddingBottom={"7px"}
           >
-            {days} {unit}
+            {lastMeasurementDate == "No Data Available"
+              ? "No Data Available"
+              : `${days} ${unit}`}
           </Text>
           <Text style={styles.date}>
-            {convertDateToMDYHM(lastMeasurementDate)}
+            {lastMeasurementDate == "No Data Available"
+              ? ""
+              : convertDateToMDYHM(lastMeasurementDate)}
           </Text>
         </View>
         <View>
@@ -236,6 +242,7 @@ const LastWateredOrFertilized = ({ route, navigation }) => {
                   };
 
                   // TODO: SAVE TO BACKEND!
+                  
 
                   setDataInternal(dataNew);
                   setAddNewModalVisible(false);
@@ -254,45 +261,45 @@ const LastWateredOrFertilized = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   page_title: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   backButton: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
-    fontSize: "19px",
+    fontSize: 19,
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   plantName: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "21px",
+    fontSize: 21,
   },
   sectionTitle: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "15px",
+    fontSize: 15,
   },
   measurement: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "34px",
-    lineHeight: "36px",
+    fontSize: 34,
+    lineHeight: 36,
   },
   date: {
-    fontWeight: 510,
+    fontWeight: "510",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "14",
+    fontSize: 14,
     color: "#806B6B",
   },
   centeredView: {
@@ -376,7 +383,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "20",
+    fontSize: 20,
     color: "black",
   },
 });

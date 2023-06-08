@@ -1,6 +1,8 @@
 const convertDateToFullMDYHM = (date) => {
-  var fullDate = new Date(date * 1000);
-
+  // date = date.split(" ").join("T").slice(0, -7)
+  // console.log(date);
+  if (!date || date === -1) return "Not Yet Measured";
+  var fullDate = new Date(date * 1000); // TO-DO: Need to parse date
   const monthNames = [
     "January",
     "February",

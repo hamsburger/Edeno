@@ -13,7 +13,8 @@ import HomeNotSelected from "./assets/icons/my-eden-not-selected";
 import SettingSelected from "./assets/icons/setting-selected";
 import SettingNotSelected from "./assets/icons/setting-not-selected";
 import StartMeasuring from "./assets/icons/start-measuring-trigger";
-import { AddPlantLandingPage } from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
+import { AddPlantManually } from "./Screens/Add_Plant_Screens/AddPlantManually";
+import { AddPlantWithImage } from "./Screens/Add_Plant_Screens/AddPlantWithImage";
 import useFonts from "./Hooks/Use_Fonts";
 import { AddPlantProvider } from "./Hooks/Contexts/AddPlant_Context";
 import { PlantProvider, usePlants } from "./Hooks/Contexts/Plant_Context";
@@ -30,6 +31,11 @@ import { SoilMoistureInfo } from "./Screens/PlantInfoPage/MetricPages/SoilMoistu
 import { HumidityInfo } from "./Screens/PlantInfoPage/MetricPages/HumidityInfo";
 import { TemperatureInfo } from "./Screens/PlantInfoPage/MetricPages/TemperatureInfo";
 import { LightIntensityInfo } from "./Screens/PlantInfoPage/MetricPages/LightIntensityInfo";
+import { TakePictureInstruction } from "./Screens/PlantHealthScanner/TakePictureInstruction";
+import NDVIInstructions from "./Screens/PlantHealthScanner/NDVIInstructions";
+import NDVILiveMeasure from "./Screens/PlantHealthScanner/NDVILiveMeasure";
+import { Results } from "./Screens/PlantHealthScanner/Results";
+import AddPlantLandingPage from "./Screens/Add_Plant_Screens/AddPlantLandingPage";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -50,13 +56,13 @@ const themeObject = {
         Box: {
           baseStyle: {
             borderColor: "cyan.500",
-            borderWidth: "1",
+            borderWidth: 1,
           },
         },
         View: {
           baseStyle: {
             borderColor: "cyan.500",
-            borderWidth: "1",
+            borderWidth: 1,
           },
         },
       }),
@@ -135,7 +141,7 @@ export default () => {
           },
           tabBarItemStyle: {
             backgroundColor: "#72A077",
-            fontSize: "12",
+            fontSize: 12,
           },
           tabBarOptions: {
             labelStyle: {
@@ -163,7 +169,7 @@ export default () => {
         />
         <Tab.Screen
           name="MeasureTrigger"
-          component={Measure}
+          component={Measure} 
           options={{
             tabBarLabel: "",
             tabBarIcon: ({}) => <StartMeasuring />,
@@ -211,11 +217,19 @@ export default () => {
           <Stack.Screen name="Measure" component={MeasureModal} />
         </Stack.Group>
         <Stack.Screen
-          name="AddPlantLandingPage"
-          component={AddPlantLandingPage}
+          name="AddPlantManually"
+          component={AddPlantManually}
           getId={({ params }) => params.progress}
         />
-
+        <Stack.Screen
+          name="AddPlantWithImage"
+          component={AddPlantWithImage}
+          getId={({ params }) => params.progress}
+        />
+        <Stack.Screen
+          name="AddPlantLandingPage"
+          component={AddPlantLandingPage}
+        />
         <Stack.Screen name="LiveMeasure">
           {(props) => <LiveMeasure {...props} visible={1} />}
         </Stack.Screen>
@@ -236,6 +250,18 @@ export default () => {
         </Stack.Screen>
         <Stack.Screen name="LightIntensityInfo">
           {(props) => <LightIntensityInfo {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="TakePictureInstruction">
+          {(props) => <TakePictureInstruction {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="NDVIInstructions">
+          {(props) => <NDVIInstructions {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="NDVILiveMeasure">
+          {(props) => <NDVILiveMeasure {...props} visible={1} />}
+        </Stack.Screen>
+        <Stack.Screen name="Results">
+          {(props) => <Results {...props} visible={1} />}
         </Stack.Screen>
       </Stack.Navigator>
     ) : (

@@ -1,0 +1,146 @@
+{
+    "plantName": "Bob (Aloe Vera)",
+    "lastMeasuredDate": 1681149717.0,
+    "addedDate": 1681136762.0,
+    "lastWatered": {
+        "dates": [],
+        "notes": []
+    },
+    "phData": {
+        "lowerIdeal": 5.6,
+        "upperIdeal": 7.8,
+        "dates": [
+            {
+                "seconds": 1681137036.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681147886.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681149717.0,
+                "nanoseconds": 0
+            }
+        ],
+        "npkMeasurements": [
+            "0-2-1",
+            "4-2-1",
+            "4-2-1",
+            "4-3-1",
+            "4-2-1",
+            "4-2-1"
+        ],
+        "measurements": [
+            "4",
+            "4",
+            "4"
+        ],
+        "pHDescriptions": "Moderately acid\nSlightly acid\nNeutral\nSlightly alkaline"
+    },
+    "lastFertilized": {
+        "dates": [],
+        "notes": []
+    },
+    "soilMoistureData": {
+        "lowerIdeal": 10,
+        "upperIdeal": null,
+        "dates": [
+            {
+                "seconds": 1681137036.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681147886.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681149717.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "6",
+            "6",
+            "6"
+        ]
+    },
+    "humidityData": {
+        "lowerIdeal": 40,
+        "upperIdeal": 60,
+        "dates": [
+            {
+                "seconds": 1681137036.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681147886.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681149717.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "-24",
+            "-24",
+            "-24"
+        ],
+        "humidityDescriptions": "Mesic\nDry Mesic\nDry"
+    },
+    "temperatureData": {
+        "lowerIdeal": 20,
+        "upperIdeal": 25,
+        "dates": [
+            {
+                "seconds": 1681137036.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681147886.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681149717.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "-25",
+            "-25",
+            "-25"
+        ],
+        "temperatureDescriptions": "Zone 9a"
+    },
+    "lightIntensityData": {
+        "lowerIdeal": 40000,
+        "upperIdeal": 130000,
+        "dates": [
+            {
+                "seconds": 1681137036.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681147886.0,
+                "nanoseconds": 0
+            },
+            {
+                "seconds": 1681149717.0,
+                "nanoseconds": 0
+            }
+        ],
+        "measurements": [
+            "46",
+            "46",
+            "46"
+        ],
+        "lightDescriptions": "Full Sun\nFull Sun to Partial Shade"
+    },
+    "NDVI": {
+        "dateTime": 1681147371.0,
+        "index": 1,
+        "value": "unHealthy"
+    },
+    "plantId": "-NSfYnvSft7I7S39vWRp"
+}

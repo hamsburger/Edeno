@@ -10,12 +10,16 @@ import {
   Button,
 } from "native-base";
 import { useAuth } from "../../Hooks/Contexts/Auth_Context";
+import { useFirebaseDatabase } from "../../Hooks/Contexts/Firebase_Context";
+import { getAuth, createUserWithEmailAndPassword  } from "firebase/auth";
 import { styles } from "./LoginStyles";
 import { TouchableOpacity, StatusBar } from "react-native";
 import HidePassword from "../../assets/icons/visibility_off.svg";
 import ShowPassword from "../../assets/icons/visibility.svg";
 
 const SignUp = ({ navigation }) => {
+  const db = useFirebaseDatabase();
+  const auth = getAuth();
   const [isSignedIn, dispatch] = useAuth();
 
   const [errors, setErrors] = useState("");
@@ -130,11 +134,30 @@ const SignUp = ({ navigation }) => {
               email: email,
               password: password,
             };
-            dispatch({
-              type: "sign-up",
-              ...signUpInfo,
+
+            createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              // Fetch user
+              const user = userCredential.user;
+  
+              // Push signup info to Realtime Database
+              db.pushWithKeyRealTimeDatabase("users", user.uid, signUpInfo);
+  
+              dispatch({
+                type: "sign-up",
+                ...signUpInfo,
+              });
+
+              // Firebase automatically signs in user on account creation. 
+              // But we don't sign in on sign up, so we sign out.
+              auth.signOut() 
+              navigation.navigate("Login");
+              // ...
+            })
+            .catch((error) => {
+              setErrors(`Firebase Error ${error.code}: ${error.message}`);
+              // ..
             });
-            navigation.navigate("Login");
           }}
         >
           <Text style={styles.logInButton}>Sign Up</Text>

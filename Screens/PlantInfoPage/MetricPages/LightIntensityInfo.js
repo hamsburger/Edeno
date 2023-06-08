@@ -9,7 +9,7 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
-
+import { buildDataset } from "../../../Functions/utilities";
 const LightIntensityInfo = ({ route, navigation }) => {
   const { lightIntensityData, plantInfo } = route.params;
 
@@ -20,15 +20,18 @@ const LightIntensityInfo = ({ route, navigation }) => {
     lightIntensityData.measurements[lightIntensityData.measurements.length - 1];
   const lastMeasurementDate =
     lightIntensityData.dates[lightIntensityData.dates.length - 1].seconds;
-
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPlantCondition = () => {
-    if (lastMeasurement > parseFloat(upperIdeal)) {
+    if (upperIdeal && lastMeasurement > parseFloat(upperIdeal)) {
       return 1;
-    } else if (lastMeasurement < parseFloat(lowerIdeal)) {
+    } else if (lowerIdeal && lastMeasurement < parseFloat(lowerIdeal)) {
       return -1;
     }
     return 0;
@@ -36,28 +39,18 @@ const LightIntensityInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(lightIntensityData.dates),
-    datasets: [
-      {
-        data: lightIntensityData.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(lightIntensityData.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(lightIntensityData.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
+    datasets: buildDataset(
+      lightIntensityData.measurements,
+      lowerIdeal,
+      upperIdeal
+    ),
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
     ],
-    legend: ["Your Measurements", "Ideal Range"],
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -78,7 +71,7 @@ const LightIntensityInfo = ({ route, navigation }) => {
             {plantInfo.plantName}
           </Text>
           <Text fontSize="37px" style={styles.page_title}>
-            Temperature
+            Light Intensity
           </Text>
         </Box>
       </Box>
@@ -110,7 +103,7 @@ const LightIntensityInfo = ({ route, navigation }) => {
               backgroundColor: "#F2F2F2",
               backgroundGradientFrom: "#F2F2F2",
               backgroundGradientTo: "#F2F2F2",
-              decimalPlaces: 1, // optional, defaults to 2dp
+              decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               propsForDots: {
@@ -173,66 +166,66 @@ const LightIntensityInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   page_title: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   backButton: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
-    fontSize: "19px",
+    fontSize: 19,
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   plantName: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "21px",
+    fontSize: 21,
   },
   sectionTitle: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "15px",
+    fontSize: 15,
   },
   measurement: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "34px",
-    lineHeight: "36px",
+    fontSize: 34,
+    lineHeight: 36,
   },
   date: {
-    fontWeight: 510,
+    fontWeight: "510",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "14",
+    fontSize: 14,
     color: "#806B6B",
   },
   alert: {
-    fontWeight: 590,
+    fontWeight: "590",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "15",
+    fontSize: 15,
     color: "#B9422C",
   },
   tips: {
-    fontWeight: 500,
+    fontWeight: "500",
     fontFamily: "SFProDisplay-Regular",
     fontStyle: "normal",
-    fontSize: "15",
+    fontSize: 15,
     color: "#432D1E",
   },
 });

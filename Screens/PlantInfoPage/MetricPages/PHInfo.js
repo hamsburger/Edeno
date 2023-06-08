@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { View, Text, Box, Flex, ScrollView } from "native-base";
 import {
   TouchableOpacity,
@@ -9,10 +9,13 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
+import { buildDataset } from "../../../Functions/utilities";
 
 const PHInfo = ({ route, navigation }) => {
   const { phDataExternal, plantInfo } = route.params;
-
+  const [npkValue, setNPKValue] = useState(
+    "Tap on a datapoint to see the N-P-K measurement"
+  );
   const chartWidth = 0.95 * Dimensions.get("window").width;
   const upperIdeal = phDataExternal.upperIdeal;
   const lowerIdeal = phDataExternal.lowerIdeal;
@@ -20,44 +23,41 @@ const PHInfo = ({ route, navigation }) => {
     phDataExternal.measurements[phDataExternal.measurements.length - 1];
   const lastMeasurementDate =
     phDataExternal.dates[phDataExternal.dates.length - 1].seconds;
-
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPH = () => {
-    if (lastMeasurement > upperIdeal) {
+    if (upperIdeal && lastMeasurement > upperIdeal) {
       return 1;
-    } else if (lastMeasurement < lowerIdeal) {
+    } else if (lowerIdeal && lastMeasurement < lowerIdeal) {
       return -1;
     }
     return 0;
   };
 
+  const dates = convertArrayofTimestampsToArrayOfMD(phDataExternal.dates);
+
   const data = {
-    labels: convertArrayofTimestampsToArrayOfMD(phDataExternal.dates),
-    datasets: [
-      {
-        data: phDataExternal.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(phDataExternal.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(phDataExternal.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
+    labels: dates,
+    datasets: buildDataset(phDataExternal.measurements, lowerIdeal, upperIdeal),
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
     ],
-    legend: ["Your Measurements", "Ideal Range"],
+  };
+
+  const getNPKValue = ({ index }) => {
+    setNPKValue(
+      `N-P-K Measurement on ${dates[index]} is ${phDataExternal.npkMeasurements[index]}`
+    );
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -82,7 +82,7 @@ const PHInfo = ({ route, navigation }) => {
           </Text>
         </Box>
       </Box>
-      <ScrollView paddingTop={"25px"} paddingBottom={"25px"}>
+      <ScrollView height={"100%"} paddingTop={"25px"} marginBottom={"100px"}>
         <View paddingLeft={"30px"} paddingRight={"30px"} marginBottom={"20px"}>
           <Text style={styles.sectionTitle}>Last Measurement</Text>
           <Text
@@ -98,6 +98,9 @@ const PHInfo = ({ route, navigation }) => {
         </View>
         <Flex justifyContent={"center"} alignItems={"center"}>
           <LineChart
+            onDataPointClick={(e) => {
+              getNPKValue(e);
+            }}
             style={{
               paddingRight: 50,
               paddingLeft: 70,
@@ -119,6 +122,7 @@ const PHInfo = ({ route, navigation }) => {
               },
             }}
           />
+          <Text style={styles.npk_prompt}>{npkValue}</Text>
         </Flex>
 
         <View paddingLeft={"30px"} paddingRight={"30px"} marginTop={"20px"}>
@@ -139,7 +143,8 @@ const PHInfo = ({ route, navigation }) => {
 
               <Text
                 style={styles.tips}
-              >{`\u2022 Consider using a lime-based compound`}</Text>
+              >{`\u2022 Consider using a lime-based compound such as dolomite lime and agricultural lime to help increase the pH of the soil`}</Text>
+
               <Text
                 style={[styles.tips, { color: "#72A077" }]}
                 onPress={() => Linking.openURL("http://google.com")}
@@ -170,67 +175,73 @@ const PHInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   page_title: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   backButton: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
-    fontSize: "19px",
+    fontSize: 19,
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   plantName: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "21px",
+    fontSize: 21,
   },
   sectionTitle: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "15px",
+    fontSize: 15,
   },
   measurement: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "34px",
-    lineHeight: "36px",
+    fontSize: 34,
+    lineHeight: 36,
   },
   date: {
-    fontWeight: 510,
+    fontWeight: "510",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "14",
+    fontSize: 14,
     color: "#806B6B",
   },
   alert: {
-    fontWeight: 590,
+    fontWeight: "590",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "15",
+    fontSize: 15,
     color: "#B9422C",
   },
   tips: {
-    fontWeight: 500,
+    fontWeight: "500",
     fontFamily: "SFProDisplay-Regular",
     fontStyle: "normal",
-    fontSize: "15",
+    fontSize: 15,
     color: "#432D1E",
+  },
+  npk_prompt: {
+    fontFamily: "SFProDisplay-RegularItalic",
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#597F51",
   },
 });
 

@@ -9,6 +9,7 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import convertDateToMDYHM from "../../../utilities/convertDateToMDYHM";
 import convertArrayofTimestampsToArrayOfMD from "../../../utilities/convertArrayofTimestampsToArrayOfMD";
+import { buildDataset } from "../../../Functions/utilities";
 
 const TemperatureInfo = ({ route, navigation }) => {
   const { temperatureData, plantInfo } = route.params;
@@ -20,15 +21,18 @@ const TemperatureInfo = ({ route, navigation }) => {
     temperatureData.measurements[temperatureData.measurements.length - 1];
   const lastMeasurementDate =
     temperatureData.dates[temperatureData.dates.length - 1].seconds;
-
+  const typeOfRange =
+    (upperIdeal && lowerIdeal && "Ideal Range") ||
+    (upperIdeal && "Upper Ideal") ||
+    (lowerIdeal && "Lower Ideal");
   // returns:
   // 1 if above ideal pH
   // -1 if below ideal pH
   // 0 otherwise
   const checkPlantCondition = () => {
-    if (lastMeasurement > parseFloat(upperIdeal)) {
+    if (upperIdeal && lastMeasurement > parseFloat(upperIdeal)) {
       return 1;
-    } else if (lastMeasurement < parseFloat(lowerIdeal)) {
+    } else if (lowerIdeal && lastMeasurement < parseFloat(lowerIdeal)) {
       return -1;
     }
     return 0;
@@ -36,28 +40,18 @@ const TemperatureInfo = ({ route, navigation }) => {
 
   const data = {
     labels: convertArrayofTimestampsToArrayOfMD(temperatureData.dates),
-    datasets: [
-      {
-        data: temperatureData.measurements,
-        color: (opacity = 1) => `rgba(89, 127, 81, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(temperatureData.measurements.length).fill(lowerIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-      {
-        data: Array(temperatureData.measurements.length).fill(upperIdeal),
-        color: (opacity = 1) => `rgba(173, 205, 176, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
+    datasets: buildDataset(
+      temperatureData.measurements,
+      lowerIdeal,
+      upperIdeal
+    ),
+    legend: (typeOfRange && ["Your Measurements", typeOfRange]) || [
+      "Your Measurements",
     ],
-    legend: ["Your Measurements", "Ideal Range"],
   };
 
   return (
-    <View>
+    <ScrollView stickyHeaderIndices={0}>
       <Box
         bgColor="secondary_green"
         paddingTop="70px"
@@ -162,7 +156,10 @@ const TemperatureInfo = ({ route, navigation }) => {
 
               <Text
                 style={styles.tips}
-              >{`\u2022 Consider using a lime-based compound`}</Text>
+              >{`\u2022 Consider moving your plant to a spot that gets less light`}</Text>
+              <Text
+                style={styles.tips}
+              >{`\u2022 Consider moving your plant to a spot that is cooler`}</Text>
               <Text
                 style={[styles.tips, { color: "#72A077" }]}
                 onPress={() => Linking.openURL("http://google.com")}
@@ -173,66 +170,66 @@ const TemperatureInfo = ({ route, navigation }) => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   page_title: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   backButton: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
-    fontSize: "19px",
+    fontSize: 19,
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
   },
   plantName: {
     color: "white",
-    fontWeight: 700,
+    fontWeight: "700",
     textAlign: "center",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "21px",
+    fontSize: 21,
   },
   sectionTitle: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "15px",
+    fontSize: 15,
   },
   measurement: {
-    fontWeight: 700,
+    fontWeight: "700",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "34px",
-    lineHeight: "36px",
+    fontSize: 34,
+    lineHeight: 36,
   },
   date: {
-    fontWeight: 510,
+    fontWeight: "510",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "14",
+    fontSize: 14,
     color: "#806B6B",
   },
   alert: {
-    fontWeight: 590,
+    fontWeight: "590",
     fontFamily: "SFProDisplay-Bold",
     fontStyle: "normal",
-    fontSize: "15",
+    fontSize: 15,
     color: "#B9422C",
   },
   tips: {
-    fontWeight: 500,
+    fontWeight: "500",
     fontFamily: "SFProDisplay-Regular",
     fontStyle: "normal",
-    fontSize: "15",
+    fontSize: 15,
     color: "#432D1E",
   },
 });
